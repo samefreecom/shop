@@ -2,7 +2,7 @@
 <html>
 <head>
     <meta charset="utf-8">
-    <title>登录 - 开心铺后台</title>
+    <title>Bootstrap 模板</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="https://cdn.bootcss.com/weui/1.1.2/style/weui.min.css">
     <link rel="stylesheet" href="https://cdn.bootcss.com/jquery-weui/1.2.0/css/jquery-weui.min.css">
@@ -21,35 +21,35 @@
     <div class="zyw-container white-color">
         <div class="head-l"><a href="javascript:window.history.back(-1)" target="_self"><img src="img/svg/head-return.svg" alt=""></a></div>
         <h1>登录</h1>
+        <div class="head-r"><a href="">注册</a></div>
     </div>
 </header>
 <section class="zyw-container">
     <div class="login-img"><img src="img/mylogo.png" alt=""></div>
-    <div class="weui-cell mt-2">
-        <div class="weui-cell__hd"><label class="weui-label">登录账号</label></div>
-        <div class="weui-cell__bd">
-            <input class="weui-input" type="text" placeholder="请输入管理员账号">
+    <div class="weui-cells">
+        <div class="weui-cell weui-cell_select weui-cell_select-before">
+            <div class="weui-cell__hd">
+                <select class="weui-select" name="select2">
+                    <option value="1">+86</option>
+                    <option value="2">+80</option>
+                    <option value="3">+84</option>
+                    <option value="4">+87</option>
+                </select>
+            </div>
+            <div class="weui-cell__bd">
+                <input class="weui-input" type="number" pattern="[0-9]*" placeholder="请输入手机号">
+            </div>
         </div>
     </div>
-    <div class="weui-cell">
-        <div class="weui-cell__hd"><label class="weui-label">登录密码</label></div>
-        <div class="weui-cell__bd">
-            <input class="weui-input" type="password" placeholder="请输入登录密码">
-        </div>
-    </div>
-    <div class="weui-cell weui-cell_vcode">
-        <div class="weui-cell__hd">
-            <label class="weui-label">验证码</label>
-        </div>
-        <div class="weui-cell__bd">
-            <input class="weui-input" type="tel" placeholder="请输入验证码">
-        </div>
-        <div class="weui-cell__ft">
-            <button class="weui-vcode-btn theme-color">获取验证码</button>
+    <div class="weui-cells">
+        <div class="weui-cell">
+            <div class="weui-cell__bd">
+                <input class="weui-input" type="password" placeholder="请输入密码">
+            </div>
         </div>
     </div>
     <div class="weui-cells__tips text-right"><a href="">忘记密码？</a></div>
-    <div class="login-btn"><a href="admin.html" class="weui-btn weui-btn_warn theme-bgcolor">登录</a></div>
+    <div class="login-btn"><a href="javascript:;" class="weui-btn weui-btn_warn theme-bgcolor">登录</a></div>
 </section>
 <script src="https://cdn.bootcss.com/jquery/1.11.0/jquery.min.js"></script>
 <script src="https://cdn.bootcss.com/jquery-weui/1.2.0/js/jquery-weui.min.js"></script>
