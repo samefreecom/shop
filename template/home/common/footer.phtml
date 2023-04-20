@@ -1,0 +1,23 @@
+<script src="__STATIC__/home/js/jquery.min.js"></script>
+<script src="__STATIC__/home/js/jquery-weui.min.js"></script>
+<script src="__STATIC__/home/js/bootstrap.min.js"></script>
+    <script type="text/javascript">
+        if (typeof sfinit == 'function') {
+            sfinit();
+        }
+        <?php
+        $messages = sfget_admin_tmp_messages();
+        if(!empty($messages)) :
+        foreach ($messages as $msg):
+        ?>
+        alert('<?php echo addslashes($msg['content']) ?>');
+        <?php
+        endforeach;
+        endif;
+        ?>
+    </script>
+</body>
+</html>
+<?php
+    sfquit();
+?>

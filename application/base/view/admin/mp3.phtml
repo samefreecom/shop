@@ -1,0 +1,26 @@
+<div id="player" style="display: none"></div>
+<script>
+    var ua = navigator.userAgent.toLowerCase();
+    var audiopath = "__STATIC__/audio/Error.mp3";
+    if (ua.match(/msie ([\d.]+)/)) {
+        jQuery('#player').html('<object classid="clsid:22D6F312-B0F6-11D0-94AB-0080C74C7E95"><param name="AutoStart" value="1" /><param name="Src" value="' + audiopath + '" /></object>');
+    }
+    else if (ua.match(/firefox\/([\d.]+)/)) {
+        jQuery('#player').html('<audio><source src="' + audiopath + '" type="audio/wav"/><source src="' + audiopath + '" type="audio/mpeg"/></audio>');
+    }
+    else if (ua.match(/chrome\/([\d.]+)/)) {
+        jQuery('#player').html('<audio src="' + audiopath + '" type="audio/wav" hidden="true"></audio>');
+    }
+    else if (ua.match(/opera.([\d.]+)/)) {
+        jQuery('#player').html('<embed src="' + audiopath + '" hidden="true" loop="false"><noembed><bgsounds src=' + audiopath + '></noembed>');
+    }
+    else if (ua.match(/version\/([\d.]+).*safari/)) {
+        jQuery('#player').html('<audio src="' + audiopath + '" type="audio/wav" hidden="true"></audio>');
+    } else {
+        jQuery('#player').html('<embed src="' + audiopath + '" type="audio/wav" hidden="true" loop="false" mastersound></embed>');
+    }
+    function mp3player (filename) {
+        $('#player *').attr('src', '__STATIC__/audio/{filename}'.replace('{filename}', filename));
+        $('#player audio, #player embed').get(0).play();
+    }
+</script>

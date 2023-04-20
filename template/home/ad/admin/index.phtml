@@ -1,0 +1,38 @@
+{include file="common:admin_header" /}
+<link rel="stylesheet" href="__STATIC__/home/css/index.css">
+<header class="zyw-header">
+    <div class="zyw-container white-color">
+        <div class="head-l"><a href="javascript:window.history.back(-1)" target="_self"><img src="__STATIC__/home/img/svg/head-return.svg" alt=""></a></div>
+        <h1>广告管理</h1>
+        <div class="head-r"><i class="fa fa-search" aria-hidden="true"></i></div>
+    </div>
+</header>
+<section class="zyw-container">
+    <div class="weui-tab">
+        <div class="weui-navbar">
+            <a class="weui-navbar__item weui-bar__item--on" href="#coupon_n">首页轮播</a>
+            <a class="weui-navbar__item" href="#coupon_y">点餐内页</a>
+            <a class="weui-navbar__item" href="#coupon_ex">商品轮播</a>
+        </div>
+        <div class="weui-tab__bd">
+            <div id="coupon_n" class="weui-tab__bd-item weui-tab__bd-item--active">
+                <div class="coupon-cont">
+                    <a href=""><img src="__STATIC__/home/img/coupon-n-30.png" alt=""></a>
+                    <a href=""><img src="__STATIC__/home/img/coupon-n-1.png" alt=""></a>
+                </div>
+            </div>
+            <div id="coupon_y" class="weui-tab__bd-item">
+                <div class="coupon-cont">
+                    <a href=""><img src="__STATIC__/home/img/coupon-y-5.png" alt=""></a>
+                    <a href=""><img src="__STATIC__/home/img/coupon-y-20.png" alt=""></a>
+                </div>
+            </div>
+            <div id="coupon_ex" class="weui-tab__bd-item">
+                <div class="coupon-cont">
+                    <a href=""><img src="__STATIC__/home/img/coupon-ex-100.png" alt=""></a>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{include file="common:footer" /}

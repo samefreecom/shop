@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>{$title} - <?php echo \app\base\model\Setting::instance()->getValue('site_name') ?></title>
+    <link rel="icon" href="data:image/ico;base64,aWNv">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="__STATIC__/home/css/weui.min.css">
+    <link rel="stylesheet" href="__STATIC__/home/css/jquery-weui.min.css">
+    <link href="__STATIC__/home/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="__STATIC__/home/css/font-awesome.min.css">
+    <link rel="stylesheet" href="__STATIC__/home/css/main.css">
+    <link rel="stylesheet" href="__STATIC__/home/css/login.css">
+    <link rel="stylesheet" href="__STATIC__/home/css/theme-color.css">
+    <!--[if lt IE 9]>
+    <script src="__STATIC__/home/js/html5shiv.js"></script>
+    <script src="__STATIC__/home/js/respond.min.js"></script>
+    <![endif]-->
+    <style>
+        .weui-label {
+            margin-bottom: 0px;
+        }
+    </style>
+</head>
+<body style="background: #fff;">
+<header class="zyw-header">
+    <div class="zyw-container white-color">
+        <div class="head-l"><a href="javascript:window.history.back(-1)" target="_self"><img src="__STATIC__/home/img/svg/head-return.svg" alt=""></a></div>
+        <h1>登录</h1>
+    </div>
+</header>
+<section class="zyw-container">
+    <form method="post">
+        <div class="login-img"><img src="__STATIC__/home/img/mylogo.png" alt=""></div>
+        <div class="weui-cell mt-2">
+            <div class="weui-cell__hd"><label class="weui-label">登录账号</label></div>
+            <div class="weui-cell__bd">
+                <input id="account" name="account" class="weui-input" type="text" placeholder="请输入管理员账号">
+            </div>
+        </div>
+        <div class="weui-cell">
+            <div class="weui-cell__hd"><label class="weui-label">登录密码</label></div>
+            <div class="weui-cell__bd">
+                <input id="password" name="password" class="weui-input" type="password" placeholder="请输入登录密码">
+            </div>
+        </div>
+        <div class="weui-cell">
+            <div class="weui-cell__hd">
+                <label class="weui-label">验证码</label>
+            </div>
+            <div class="weui-cell__bd">
+                <input class="weui-input" type="text" name="captcha" placeholder="请输入验证码" style="width: 80%">
+            </div>
+            <div class="weui-cell__ft">
+                <img id="captcha" style="margin-right: 10px" title="点击更换验证码" src="<?php echo sfurl('/admin/login/captcha') ?>" alt="验证码生成失败！" onclick="this.src='<?php echo sfurl('/admin/login/captcha') ?>?' + (new Date()).getTime()" /><a style="margin-right: 10px" href="javascript:;" onclick="$('#captcha').attr('src', '<?php echo sfurl('/admin/login/captcha') ?>?' + (new Date()).getTime())">点击更换</a>
+            </div>
+        </div>
+        <div class="login-btn"><button type="submit" class="weui-btn weui-btn_warn theme-bgcolor">登录</button></div>
+        <div style="text-align: right; margin: 0 10px"><a href="">忘记密码？</a></div>
+    </form>
+</section>
+<script src="__STATIC__/home/js/jquery.min.js"></script>
+<script src="__STATIC__/home/js/jquery-weui.min.js"></script>
+<script src="__STATIC__/home/js/bootstrap.min.js"></script>
+<script type="text/javascript">
+    $(function () {
+        <?php
+        $messages = sfget_admin_tmp_messages();
+        if(!empty($messages)) :
+        foreach ($messages as $msg):
+        ?>
+        alert('<?php echo addslashes($msg['content']) ?>');
+        <?php
+        endforeach;
+        endif;
+        ?>
+        $('#account').focus();
+    });
+</script>
+</body>
+</html>
