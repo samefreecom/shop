@@ -80,11 +80,12 @@
 <section class="zyw-container content JP_seat">
     <div class="aui-tab" id="tab">
         <div class="aui-tab-item aui-active">全部</div>
+        <div class="aui-tab-item">当前已点</div>
         <div class="aui-tab-item">团体已点</div>
     </div>
     <div class="main">
         <div class="aui-item" id="tab1-con1">
-            <div class="left-menu left" id="left">
+            <div class="left-menu left">
                 <ul>
                     <li><span>所有</span></li>
                     {foreach name="varietyList" item="v"}
@@ -123,7 +124,7 @@
                             <div class="menu-img"><img src="<?php echo sfimg($v['image'], 115, 115) ?>" orgimg="<?php echo sfimg($v['image'], null, 1440) ?>"></div>
                             <div class="menu-txt">
                                 <h4 class="accountName">{$v.name}</h4>
-                                <p class="list1">月销量：123</p>
+                                <p class="list1">月销量：{$v.quantity}</p>
                                 <p class="list2">
                                     <b>￥</b><b>{$v.price}</b>
                                 </p>
@@ -142,7 +143,38 @@
             </div>
         </div>
         <div class="aui-item aui-hide" id="tab1-con2">
-            <div class="left-menu" id="left">
+            <div class="left-menu">
+                <ul>
+                    <li><span>自己</span></li>
+                </ul>
+            </div>
+            <div class="con">
+                <div class="right-con con-active">
+                    <ul>
+                        {foreach name='list' item='v'}
+                        <li>
+                            <div class="menu-img"><img src="<?php echo sfimg($v['image'], 115, 115) ?>" orgimg="<?php echo sfimg($v['image'], null, 1440) ?>"></div>
+                            <div class="menu-txt">
+                                <h4 class="accountName">{$v.name}</h4>
+                                <p class="list1">月销量：{$v.quantity}</p>
+                                <p class="list2">
+                                    <b>￥</b><b>{$v.price}</b>
+                                </p>
+                                <div class="btn">
+                                    <button class="minus"></button>
+                                    <i>0</i>
+                                    <button class="add"></button>
+                                    <i class="price">{$v.price}</i>
+                                </div>
+                            </div>
+                        </li>
+                        {/foreach}
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div class="aui-item aui-hide" id="tab1-con3">
+            <div class="left-menu">
                 <ul>
                     <li><span>所有</span></li>
                     <li><span>自己</span></li>
@@ -156,14 +188,12 @@
                             <div class="menu-img"><img src="<?php echo sfimg($v['image'], 115, 115) ?>" orgimg="<?php echo sfimg($v['image'], null, 1440) ?>"></div>
                             <div class="menu-txt">
                                 <h4 class="accountName">{$v.name}</h4>
-                                <p class="list1">月销量：123</p>
+                                <p class="list1">月销量：{$v.quantity}</p>
                                 <p class="list2">
                                     <b>￥</b><b>{$v.price}</b>
                                 </p>
                                 <div class="btn">
-                                    <button class="minus"></button>
-                                    <i>0</i>
-                                    <button class="add"></button>
+                                    <i style="display: inline-block">0</i>
                                     <i class="price">{$v.price}</i>
                                 </div>
                             </div>
@@ -171,15 +201,14 @@
                         {/foreach}
                     </ul>
                 </div>
-                {foreach name="varietyList" item="data"}
-                <div class="right-con" style="display: none;">
+                <div class="right-con my-self" style="display: none;">
                     <ul>
-                        {foreach name='data.list' item='v'}
+                        {foreach name='list' item='v'}
                         <li>
                             <div class="menu-img"><img src="<?php echo sfimg($v['image'], 115, 115) ?>" orgimg="<?php echo sfimg($v['image'], null, 1440) ?>"></div>
                             <div class="menu-txt">
                                 <h4 class="accountName">{$v.name}</h4>
-                                <p class="list1">月销量：123</p>
+                                <p class="list1">月销量：{$v.quantity}</p>
                                 <p class="list2">
                                     <b>￥</b><b>{$v.price}</b>
                                 </p>
@@ -194,8 +223,8 @@
                         {/foreach}
                     </ul>
                 </div>
-                {/foreach}
             </div>
+        </div>
     </div>
 </section>
 <script type="text/html" id="bar_gallery">

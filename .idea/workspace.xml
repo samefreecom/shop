@@ -3,33 +3,7 @@
   <component name="ChangeListManager">
     <list default="true" id="3acf79bb-89f4-462b-9c5b-7274dad1687c" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/admin/controller/Index.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/admin/controller/Index.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/admin/controller/Item.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/admin/controller/Item.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/admin/controller/Login.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/admin/controller/Login.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/common.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/common.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/group/controller/Index.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/group/controller/Index.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/seat/controller/Index.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/seat/controller/Index.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/tool/controller/Image.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/tool/controller/Image.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/cart.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/config/database.php" beforeDir="false" afterPath="$PROJECT_DIR$/config/database.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/config/template.php" beforeDir="false" afterPath="$PROJECT_DIR$/config/template.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/item.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/order.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/static/home/css/classify.css" beforeDir="false" afterPath="$PROJECT_DIR$/public/static/home/css/classify.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/static/home/css/find.css" beforeDir="false" afterPath="$PROJECT_DIR$/public/static/home/css/find.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/static/home/css/index.css" beforeDir="false" afterPath="$PROJECT_DIR$/public/static/home/css/index.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/static/home/css/main.css" beforeDir="false" afterPath="$PROJECT_DIR$/public/static/home/css/main.css" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/public/static/home/js/add.js" beforeDir="false" afterPath="$PROJECT_DIR$/public/static/home/js/add.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/register.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/sign.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/star.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/template/home/admin/index.phtml" beforeDir="false" afterPath="$PROJECT_DIR$/template/home/admin/index.phtml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/template/home/common/admin_header.phtml" beforeDir="false" afterPath="$PROJECT_DIR$/template/home/common/admin_header.phtml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/template/home/common/footer.phtml" beforeDir="false" afterPath="$PROJECT_DIR$/template/home/common/footer.phtml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/template/home/common/header.phtml" beforeDir="false" afterPath="$PROJECT_DIR$/template/home/common/header.phtml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/template/home/group/index.phtml" beforeDir="false" afterPath="$PROJECT_DIR$/template/home/group/index.phtml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/template/home/index/index.phtml" beforeDir="false" afterPath="$PROJECT_DIR$/template/home/index/index.phtml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/template/home/member/index.phtml" beforeDir="false" afterPath="$PROJECT_DIR$/template/home/member/index.phtml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/template/home/seat/index.phtml" beforeDir="false" afterPath="$PROJECT_DIR$/template/home/seat/index.phtml" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -153,7 +127,7 @@
       <workItem from="1682069306044" duration="5222000" />
       <workItem from="1682130955667" duration="6352000" />
       <workItem from="1682303438383" duration="10611000" />
-      <workItem from="1682409769855" duration="24900000" />
+      <workItem from="1682409769855" duration="26766000" />
     </task>
     <servers />
   </component>
@@ -189,6 +163,11 @@
           <url>file://$PROJECT_DIR$/template/home/seat/order.phtml</url>
           <line>27</line>
           <option name="timeStamp" value="2" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="php">
+          <url>file://$PROJECT_DIR$/template/home/seat/index.phtml</url>
+          <line>155</line>
+          <option name="timeStamp" value="3" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>

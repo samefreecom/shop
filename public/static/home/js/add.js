@@ -1,28 +1,32 @@
 $(function () {
 
-    $("#left li:first-child").addClass("active");
+    $(".left-menu:first-child li:first-child").addClass("active");
     var e;
 	//商品点击增加
 
 
 	$(".JP_seat .add").click(function(){
-		var n = $(this).prev().text();
-		var num = parseFloat(n)+1;
-		e = $(this).prev();//当前数量
-		var ms = e.text(num-1);
-		if(ms!=0){      //判断是否显示减号及数量
-			e.css("display","inline-block");
-			e.prev().css("display","inline-block")
+		var e;
+		var m = $(this).parent().parent().find(".accountName").text();  //当前商品名字
+		var a = parseFloat($(this).siblings(".price").text());  //当前商品单价
+		var n = parseInt($(this).prev().text())+1;  //当前商品数量
+		var s = parseFloat($("#totalpriceshow").text());  //总金额
+		if (n>=999) {
+			n = 999;
 		}
-		e.text(num); //设置数量
-		var parent = $(this).parent();
-		var m=parent.parent().children("h4").text(); //当前商品名称
-		var danjia=$(this).next().text(); //获取单价
-		var a = $("#totalpriceshow").html();  //获取当前所选总价
-		$("#totalpriceshow").html((a * 1 + danjia * 1).toFixed(2));//计算当前所选总价
-		var nm = $("#totalcountshow").html(); //获取数量
-		$("#totalcountshow").html(nm*1+1);
-		jss();   //改变按钮样式
+		$('#tab1-con1 .right-con, #tab1-con2 .right-con, .my-self').each(function () {
+			$(this).find('ul li').each(function(){
+				if(m==$(this).find('h4').text()){
+					e=$(this).find('.add').prev();
+					e.css("display","inline-block")
+					e.prev().css("display","inline-block")
+					e.text(n);
+				}
+			});
+		});
+		$(this).parent().prev().children("span:nth-child(2)").text((a*n).toFixed(2));
+		$("#totalcountshow").text(parseInt($("#totalcountshow").text())+1);
+		$("#totalpriceshow").text((s+a).toFixed(2));
 	});
 
     $(".JP_food_admin .add").click(function(){
@@ -98,11 +102,11 @@ $(function () {
 		e.text(n);    //赋值给商品列表的数量
 		var p = parseFloat($(this).next().text());    //隐藏的价格
 		$(this).parent().prev().children("span.accountPrice").text((p*n).toFixed(2));  //计算该商品规格的总价值
-	   
+
 		$("#totalcountshow").text(parseFloat($("#totalcountshow").text())+1);   //总数量＋1
 		$("#totalpriceshow").text((parseFloat($("#totalpriceshow").text())+p).toFixed(2));   //总价加上该商品价格
 	});
-	
+
 	//购物车 - 减
 	$('.list-content').on('click','.ms2',function(){
 		var e;
@@ -135,7 +139,7 @@ $(function () {
 		$(this).next().text(n);
 	    e.text(n);    //赋值给商品列表的数量
 		$(this).parent().prev().children("span:nth-child(2)").text((a*n).toFixed(2));
-		
+
 		$("#totalcountshow").text(parseInt($("#totalcountshow").text())-1);
 		$("#totalpriceshow").text((s-a).toFixed(2));
 		if(parseFloat($("#totalcountshow").text())==0){
