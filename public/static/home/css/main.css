@@ -11,6 +11,7 @@
 @media only screen and (min-width:640px){html{font-size:16px !important;}}
 body{background: #f6f6f6; font-family: 微软雅黑; max-width: 640px; margin: 0 auto;}
 
+ul, ol, li{list-style-type: none;}
 input::placeholder {
     font-size: 100%!important;
     color: #A8C9FF !important;
@@ -113,6 +114,35 @@ a{color: inherit; text-decoration: none !important;}
 .weui-cells .weui-cell{border-bottom: 1px solid #f6f6f6;}
 .weui-cells .weui-cell:last-child{border-bottom: none;}
 /*首页头部*/
+.head-l-svg{
+    display: inline-block;
+    width: 16px;
+    height: 20px;
+    background: url("../img/svg/geo-alt.svg");
+    vertical-align: middle;
+}
+.head-l-svg.black-icon {
+    background: url("../img/svg/geo-alt-black.svg");
+}
+.head-r-svg{
+    display: inline-block;
+    width: 25px;
+    height: 25px;
+    background: url("../img/svg/scan.svg");
+    margin-top: 10px;
+}
+.head-length {
+    font-style: normal;
+    font-size: 0.1rem;
+    position: absolute;
+    top: 5px;
+    right: -6px;
+    background: #f23030;
+    color: #fff;
+    line-height: initial;
+    padding: 0px 4px;
+    border-radius: 50px;
+}
 .head-search{
     position: absolute;
     width: 55%;
@@ -167,4 +197,43 @@ a{color: inherit; text-decoration: none !important;}
 
 .head-search input {
     font-size: 120%;
+}
+div.pinch-zoom {
+    position: relative;
+    vertical-align: middle;
+    display: block;
+    width: 100%;
+}
+div.pinch-zoom a{
+    color: white;
+    position: absolute;
+    bottom: 10px;
+    right: 10px;
+    text-decoration: none;
+    background: #333;
+    padding: 3px;
+    font-size: 11px;
+}
+.pinch-zoom,.pinch-zoom img{
+    -webkit-user-drag: none;
+    -moz-user-drag: none;
+    -ms-user-drag: none;
+    user-drag: none;
+    vertical-align: middle;
+}
+.pinch-zoom-container {
+    display: table;
+    width: 100%;
+}
+.weui-btn.theme-right {
+    border-radius: 0;
+}
+.weui-btn.theme-right:after {
+    content: none;
+}
+.p-right {
+    position: absolute;
+    right: 10px;
+    top: 50%;
+    margin-top: -12px;
 }

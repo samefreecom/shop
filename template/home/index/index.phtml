@@ -1,4 +1,6 @@
+<?php $menuHome = true; ?>
 {include file="common:header" /}
+<link rel="stylesheet" href="__STATIC__/home/css/index.css?v<?php echo time() ?>">
 <link rel="stylesheet" href="__STATIC__/home/css/swiper.min.css">
 <header class="zyw-header">
     <div class="zyw-container white-color">
@@ -7,7 +9,7 @@
             <i class="fa fa-search" aria-hidden="true"></i>
             <input type="text" placeholder="输入要搜索的菜品或商品" class="white-color">
         </div>
-        <div class="head-r"><a href="javascript:;"><i class="head-r-svg" aria-hidden="true"></i></a></div>
+        <div class="head-r"><a href="javascript:;" onclick="do_qrcode()"><i class="head-r-svg" aria-hidden="true"></i></a></div>
     </div>
 </header>
 <section class="zyw-container">
@@ -23,35 +25,11 @@
     <div class="index-class white-bgcolor">
         <div class="weui-flex">
             <div class="weui-flex__item">
-                <a href="class.php">
-                    <div class="index-class-img">
-                        <img src="__STATIC__/home/img/yqyl.png" alt="">
-                    </div>
-                    <p class="index-class-text">开始点菜</p>
-                </a>
-            </div>
-            <div class="weui-flex__item">
                 <a href="group">
                     <div class="index-class-img">
                         <img src="__STATIC__/home/img/sjtx.png" alt="">
                     </div>
-                    <p class="index-class-text">团体点菜</p>
-                </a>
-            </div>
-            <div class="weui-flex__item">
-                <a href="javascript:;">
-                    <div class="index-class-img">
-                        <img src="__STATIC__/home/img/kbsc.png" alt="">
-                    </div>
-                    <p class="index-class-text">积分兑换</p>
-                </a>
-            </div>
-            <div class="weui-flex__item">
-                <a href="javascript:;">
-                    <div class="index-class-img">
-                        <img src="__STATIC__/home/img/cjfl.png" alt="">
-                    </div>
-                    <p class="index-class-text">查看配送</p>
+                    <p class="index-class-text">团体点餐</p>
                 </a>
             </div>
         </div>
@@ -71,109 +49,19 @@
             <a href="" class="news-more">更多</a>
         </div>
     </div>
-    <div class="index-seckill white-bgcolor">
-        <div class="seckill-hd">
-            <span class="seckill-hd-title red-color"><i class="fa fa-clock-o" aria-hidden="true"></i> 预订好菜，积分翻倍</span>
-            <strong>明日11点后配送</strong>
-            <div id="time"></div>
-            <div class="seckill-hd-r">新鲜食材，第一食享</div>
-        </div>
-        <div class="seckill-bd">
-            <div class="seckill-wares">
-                <div class="swiper-wrapper">
-                    <div class="swiper-slide seckill-ware">
-                        <a href="item.html">
-                            <img src="https://m.360buyimg.com/n1/jfs/t15787/353/109633918/16701/5a8390ef/5a27ae6dNc530b5bb.jpg!q70.jpg" alt="">
-                            <p class="red-color">￥<strong>20.00</strong></p>
-                            <span>积分 40</span>
-                        </a>
-                    </div>
-                    <div class="swiper-slide seckill-ware">
-                        <a href="item.html">
-                            <img src="https://m.360buyimg.com/mobilecms/s240x240_jfs/t14287/16/2071526173/41836/766c1953/5a6935d3N17ca68e7.jpg!q70.jpg" alt="">
-                            <p class="red-color">￥<strong>18.00</strong></p>
-                            <span>积分 36</span>
-                        </a>
-                    </div>
-                    <div class="swiper-slide seckill-ware">
-                        <a href="item.html">
-                            <img src="https://m.360buyimg.com/mobilecms/s240x240_jfs/t15049/171/1967249015/25679/d554d9a9/5a61d929N027318e3.jpg!q70.jpg" alt="">
-                            <p class="red-color">￥<strong>19.00</strong></p>
-                            <span>积分 38</span>
-                        </a>
-                    </div>
-                    <div class="swiper-slide seckill-ware">
-                        <a href="item.html">
-                            <img src="https://m.360buyimg.com//mobilecms/s276x276_jfs/t13030/75/2301251503/262030/ed6dc00d/5a3a09beN645f27a8.jpg!q70.jpg" alt="">
-                            <p class="red-color">￥<strong>15.00</strong></p>
-                            <span>积分 30</span>
-                        </a>
-                    </div>
-                    <div class="swiper-slide seckill-ware">
-                        <a href="item.html">
-                            <img src="https://m.360buyimg.com//mobilecms/s276x276_jfs/t11401/34/504898878/183378/5a6a8a48/59f1c3a1N2174c8cc.jpg!q70.jpg" alt="">
-                            <p class="red-color">￥<strong>16.00</strong></p>
-                            <span>积分 32</span>
-                        </a>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-    <div class="index-wares">
-        <div class="wares-title"><img src="http://gw.alicdn.com/tfs/TB1Aw9JSVXXXXXQXXXXXXXXXXXX-1500-68.png" alt=""></div>
-        <div class="wares-cont">
-            <ul class="clearfix">
-                <li class="col-sm-6 col-xs-6 ware-box">
-                    <a href="item.html">
-                        <div class="ware-img">
-                            <img src="https://m.360buyimg.com/n1/jfs/t15787/353/109633918/16701/5a8390ef/5a27ae6dNc530b5bb.jpg!q70.jpg" alt="">
-                            <span class="ware-vip">vip专享</span>
-                        </div>
-                        <h3 class="ware-title">Apple 苹果 iPhoneX 全新发布</h3>
-                        <p class="ware-des">全网通 64G 深空灰</p>
-                        <span class="ware-prince red-color">￥8088.00</span>
-                    </a>
-                </li>
-                <li class="col-sm-6 col-xs-6 ware-box">
-                    <a href="item.html">
-                        <div class="ware-img">
-                            <img src="https://m.360buyimg.com/mobilecms/s240x240_jfs/t14125/285/900232321/14466/12dfc3a3/5a163dd1Ne09fad4b.jpg!q70.jpg" alt="">
-                            <span class="ware-vip">vip专享</span>
-                        </div>
-                        <h3 class="ware-title">Apple 苹果 iPhoneX 全新发布</h3>
-                        <p class="ware-des">全网通 64G 深空灰</p>
-                        <span class="ware-prince red-color">￥8088.00</span>
-                    </a>
-                </li>
-                <li class="col-sm-6 col-xs-6 ware-box">
-                    <a href="item.html">
-                        <div class="ware-img">
-                            <img src="https://m.360buyimg.com/mobilecms/s240x240_jfs/t15811/137/1521616135/14255/a6150285/5a546fadN096d46b4.jpg!q70.jpg" alt="">
-                            <span class="ware-vip">vip专享</span>
-                        </div>
-                        <h3 class="ware-title">Apple 苹果 iPhoneX 全新发布</h3>
-                        <p class="ware-des">全网通 64G 深空灰</p>
-                        <span class="ware-prince red-color">￥8088.00</span>
-                    </a>
-                </li>
-                <li class="col-sm-6 col-xs-6 ware-box">
-                    <a href="item.html">
-                        <div class="ware-img">
-                            <img src="https://m.360buyimg.com//mobilecms/s276x276_jfs/t5848/205/6830434960/124593/19e83624/596c8b4eN3c8ba6a7.jpg!q70.jpg" alt="">
-                            <span class="ware-vip">vip专享</span>
-                        </div>
-                        <h3 class="ware-title">Apple 苹果 iPhoneX 全新发布</h3>
-                        <p class="ware-des">全网通 64G 深空灰</p>
-                        <span class="ware-prince red-color">￥8088.00</span>
-                    </a>
-                </li>
-            </ul>
-        </div>
-    </div>
 </section>
 <script src="__STATIC__/home/js/swiper.min.js"></script>
 <script type="text/javascript">
+        function scan_qrcode()
+        {
+            wx.scanQRCode({
+                needResult: 0, // 默认为0，扫描结果由微信处理，1则直接返回扫描结果，
+                scanType: ["qrCode","barCode"], // 可以指定扫二维码还是一维码，默认二者都有
+                success: function (res) {
+                    var result = res.resultStr; // 当needResult 为 1 时，扫码返回的结果
+                }
+            });
+        }
         // 轮播
         $(document).ready(function () {
             // 顶部轮播图

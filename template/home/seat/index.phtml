@@ -1,12 +1,7 @@
+<?php $menuSeat = true; ?>
 {include file="common:header" /}
-<link rel="stylesheet" href="__STATIC__/home/js/weui.min.css">
-<link rel="stylesheet" href="__STATIC__/home/css/jquery-weui.min.css">
-<link href="__STATIC__/home/css/bootstrap.min.css" rel="stylesheet">
-<link rel="stylesheet" href="__STATIC__/home/css/font-awesome.min.css">
 <link rel="stylesheet" href="__STATIC__/home/css/aui.css">
-<link rel="stylesheet" href="__STATIC__/home/css/main.css?v<?php echo time() ?>">
 <link rel="stylesheet" href="__STATIC__/home/css/cart.css?v<?php echo time() ?>"">
-<link rel="stylesheet" href="__STATIC__/home/css/theme-color.css">
 <link rel="stylesheet" href="__STATIC__/home/css/classify.css?v<?php echo time() ?>">
 <style>
     html,body{height: 100%;max-width: 640px;margin:0 auto;}
@@ -58,9 +53,8 @@
 </style>
 <header class="zyw-header">
     <div class="zyw-container white-color">
-        <div class="head-l"><a href="javascript:window.history.back(-1)" target="_self"><img src="img/svg/head-return.svg" alt=""></a></div>
+        <div class="head-l"><a href="javascript:window.history.back(-1)" target="_self"><img src="__STATIC__/home/img/svg/head-return.svg" alt=""></a></div>
         <h1>共乐社区店 - 菜单</h1>
-        <div class="head-r"><a href="">切换门店</a></div>
     </div>
 </header>
 <footer class="zyw-footer">
@@ -77,213 +71,150 @@
                             ¥ <b id="totalpriceshow">0</b>
                         </span>
                 </dt>
-                <dd>不含运费</dd>
+                <dd>免运费</dd>
             </dl>
-            <a class="settle_btn" href="javascript:void(0);" id="confirm_cart">去结算</a>
+            <a class="settle_btn" href="javascript:void(0);" id="confirm_cart">确认</a>
         </div>
     </div>
 </footer>
-<section class="zyw-container content">
+<section class="zyw-container content JP_seat">
     <div class="aui-tab" id="tab">
         <div class="aui-tab-item aui-active">全部</div>
-        <div class="aui-tab-item">最近点餐</div>
-        <div class="aui-tab-item">最近收藏</div>
+        <div class="aui-tab-item">团体已点</div>
     </div>
     <div class="main">
         <div class="aui-item" id="tab1-con1">
-            <div class="left-menu" id="left">
+            <div class="left-menu left" id="left">
                 <ul>
-                    <li><span>营养套餐</span></li>
-                    <li><span>实惠炒菜</span></li>
+                    <li><span>所有</span></li>
+                    {foreach name="varietyList" item="v"}
+                    <li><span>{$v.name}</span></li>
+                    {/foreach}
                 </ul>
             </div>
             <div class="con">
                 <div class="right-con con-active" style="display: none;">
                     <ul>
+                        {foreach name='list' item='v'}
                         <li>
-                            <div class="menu-img"><img src="image/img.jpg"></div>
+                            <div class="menu-img"><img src="<?php echo sfimg($v['image'], 115, 115) ?>" orgimg="<?php echo sfimg($v['image'], null, 1440) ?>"></div>
                             <div class="menu-txt">
-                                <h4 data-icon="00">珍珠奶茶</h4>
-                                <p class="list1">月销量：123</p>
+                                <h4 class="accountName">{$v.name}</h4>
+                                <p class="list1">月销量：{$v.quantity_sale}</p>
                                 <p class="list2">
-                                    <b>￥</b><b>2.00</b>
+                                    <b>￥</b><b>{$v.price}</b>
                                 </p>
                                 <div class="btn">
                                     <button class="minus"></button>
                                     <i>0</i>
                                     <button class="add"></button>
-                                    <i class="price">2.00</i>
+                                    <i class="price">{$v.price}</i>
                                 </div>
                             </div>
                         </li>
-                        <li>
-                            <div class="menu-img"><img src="image/img.jpg"></div>
-                            <div class="menu-txt">
-                                <h4 data-icon="01">辣子鸡</h4>
-                                <p class="list1">月销量：123</p>
-                                <p class="list2">
-                                    <b>￥</b><b>3.00</b>
-                                </p>
-                                <div class="btn">
-                                    <button class="minus"></button>
-                                    <i>0</i>
-                                    <button class="add"></button>
-                                    <i class="price">3.00</i>
-                                </div>
-                            </div>
-                        </li>
+                        {/foreach}
                     </ul>
                 </div>
+                {foreach name="varietyList" item="data"}
                 <div class="right-con" style="display: none;">
                     <ul>
+                        {foreach name='data.list' item='v'}
                         <li>
-                            <div class="menu-img"><img src="image/img.jpg"></div>
+                            <div class="menu-img"><img src="<?php echo sfimg($v['image'], 115, 115) ?>" orgimg="<?php echo sfimg($v['image'], null, 1440) ?>"></div>
                             <div class="menu-txt">
-                                <h4 data-icon="10">宫保鸡丁</h4>
+                                <h4 class="accountName">{$v.name}</h4>
                                 <p class="list1">月销量：123</p>
                                 <p class="list2">
-                                    <b>￥</b><b>4.00</b>
+                                    <b>￥</b><b>{$v.price}</b>
                                 </p>
                                 <div class="btn">
                                     <button class="minus"></button>
                                     <i>0</i>
                                     <button class="add"></button>
-                                    <i class="price">4.00</i>
+                                    <i class="price">{$v.price}</i>
                                 </div>
                             </div>
                         </li>
-                        <li>
-                            <div class="menu-img"><img src="image/img.jpg"></div>
-                            <div class="menu-txt">
-                                <h4 data-icon="11">回锅肉</h4>
-                                <p class="list1">月销量：123</p>
-                                <p class="list2">
-                                    <b>￥</b><b>168.00</b>
-                                </p>
-                                <div class="btn">
-                                    <button class="minus"></button>
-                                    <i>0</i>
-                                    <button class="add"></button>
-                                    <i class="price">5.00</i>
-                                </div>
-                            </div>
-                        </li>
+                        {/foreach}
                     </ul>
                 </div>
-            </div>
-            <div class="up1"></div>
-            <div class="shopcart-list fold-transition">
-                <div class="list-header">
-                    <h1 class="title">已点</h1>
-                    <span class="empty">清空所有</span>
-                </div>
-                <div class="list-content">
-                    <ul></ul>
-                </div>
+                {/foreach}
             </div>
         </div>
         <div class="aui-item aui-hide" id="tab1-con2">
-            <div class="right-con tab-con">
+            <div class="left-menu" id="left">
                 <ul>
-                    <li>
-                        <div class="menu-img"><img src="image/img.jpg"></div>
-                        <div class="menu-txt">
-                            <h4 data-icon="10">宫保鸡丁</h4>
-                            <p class="list1">月销量：123</p>
-                            <p class="list2">
-                                <b>￥</b><b>4.00</b>
-                            </p>
-                            <div class="btn">
-                                <button class="minus"></button>
-                                <i>0</i>
-                                <button class="add"></button>
-                                <i class="price">4.00</i>
-                            </div>
-                        </div>
-                    </li>
-                    <li>
-                        <div class="menu-img"><img src="image/img.jpg"></div>
-                        <div class="menu-txt">
-                            <h4 data-icon="11">回锅肉</h4>
-                            <p class="list1">月销量：123</p>
-                            <p class="list2">
-                                <b>￥</b><b>168.00</b>
-                            </p>
-                            <div class="btn">
-                                <button class="minus"></button>
-                                <i>0</i>
-                                <button class="add"></button>
-                                <i class="price">5.00</i>
-                            </div>
-                        </div>
-                    </li>
+                    <li><span>所有</span></li>
+                    <li><span>自己</span></li>
                 </ul>
             </div>
-            <div class="up1"></div>
-            <div class="shopcart-list fold-transition">
-                <div class="list-header">
-                    <h1 class="title">已点</h1>
-                    <span class="empty">清空所有</span>
-                </div>
-                <div class="list-content">
-                    <ul></ul>
-                </div>
-            </div>
-        </div>
-        <div class="aui-item aui-hide" id="tab1-con3">
-            <div class="right-con tab-con">
-                <ul>
-                    <li>
-                        <div class="menu-img"><img src="image/img.jpg"></div>
-                        <div class="menu-txt">
-                            <h4 data-icon="00">珍珠奶茶</h4>
-                            <p class="list1">月销量：123</p>
-                            <p class="list2">
-                                <b>￥</b><b>2.00</b>
-                            </p>
-                            <div class="btn">
-                                <button class="minus"></button>
-                                <i>0</i>
-                                <button class="add"></button>
-                                <i class="price">2.00</i>
+            <div class="con">
+                <div class="right-con con-active">
+                    <ul>
+                        {foreach name='list' item='v'}
+                        <li>
+                            <div class="menu-img"><img src="<?php echo sfimg($v['image'], 115, 115) ?>" orgimg="<?php echo sfimg($v['image'], null, 1440) ?>"></div>
+                            <div class="menu-txt">
+                                <h4 class="accountName">{$v.name}</h4>
+                                <p class="list1">月销量：123</p>
+                                <p class="list2">
+                                    <b>￥</b><b>{$v.price}</b>
+                                </p>
+                                <div class="btn">
+                                    <button class="minus"></button>
+                                    <i>0</i>
+                                    <button class="add"></button>
+                                    <i class="price">{$v.price}</i>
+                                </div>
                             </div>
-                        </div>
-                    </li>
-                    <li>
-                        <div class="menu-img"><img src="image/img.jpg"></div>
-                        <div class="menu-txt">
-                            <h4 data-icon="01">辣子鸡</h4>
-                            <p class="list1">月销量：123</p>
-                            <p class="list2">
-                                <b>￥</b><b>3.00</b>
-                            </p>
-                            <div class="btn">
-                                <button class="minus"></button>
-                                <i>0</i>
-                                <button class="add"></button>
-                                <i class="price">3.00</i>
+                        </li>
+                        {/foreach}
+                    </ul>
+                </div>
+                {foreach name="varietyList" item="data"}
+                <div class="right-con" style="display: none;">
+                    <ul>
+                        {foreach name='data.list' item='v'}
+                        <li>
+                            <div class="menu-img"><img src="<?php echo sfimg($v['image'], 115, 115) ?>" orgimg="<?php echo sfimg($v['image'], null, 1440) ?>"></div>
+                            <div class="menu-txt">
+                                <h4 class="accountName">{$v.name}</h4>
+                                <p class="list1">月销量：123</p>
+                                <p class="list2">
+                                    <b>￥</b><b>{$v.price}</b>
+                                </p>
+                                <div class="btn">
+                                    <button class="minus"></button>
+                                    <i>0</i>
+                                    <button class="add"></button>
+                                    <i class="price">{$v.price}</i>
+                                </div>
                             </div>
-                        </div>
-                    </li>
-                </ul>
-            </div>
-            <div class="up1"></div>
-            <div class="shopcart-list fold-transition">
-                <div class="list-header">
-                    <h1 class="title">已点</h1>
-                    <span class="empty">清空所有</span>
+                        </li>
+                        {/foreach}
+                    </ul>
                 </div>
-                <div class="list-content">
-                    <ul></ul>
-                </div>
+                {/foreach}
             </div>
-        </div>
     </div>
 </section>
+<script type="text/html" id="bar_gallery">
+    <div id="galleryImg" alt="图片详情" role="img" class="weui-gallery__img pinch-zoom" style="text-align: center">
+    </div>
+    <div class="weui-gallery__opr">
+        <a role="button" aria-label="关闭" href="javascript:" onclick="$('#gallery').fadeOut(100)"
+           class="weui-gallery__del">
+            <i class="weui-icon-cancel weui-icon_gallery-cancel"></i>
+        </a>
+    </div>
+</script>
+<div style="display: none;" role="dialog" aria-labelledby="galleryImg" aria-hidden="true" aria-modal="true"
+     class="weui-gallery" id="gallery" onclick="$('#gallery').fadeOut(100)">
+</div>
 <script type="text/javascript" src="__STATIC__/home/js/api.js" ></script>
-<script src="__STATIC__/home/js/jquery.min.js"></script>
-<script type="text/javascript" src="__STATIC__/home/js/add.js"></script>
+<script type="text/javascript" src="__STATIC__/home/js/add.js__URL_CACHE__"></script>
 <script type="text/javascript" src="__STATIC__/home/js/aui-tab.js" ></script>
+<script type="text/javascript" src="__STATIC__/home/js/pinchzoom.js__URL_CACHE__" ></script>
 <script type="text/javascript">
     apiready = function() {
         api.parseTapmode();
@@ -304,11 +235,23 @@
             }
             var index = ret.index;
             var activeC = document.getElementById("tab1-con" + index);
+            $(activeC).find('.left-menu li').first().click();
             activeC.className = "";
             for (var i = 0; i < siblings(activeC).length; i++) {
                 siblings(activeC)[i].className = "aui-hide";
             }
         }
+    });
+    $(function () {
+        $('.menu-img img').click(function () {
+            $('#gallery').html($('#bar_gallery').html());
+            $('#galleryImg').html('<img src="' + $(this).attr('orgimg') + '" style="max-height: 100%; display: none" />');
+            $('#gallery').fadeIn(100, 'swing', function () {
+                $('div.pinch-zoom').each(function () {
+                    new RTP.PinchZoom($(this), {});
+                });
+            });
+        });
     });
 </script>
 {include file="common:footer" /}

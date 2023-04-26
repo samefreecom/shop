@@ -8,6 +8,7 @@ class Item
 {
     public function _empty()
     {
+        define('FALG_ADMIN', true);
         $model = Request::action();
         $class = "app\\" . $model . "\\controller\\Admin";
         if (class_exists($class)) {

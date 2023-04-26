@@ -14,6 +14,7 @@ define('GLOBAL_INSTANCE_KEY', '__');
 define('FLAG_BASEDIR', false);
 define('DS', DIRECTORY_SEPARATOR);
 define('FLAG_AJAX', isset($_SERVER['HTTP_X_REQUESTED_WITH']) ? ($_SERVER['HTTP_X_REQUESTED_WITH']== 'XMLHttpRequest') : false);
+define('FLAG_WX', strpos($_SERVER['HTTP_USER_AGENT'], 'MicroMessenger'));
 define('ROOT', dirname(dirname(__FILE__)));
 define('DOMAIN', isset($_SERVER['HTTP_HOST']) ? $_SERVER['HTTP_HOST'] : 'localhost');
 define('BASEURL', 'http://' . DOMAIN);  //  e.g. localhost
@@ -1507,7 +1508,7 @@ function sfdump($value, $exit = false)
  * @param $value    需要清空的数据
  * @return array|string 清空后的数组
  */
-function sftrim(&$value, $remove = true)
+function sftrim(&$value, $remove = false)
 {
     if (is_array($value)) {
         foreach ($value as $k => $v) {

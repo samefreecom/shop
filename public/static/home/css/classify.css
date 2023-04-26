@@ -299,12 +299,16 @@ width: 0;
 	color: #f00;
 	font-weight:normal
 }
+.right-con li .menu-txt p.list2 b:first-child {
+	font-size: 9px!important;
+}
 .right-con li .btn {
 	background-color: transparent;
 	position: absolute;
 	right: 0px;
 	bottom: 0px;
 	cursor: pointer;
+	padding-right: 8px;
 }
 .right-con li .btn button.minus, .subCount dd .btn button.ms {
 	margin-right: -10px;
@@ -338,6 +342,10 @@ width: 0;
 	vertical-align: top;
 	margin-top: 3px;
 	line-height: 18px;
+}
+.JP_food_admin .right-con .btn i
+, .JP_food_admin .right-con li .btn button.minus {
+	display: inline-block;
 }
 .right-con li .btn button.add, .subCount dd .btn button.ad {
 	margin-left: -10px;
@@ -611,7 +619,7 @@ button:focus {
 	right: 0;
 	bottom: 6px;
 }
-.main #left li span {
+.main .left-menu li span {
 	display: inline-block;
 	text-align: center;
 	line-height: 50px;

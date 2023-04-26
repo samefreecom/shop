@@ -1,3 +1,4 @@
+<?php $menuMember = true; ?>
 {include file="common:header" /}
 <link rel="stylesheet" href="__STATIC__/home/css/weui.min.css">
 <link rel="stylesheet" href="__STATIC__/home/css/jquery-weui.min.css">
@@ -10,43 +11,35 @@
     <div class="home-head white-bgcolor clearfix">
         <div class="head-img">
             <div class="head-logo"><img src="__STATIC__/home/img/mylogo.png" alt=""></div>
-            <div class="head-name">抓耗子的猫</div>
+            <div class="head-name JU_name">-</div>
             <div class="head-name" style="right: 8px; left: auto"><a href="/admin">管理店铺</a></div>
             <div class="head-icon">
-                <a href=""><img src="__STATIC__/home/img/svg/home-cog.svg" alt=""></a>
+                <a href="javascript:;" onclick="update_name()"><img src="__STATIC__/home/img/svg/home-cog.svg" alt=""></a>
                 <a href=""><img src="__STATIC__/home/img/svg/home-message.svg" alt=""></a>
             </div>
         </div>
         <div class="head-cont">
             <div class="weui-flex">
-                <div class="weui-flex__item"><a href="star.html"><p>12</p><span>喜欢的菜品</span></a></div>
-                <div class="weui-flex__item"><a href="star.html"><p>6</p><span>收藏的宝贝</span></a></div>
-                <div class="weui-flex__item"><a href="star.html"><p>16</p><span>我的足迹</span></a></div>
+                <div class="weui-flex__item"><a href="javascript:;"><p>0</p><span>喜欢的菜品</span></a></div>
             </div>
         </div>
     </div>
     <div class="home-cont weui-cells mt-625">
-        <a class="weui-cell weui-cell_access" href="order.html">
+        <a class="weui-cell weui-cell_access" href="<?php echo sfurl('/seat/order') ?>">
             <div class="weui-cell__bd">
-                <p class="choose-text"><img src="__STATIC__/home/img/svg/home-1.svg" alt=""> 点餐订单</p>
+                <p class="choose-text"><img src="__STATIC__/home/img/svg/home-1.svg" alt=""> 外卖订单</p>
             </div>
             <div class="weui-cell__ft choose-des">
-                查看所有已点菜品
+                查看所有外卖
             </div>
         </a>
     </div>
     <div class="weui-flex home-order white-bgcolor mb-625">
         <a href="order.html" class="weui-flex__item">
             <div class="weui-flex__icon">
-                <img src="__STATIC__/home/img/svg/home-dfk.svg" alt="">
-            </div>
-            <p class="weui-flex__label">待付款</p>
-        </a>
-        <a href="order.html" class="weui-flex__item">
-            <div class="weui-flex__icon">
                 <img src="__STATIC__/home/img/svg/home-dfh.svg" alt="">
             </div>
-            <p class="weui-flex__label">待配送</p>
+            <p class="weui-flex__label">待配餐</p>
         </a>
         <a href="order.html" class="weui-flex__item">
             <div class="weui-flex__icon">
@@ -58,84 +51,20 @@
             <div class="weui-flex__icon">
                 <img src="__STATIC__/home/img/svg/home-dpj.svg" alt="">
             </div>
-            <p class="weui-flex__label">待评价</p>
-        </a>
-        <a href="javascript:;" class="weui-flex__item">
-            <div class="weui-flex__icon">
-                <img src="__STATIC__/home/img/svg/home-tk.svg" alt="">
-            </div>
-            <p class="weui-flex__label">退款/售后</p>
-        </a>
-    </div>
-    <div class="home-cont weui-cells mt-625">
-        <a class="weui-cell weui-cell_access" href="order.html">
-            <div class="weui-cell__bd">
-                <p class="choose-text"><img src="__STATIC__/home/img/svg/home-1.svg" alt=""> 商品订单</p>
-            </div>
-            <div class="weui-cell__ft choose-des">
-                查看所有已购宝贝
-            </div>
-        </a>
-    </div>
-    <div class="weui-flex home-order white-bgcolor mb-625">
-        <a href="order.html" class="weui-flex__item">
-            <div class="weui-flex__icon">
-                <img src="__STATIC__/home/img/svg/home-dfk.svg" alt="">
-            </div>
-            <p class="weui-flex__label">待付款</p>
-        </a>
-        <a href="order.html" class="weui-flex__item">
-            <div class="weui-flex__icon">
-                <img src="__STATIC__/home/img/svg/home-dfh.svg" alt="">
-            </div>
-            <p class="weui-flex__label">待发货</p>
-        </a>
-        <a href="order.html" class="weui-flex__item">
-            <div class="weui-flex__icon">
-                <img src="__STATIC__/home/img/svg/home-dsh.svg" alt="">
-            </div>
-            <p class="weui-flex__label">待收货</p>
-        </a>
-        <a href="order.html" class="weui-flex__item">
-            <div class="weui-flex__icon">
-                <img src="__STATIC__/home/img/svg/home-dpj.svg" alt="">
-            </div>
-            <p class="weui-flex__label">待评价</p>
-        </a>
-        <a href="javascript:;" class="weui-flex__item">
-            <div class="weui-flex__icon">
-                <img src="__STATIC__/home/img/svg/home-tk.svg" alt="">
-            </div>
-            <p class="weui-flex__label">退款/售后</p>
+            <p class="weui-flex__label">已收货</p>
         </a>
     </div>
     <div class="home-cont weui-cells mb-625">
         <a class="weui-cell weui-cell_access" href="javascript:;">
             <div class="weui-cell__bd">
-                <p class="choose-text"><img src="__STATIC__/home/img/svg/home-2.svg" alt=""> 积分</p>
+                <p class="choose-text"><img src="__STATIC__/home/img/svg/home-4.svg" alt=""> 填补手机号</p>
             </div>
             <div class="weui-cell__ft choose-des">
-                当前可用积分200
-            </div>
-        </a>
-        <a class="weui-cell weui-cell_access" href="coupon.html">
-            <div class="weui-cell__bd">
-                <p class="choose-text"><img src="__STATIC__/home/img/svg/home-3.svg" alt=""> 优惠券</p>
-            </div>
-            <div class="weui-cell__ft choose-des">
-                2张
             </div>
         </a>
     </div>
     <div class="home-cont weui-cells mb-625">
-        <a class="weui-cell weui-cell_access" href="javascript:;">
-            <div class="weui-cell__bd">
-                <p class="choose-text"><img src="__STATIC__/home/img/svg/home-4.svg" alt=""> 地址管理</p>
-            </div>
-            <div class="weui-cell__ft choose-des">
-            </div>
-        </a>
-        <a class="weui-cell weui-cell_access" href="login.html">
+        <a class="weui-cell weui-cell_access" href="#">
             <div class="weui-cell__bd">
                 <p class="choose-text"><img src="__STATIC__/home/img/svg/home-5.svg" alt=""> 意见反馈</p>
             </div>
@@ -144,7 +73,17 @@
         </a>
     </div>
 </section>
-<script src="__STATIC__/home/js/jquery.min.js"></script>
-<script src="__STATIC__/home/js/jquery-weui.min.js"></script>
-<script src="__STATIC__/home/js/bootstrap.min.js"></script>
+<script type="text/javascript">
+    function update_name() {
+        let memberName = '<?php echo app\member\model\Session::instance()->getName() ?>' || window.localStorage.getItem('member_name');
+        memberName = prompt("请输入您的昵称：", memberName);
+        while(!memberName || memberName.toLowerCase() == 'null' || memberName.length == 0) {
+            memberName = prompt("请输入您的昵称：（2-6长度）", '<?php echo app\base\model\Common::instance()->getRandNetName() ?>');
+        }
+        window.localStorage.setItem('member_name', memberName);
+        if ($('.JU_name').length > 0) {
+            $('.JU_name').html(memberName);
+        }
+    }
+</script>
 {include file="common:footer" /}

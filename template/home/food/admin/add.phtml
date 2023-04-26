@@ -1,0 +1,204 @@
+<?php $menuFood = true; ?>
+{include file="common:admin_header" /}
+<link rel="stylesheet" href="__STATIC__/home/css/aui.css">
+<link rel="stylesheet" href="__STATIC__/home/css/cart.css__URL_CACHE__">
+<link rel="stylesheet" href="__STATIC__/home/css/classify.css__URL_CACHE__">
+<style type="text/css">
+    .weui-cell__hd label {
+        margin-bottom: 0;
+    }
+    .weui-cell__bd input {
+        font-size: 14px;
+    }
+    .weui-cell__bd .weui-select {
+        padding-left: 0;
+    }
+</style>
+<body style="background: #fff;">
+<header class="zyw-header">
+    <div class="zyw-container white-color">
+        <div class="head-l"><a href="javascript:window.history.back(-1)" target="_self"><img src="__STATIC__/home/img/svg/head-return.svg" alt=""></a></div>
+        <h1>新增</h1>
+    </div>
+</header>
+<section class="zyw-container">
+    <div class="weui-cell mt-2 weui-cell_vcode">
+        <div class="weui-cell__hd">
+            <label class="weui-label">商品图片</label>
+        </div>
+        <div class="weui-cell__bd">
+            <img id="image" src="<?php echo sfret('image_min', sfurl('/public/static/asset/no_image_left.png')) ?>" orgimg="<?php echo sfret('image_max') ?>" style="min-height: 115px" />
+        </div>
+        <div class="weui-cell__ft">
+            <button class="weui-vcode-btn theme-color" onclick="$('#uploaderInput').click()">选择</button>
+            <form action="<?php echo sfurl('/tool/image/upload') ?>" method="post" enctype="multipart/form-data" target="_image">
+                <input type="hidden" name="min_width" value="115" />
+                <input type="hidden" name="min_height" value="115" />
+                <input type="hidden" name="max_height" value="1440" />
+                <input id="uploaderInput" name="file" style="display: none" class="weui-uploader__input" type="file" accept="image/*" onchange="reset_image();this.parentNode.submit()">
+            </form>
+        </div>
+    </div>
+    <form id="frm_main" method="post" onsubmit="return valid_frm(this)">
+        <input type="hidden" name="image" value="<?php echo sfret('image') ?>" />
+        <input type="hidden" name="image_min" value="<?php echo sfret('image_min') ?>" />
+        <input type="hidden" name="image_max" value="<?php echo sfret('image_max') ?>" />
+        <div class="weui-cell">
+            <div class="weui-cell__hd"><label class="weui-label">商品名称</label></div>
+            <div class="weui-cell__bd">
+                <input class="weui-input" type="text" name="name" value="<?php echo sfret('name') ?>">
+            </div>
+        </div>
+        <div class="weui-cell">
+            <div class="weui-cell__hd"><label class="weui-label">排序优先级</label></div>
+            <div class="weui-cell__bd">
+                <input class="weui-input" type="number" name="sort" value="<?php echo sfret('sort', 999) ?>">
+            </div>
+        </div>
+        <div class="weui-cell weui-cell_vcode">
+            <div class="weui-cell__hd">
+                <label class="weui-label">所属类目</label>
+            </div>
+            <div class="weui-cell__bd">
+                <select name="variety_id" class="weui-select">
+                    <option value="">默认</option>
+                    {foreach name="varietyList" item="v"}
+                    <option value="{$v.id}">{$v.name}</option>
+                    {/foreach}
+                </select>
+            </div>
+            <div class="weui-cell__ft">
+                <button type="button" class="weui-vcode-btn theme-color" onclick="add_variety()">新增</button><button type="button" class="weui-vcode-btn theme-color" onclick="del_variety()">删除</button>
+            </div>
+        </div>
+        <div class="weui-cell">
+            <div class="weui-cell__hd"><label class="weui-label">商品单价</label></div>
+            <div class="weui-cell__bd">
+                <input class="weui-input" type="number" name="price" value="<?php echo sfret('price', 999.99) ?>">
+            </div>
+        </div>
+        <div class="weui-cell weui-cell_vcode mb-625">
+            <div class="weui-cell__hd">
+                <label class="weui-label">剩余库存</label>
+            </div>
+            <div class="weui-cell__bd">
+                <input class="weui-input" id="quantity" type="text" name="quantity" value="<?php echo sfret('quantity', 0) ?>">
+            </div>
+            <div class="weui-cell__ft">
+                <button type="button" class="weui-vcode-btn theme-color" onclick="$('#quantity').val(999)">填满</button><button type="button" class="weui-vcode-btn theme-color" onclick="$('#quantity').val(0)">清零</button><button type="button" class="weui-vcode-btn theme-color" onclick="$('#quantity').val(parseInt($('#quantity').val()) + 1)" style="width: 56px">+</button>
+            </div>
+        </div>
+        <div class="login-btn mt-2"><input type="submit" name="subtype" class="weui-btn weui-btn_warn theme-bgcolor" value="确认"></div>
+        <div class="login-btn mt-2"><input type="submit" name="subtype" class="weui-btn weui-btn_warn theme-bgcolor" value="确认并继续"></div>
+    </form>
+</section>
+<script type="text/html" id="bar_gallery">
+    <div id="galleryImg" alt="图片详情" role="img" class="weui-gallery__img pinch-zoom" style="text-align: center">
+    </div>
+    <div class="weui-gallery__opr">
+        <a role="button" aria-label="关闭" href="javascript:" onclick="$('#gallery').fadeOut(100)"
+           class="weui-gallery__del">
+            <i class="weui-icon-cancel weui-icon_gallery-cancel"></i>
+        </a>
+    </div>
+</script>
+<div style="display: none;" role="dialog" aria-labelledby="galleryImg" aria-hidden="true" aria-modal="true"
+     class="weui-gallery" id="gallery" onclick="$('#gallery').fadeOut(100)">
+</div>
+<script type="text/javascript" src="__STATIC__/home/js/pinchzoom.js__URL_CACHE__" ></script>
+<script type="text/javascript">
+    $(function () {
+        $('#image').click(function () {
+            let orgimg = $(this).attr('orgimg');
+            if (!orgimg || orgimg.length == 0) {
+                $('#uploaderInput').click();
+                return;
+            }
+            $('#gallery').html($('#bar_gallery').html());
+            $('#galleryImg').html('<img src="' + orgimg + '" style="max-height: 100%; display: none" />');
+            $('#gallery').fadeIn(100, 'swing', function () {
+                $('div.pinch-zoom').each(function () {
+                    new RTP.PinchZoom($(this), {});
+                });
+            });
+        });
+    });
+    function add_variety() {
+        $.prompt({
+            title: '添加类目',
+            empty: false,
+            onOK: function (input) {
+                $.post('<?php echo sfurl("/admin/item/food/addVariety") ?>', {name: input}, function (ret) {
+                    ret = eval('(' + ret + ')');
+                    if (ret.code == 200) {
+                        $.toptip('新增类目成功', 'success');
+                        $('#frm_main select[name="variety_id"]').append('<option value="' + ret.data.id + '">' + ret.data.name + '</option>');
+                        $('#frm_main select[name="variety_id"] option').removeAttr("selected");
+                        $('#frm_main select[name="variety_id"] option:last').attr("selected", "selected");
+                    } else {
+                        $.toptip(ret.msg, 'error');
+                    }
+                });
+            },
+            onCancel: function () {
+                //点击取消
+            }
+        });
+    }
+    function valid_frm(frm) {
+        if (frm.name.value.length == 0) {
+            $.toptip('请输入“商品名称”', 'error');
+            frm.name.focus();
+            return false;
+        }
+        if (isNaN(frm.sort.value)) {
+            $.toptip('请输入正确的“排序优先级”', 'error');
+            frm.sort.focus();
+            return false;
+        }
+        if (isNaN(frm.price.value)) {
+            $.toptip('请输入正确的“商品单价”', 'error');
+            frm.price.focus();
+            return false;
+        }
+        if (isNaN(frm.quantity.value)) {
+            $.toptip('请输入正确的“剩余库存”', 'error');
+            frm.quantity.focus();
+            return false;
+        }
+        return true;
+    }
+    function del_variety() {
+        let id = $('#frm_main select[name="variety_id"]').val();
+        if (id.length > 0) {
+            $.getJSON('<?php echo sfurl("/admin/item/food/delVariety") ?>', {id: id}, function (ret) {
+                if (ret.code == 200) {
+                    $.toptip('删除类目成功', 'success');
+                    $('#frm_main select[name="variety"] option[value="' + id + '"]').remove();
+                    $('#frm_main select[name="variety"] option:first').attr("selected", "selected");
+                } else {
+                    alert(ret.msg);
+                }
+            });
+        } else {
+            $.toptip('不能删除"默认"类目', 'error');
+        }
+    }
+    function reset_image() {
+        $.showLoading();
+        document.getElementsByName('image')[0].value = '';
+    }
+    function call_back(ret, method_name) {
+        $.hideLoading();
+        $('#frm_main input[name="name"]').focus();
+        if (ret.code == 200) {
+            $('#image').attr('src', ret.data.min_url);
+            $('#image').attr('orgimg', ret.data.max_url);
+            $('#frm_main input[name="image"]').val(ret.data.path);
+            $('#frm_main input[name="image_min"]').val(ret.data.min_url);
+            $('#frm_main input[name="image_max"]').val(ret.data.max_url);
+        }
+    }
+</script>
+<iframe style="display: none" name="_image"></iframe>
+{include file="common:footer" /}

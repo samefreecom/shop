@@ -1,0 +1,71 @@
+<?php $menuMember = true; ?>
+{include file="common:header" /}
+<link rel="stylesheet" href="__STATIC__/home/css/order.css__URL_CACHE__">
+<header class="zyw-header">
+    <div class="zyw-container white-color">
+        <div class="head-l"><a href="javascript:window.history.back(-1)" target="_self"><img src="__STATIC__/home/img/svg/head-return.svg" alt=""></a></div>
+        <h1>外卖订单</h1>
+        <div class="head-r"></div>
+    </div>
+</header>
+<section class="zyw-container">
+    <div class="weui-tab">
+        <div class="weui-navbar">
+            <a class="weui-navbar__item weui-bar__item--on" href="#order_all">全部</a>
+            <a class="weui-navbar__item" href="#order_dfk">待处理</a>
+            <a class="weui-navbar__item" href="#order_dpj">已收货</a>
+        </div>
+        <div class="weui-tab__bd">
+            <div id="order_all" class="weui-tab__bd-item weui-tab__bd-item--active">
+                <div class="order-group">
+                    <div class="order-group-item clearfix">
+                        <div class="order-item-box">
+                            <h4 class="order-item-id">订单号：52145859543856977
+                                <span class="order-item-state theme-color pull-right">待收货</span>
+                            </h4>
+                            <div class="media">
+                                <a href="" class="pull-left">
+                                    <img class="media-object order-item-img" src="<?php echo sfimg('/public/static/asset/img/20230421181042.jpg', 115, 115) ?>">
+                                </a>
+                                <div class="media-body">
+                                    <div class="order-item-info">
+                                        <h5 class="order-item-title">Apple iPhone X (A1865) 64GB 银色 移动联通电信4G手机</h5>
+                                        <div class="pull-right text-right order-item-r">
+                                            <p class="order-item-prince">￥4800.00</p>
+                                            <p class="order-item-length">x 2</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="media">
+                                <a href="" class="pull-left">
+                                    <img class="media-object order-item-img" src="<?php echo sfimg('/public/static/asset/img/20230421181042.jpg', 115, 115) ?>">
+                                </a>
+                                <div class="media-body">
+                                    <div class="order-item-info">
+                                        <h5 class="order-item-title">Apple iPhone X (A1865) 64GB 银色 移动联通电信4G手机</h5>
+                                        <div class="pull-right text-right order-item-r">
+                                            <p class="order-item-prince">￥4800.00</p>
+                                            <p class="order-item-length">x 2</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <h4 class="order-item-id"><a href="javascript:;"><i class="head-l-svg black-icon" aria-hidden="true"></i> <strong>南山区卓越前海壹号T3写字楼（总 12 份）</strong></a>
+                            <span class="order-item-state pull-right" style="color: red">您共计 1 份</span>
+                        </h4>
+                        <p class="text-right order-item-sum">合计 4815.00（含运费 0.00元）</p>
+                        <div class="order-item-btn pull-left">
+                            <button class="btn btn-sm btn-primary theme-bdcolor theme-bgcolor">修改</button> 备注：
+                        </div>
+                        <div class="order-item-btn pull-right">
+                            <button class="btn btn-sm btn-default">取消订餐</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{include file="common:footer" /}

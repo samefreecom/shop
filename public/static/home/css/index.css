@@ -1,29 +1,3 @@
-.head-l-svg{
-    display: inline-block;
-    width: 16px;
-    height: 20px;
-    background: url("../img/svg/geo-alt.svg");
-    vertical-align: middle;
-}
-.head-r-svg{
-    display: inline-block;
-    width: 25px;
-    height: 25px;
-    background: url("../img/svg/scan.svg");
-    margin-top: 10px;
-}
-.head-length {
-    font-style: normal;
-    font-size: 0.1rem;
-    position: absolute;
-    top: 5px;
-    right: -6px;
-    background: #f23030;
-    color: #fff;
-    line-height: initial;
-    padding: 0px 4px;
-    border-radius: 50px;
-}
 .swiper-slide img{
     width: 100%;
 }
@@ -166,7 +140,6 @@ span.seckill-hd-title.theme-color {
 .index-show .col-sm-12, .index-show .col-sm-4, .index-show .col-sm-6, .index-show .col-xs-12, .index-show .col-xs-4, .index-show .col-xs-6{
     padding: 0;
 }
-ul, ol, li{list-style-type: none;}
 .index-wares{
     width: 100%;
 }

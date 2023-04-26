@@ -7,6 +7,7 @@ class Login
 {
     public function index()
     {
+        define('FALG_ADMIN', true);
         if (Request::isPost()) {
             @session_start();
             if (isset($_SESSION['_captcha_admin_login']) && isset($_POST['captcha']) && $_POST['captcha'] == $_SESSION['_captcha_admin_login']) {

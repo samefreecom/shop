@@ -1,0 +1,114 @@
+<?php $menuFood = true; ?>
+{include file="common:admin_header" /}
+<link rel="stylesheet" href="__STATIC__/home/css/aui.css">
+<link rel="stylesheet" href="__STATIC__/home/css/cart.css__URL_CACHE__">
+<link rel="stylesheet" href="__STATIC__/home/css/classify.css__URL_CACHE__">
+<style>
+    html,body{height: 100%;max-width: 640px;margin:0 auto;}
+    h1 {
+        margin-top: 12px;
+    }
+    .btn {
+        padding-top: 10px;
+    }
+    .main{height: calc(100% - 4.5rem);}
+
+    #tab1-con1{padding-bottom: 3rem;}
+    #tab1-con1,#tab1-con2,#tab1-con3{height: 100%;}
+    .aui-tab{border-bottom: solid 1px #eee;background: #fff;height: 42px;}
+    .aui-tab-item{color: #666;width: 25%; height: 36px; line-height: 36px}
+    .aui-tab-item.aui-active{border:none;color: #000;position: relative;}
+    .aui-tab-item.aui-active:after{position: absolute;left: 40%;width: 20%;height: 2px;background: #00ae66;content: '';bottom:0;}
+    .zyw-container.content, .zyw-container.content .con {
+        height: 100%;
+    }
+    .zyw-container.content * {
+        font-size: 16px!important;
+    }
+    .settle_box .total_amount dt p {
+        font-size: 16px;
+    }
+    .settle_box .total_amount dd {
+        font-size: 14px;
+    }
+    .settle_box .total_amount dt span {
+        color: #f34347;
+        font-size: 16px;
+        line-height: 20px;
+    }
+    .main .tab-con {
+        display: block;
+        left: 25%;
+    }
+</style>
+<header class="zyw-header">
+    <div class="zyw-container white-color">
+        <div class="head-l"><a href="javascript:window.history.back(-1)" target="_self"><img src="__STATIC__/home/img/svg/head-return.svg" alt=""></a></div>
+        <h1>共乐社区店 - 菜单管理</h1>
+        <div class="head-r"><a href="<?php echo sfurl('/admin/item/food/add') ?>">+ 新增</a></div>
+    </div>
+</header>
+<section class="zyw-container content JP_food_admin">
+    <div class="aui-tab" id="tab">
+        <div class="aui-tab-item aui-active">全部</div>
+        <span class="p-right">点击图片或名字进行编辑、下架</span>
+    </div>
+    <div class="main">
+        <div class="aui-item" id="tab1-con1">
+            <div class="left-menu left" id="left">
+                <ul>
+                    <li><span>营养套餐</span></li>
+                    <li><span>加菜</span></li>
+                </ul>
+            </div>
+            <div class="con">
+                <div class="right-con con-active" style="display: none;">
+                    <ul>
+                        {foreach name='list' item='v'}
+                        <li>
+                            <div class="menu-img"><a href="#"><img src="<?php echo sfimg($v['image'], 115, 115) ?>"></a></div>
+                            <div class="menu-txt">
+                                <h4><a href="#">{$v.name}</a></h4>
+                                <p class="list1">月销量：{$v.quantity_sale}</p>
+                                <p class="list2">
+                                    <b>￥</b><b>{$v.price}</b>
+                                </p>
+                                <div class="btn">
+                                    <button class="minus"></button>
+                                    <i>{$v.quantity}</i>
+                                    <button class="add"></button>
+                                    <i class="price">{$v.price}</i>
+                                </div>
+                            </div>
+                        </li>
+                        {/foreach}
+                    </ul>
+                </div>
+                <div class="right-con" style="display: none;">
+                    <ul>
+                        {foreach name='list' item='v'}
+                        <li>
+                            <div class="menu-img"><img src="<?php echo sfimg($v['image'], 115, 115) ?>"></div>
+                            <div class="menu-txt">
+                                <h4 data-icon="00">{$v.name}</h4>
+                                <p class="list1">月销量：{$v.quantity_sale}</p>
+                                <p class="list2">
+                                    <b>￥</b><b>{$v.price}</b>
+                                </p>
+                                <div class="btn">
+                                    <button class="minus"></button>
+                                    <i>{$v.quantity}</i>
+                                    <button class="add"></button>
+                                    <i class="price">{$v.price}</i>
+                                </div>
+                            </div>
+                        </li>
+                        {/foreach}
+                    </ul>
+                </div>
+            </div>
+        </div>
+</section>
+<script type="text/javascript" src="__STATIC__/home/js/add.js__URL_CACHE__"></script>
+<script type="text/javascript" src="__STATIC__/home/js/aui-tab.js" ></script>
+{include file="common:footer" /}

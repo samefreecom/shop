@@ -146,5 +146,6 @@ return [
     'tpl_replace_string' => [
         '__DOMAIN__' => ROOT_DIR
         , '__STATIC__' => ROOT_DIR . '/public/static'
+        , '__URL_CACHE__' => '?v' . time()
     ]
 ];

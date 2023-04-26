@@ -1,21 +1,51 @@
-<script src="__STATIC__/home/js/jquery.min.js"></script>
-<script src="__STATIC__/home/js/jquery-weui.min.js"></script>
-<script src="__STATIC__/home/js/bootstrap.min.js"></script>
-    <script type="text/javascript">
-        if (typeof sfinit == 'function') {
-            sfinit();
+<?php
+    $mWechat = app\wx\model\Base::instance();
+    $jsSign = $mWechat->getJsSign();
+?>
+<script type="text/javascript" src="http://res.wx.qq.com/open/js/jweixin-1.6.0.js"></script>
+<script type="text/javascript">
+    <?php if (FLAG_WX) : ?>
+    <?php endif; ?>
+    $(function () {
+        if (!wx) {
+            wx.config({
+                debug: true, // 开启调试模式,调用的所有api的返回值会在客户端alert出来，若要查看传入的参数，可以在pc端打开，参数信息会通过log打出，仅在pc端时才会打印。
+                appId: '{$jsSign.appId}', // 必填，公众号的唯一标识
+                timestamp: {$jsSign.timestamp}, // 必填，生成签名的时间戳
+                nonceStr: '{$jsSign.nonceStr}', // 必填，生成签名的随机串
+                signature: '{$jsSign.signature}',// 必填，签名
+                jsApiList: [
+                    'getLocation'
+                    , 'scanQRCode'
+                ] // 必填，需要使用的JS接口列表
+            });
         }
-        <?php
-        $messages = sfget_admin_tmp_messages();
-        if(!empty($messages)) :
-        foreach ($messages as $msg):
-        ?>
-        alert('<?php echo addslashes($msg['content']) ?>');
-        <?php
-        endforeach;
-        endif;
-        ?>
-    </script>
+    });
+    if (typeof sfinit == 'function') {
+        sfinit();
+    }
+    let memberName = '<?php echo app\member\model\Session::instance()->getName() ?>' || window.localStorage.getItem('member_name');
+    if (!memberName || memberName.toLowerCase() == 'null' || memberName.length == 0) {
+        memberName = prompt("请输入您的昵称：", '<?php echo app\base\model\Common::instance()->getRandNetName() ?>');
+        while(!memberName || memberName.toLowerCase() == 'null' || memberName.length == 0) {
+            memberName = prompt("请输入您的昵称：（2-6长度）", '<?php echo app\base\model\Common::instance()->getRandNetName() ?>');
+        }
+        window.localStorage.setItem('member_name', memberName);
+    }
+    if ($('.JU_name').length > 0) {
+        $('.JU_name').html(memberName);
+    }
+    <?php
+    $messages = defined('FALG_ADMIN') && FALG_ADMIN ? sfget_admin_tmp_messages() : sfget_tmp_messages();
+    if(!empty($messages)) :
+    foreach ($messages as $msg):
+    ?>
+    $.toptip('<?php echo addslashes($msg['content']) ?>', 'warning');
+    <?php
+    endforeach;
+    endif;
+    ?>
+</script>
 </body>
 </html>
 <?php
