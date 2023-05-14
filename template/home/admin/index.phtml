@@ -1,4 +1,6 @@
-<?php $menuAll = true; ?>
+<?php use app\base\model\Summary;
+
+$menuAll = true; ?>
 {include file="common:admin_header" /}
 <style type="text/css">
     .home-head .head-img {
@@ -18,14 +20,14 @@
         </div>
         <div class="head-cont">
             <div class="weui-flex">
-                <div class="weui-flex__item"><a href="<?php echo sfurl('/admin/item/seat/order') ?>"><p>12</p><span>今日外卖单</span></a></div>
-                <div class="weui-flex__item"><a href="#"><p>6</p><span>今日新建团体</span></a></div>
-                <div class="weui-flex__item"><a href="#"><p>16</p><span>今日新增会员</span></a></div>
+                <div class="weui-flex__item"><a href="#"><p><?php echo Summary::instance()->getTodayIndent() ?></p><span>今日有效单</span></a></div>
+                <div class="weui-flex__item"><a href="#"><p><?php echo Summary::instance()->getTodayGroup() ?></p><span>今日新建团体</span></a></div>
+                <div class="weui-flex__item"><a href="#"><p><?php echo Summary::instance()->getTodayAccount() ?></p><span>今日新增会员</span></a></div>
             </div>
         </div>
     </div>
     <div class="home-cont weui-cells mt-625">
-        <a class="weui-cell weui-cell_access" href="<?php echo sfurl('/admin/item/seat/order') ?>">
+        <a class="weui-cell weui-cell_access" href="<?php echo sfurl('/admin/item/indent/order') ?>">
             <div class="weui-cell__bd">
                 <p class="choose-text"><img src="__STATIC__/home/img/svg/home-1.svg" alt=""> 外卖订单</p>
             </div>
@@ -35,19 +37,19 @@
         </a>
     </div>
     <div class="weui-flex home-order white-bgcolor mb-625">
-        <a href="order.html" class="weui-flex__item">
+        <a href="<?php echo sfurl('/admin/indent/order/status/W') ?>" class="weui-flex__item">
             <div class="weui-flex__icon">
                 <img src="__STATIC__/home/img/svg/home-dfh.svg" alt="">
             </div>
             <p class="weui-flex__label">待配餐</p>
         </a>
-        <a href="order.html" class="weui-flex__item">
+        <a href="<?php echo sfurl('/admin/indent/order/status/P') ?>" class="weui-flex__item">
             <div class="weui-flex__icon">
                 <img src="__STATIC__/home/img/svg/home-dsh.svg" alt="">
             </div>
             <p class="weui-flex__label">待收货</p>
         </a>
-        <a href="order.html" class="weui-flex__item">
+        <a href="<?php echo sfurl('/admin/indent/order/status/C') ?>" class="weui-flex__item">
             <div class="weui-flex__icon">
                 <img src="__STATIC__/home/img/svg/home-dpj.svg" alt="">
             </div>
@@ -55,7 +57,7 @@
         </a>
     </div>
     <div class="home-cont weui-cells mt-625">
-        <a class="weui-cell weui-cell_access" href="order.html">
+        <a class="weui-cell weui-cell_access" href="#">
             <div class="weui-cell__bd">
                 <p class="choose-text"><img src="img/svg/home-1.svg" alt=""> 其他功能</p>
             </div>
@@ -68,7 +70,7 @@
             </div>
             <p class="weui-flex__label">店铺管理</p>
         </a>
-        <a href="<?php echo sfurl('/admin/item/ad') ?>" class="weui-flex__item">
+        <a href="<?php echo sfurl('/admin/ad') ?>" class="weui-flex__item">
             <div class="weui-flex__icon">
                 <img src="__STATIC__/home/img/svg/home-dfk.svg" alt="">
             </div>

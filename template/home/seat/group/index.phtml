@@ -193,7 +193,6 @@
                             <div class="menu-img"><img src="<?php echo sfimg($v['image'], 115, 115) ?>" orgimg="<?php echo sfimg($v['image'], null, 1440) ?>"></div>
                             <div class="menu-txt">
                                 <h4 class="accountName">{$v.food_name}</h4>
-                                <p class="list1">销量：{$v.quantity_sale}</p>
                                 <p class="list2">
                                     <b>￥</b><b>{$v.price}</b>
                                 </p>
@@ -214,7 +213,6 @@
                             <div class="menu-img"><img src="<?php echo sfimg($v['image'], 115, 115) ?>" orgimg="<?php echo sfimg($v['image'], null, 1440) ?>"></div>
                             <div class="menu-txt">
                                 <h4 class="accountName">{$v.food_name}</h4>
-                                <p class="list1">销量：{$v.quantity_sale}</p>
                                 <p class="list2">
                                     <b>￥</b><b>{$v.price}</b>
                                 </p>
@@ -311,7 +309,10 @@
                ret = eval('(' + ret + ')');
                 $.hideLoading();
                if (ret.code == 1) {
-                   $.toast("下单成功");
+                   $.toast("下单成功", '', function () {
+                       $.showLoading('前往订单');
+                       window.location.href = "<?php echo sfurl('/indent/order/show/status/W') ?>";
+                   });
                } else {
                    $.toast(ret.msg, "cancel");
                }

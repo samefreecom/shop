@@ -13,7 +13,7 @@
         <div class="weui-navbar">
             <a class="weui-navbar__item{if condition='$status eq "A"'} weui-bar__item--on{/if}" href="<?php echo sfurl('/indent/order') ?>">全部</a>
             <a class="weui-navbar__item{if condition='$status eq "W"'} weui-bar__item--on{/if}" href="<?php echo sfurl('/indent/order/show/status/W') ?>">待配餐</a>
-            <a class="weui-navbar__item{if condition='$status eq "S"'} weui-bar__item--on{/if}" href="<?php echo sfurl('/indent/order/show/status/S') ?>">待收货</a>
+            <a class="weui-navbar__item{if condition='$status eq "P"'} weui-bar__item--on{/if}" href="<?php echo sfurl('/indent/order/show/status/P') ?>">待收货</a>
             <a class="weui-navbar__item{if condition='$status eq "C"'} weui-bar__item--on{/if}" href="<?php echo sfurl('/indent/order/show/status/C') ?>">已收货</a>
         </div>
         <div class="weui-tab__bd">
@@ -23,7 +23,7 @@
                     <div class="order-group-item clearfix">
                         <div class="order-item-box">
                             <h4 class="order-item-id">订单号：{$order.indent_no}
-                                <span class="order-item-state theme-color pull-right">{$order.status_indent}</span>
+                                <span class="order-item-state theme-color pull-right" id="JV_status_{$order.id}">{$order.status_indent}</span>
                             </h4>
                             {foreach name="order.foodList" item="v"}
                             <div class="media">
@@ -32,7 +32,7 @@
                                 </div>
                                 <div class="media-body">
                                     <div class="order-item-info">
-                                        <h5 class="order-item-title">{$v.name}</h5>
+                                        <h5 class="order-item-title">#{$v.tag_no} {$v.name}</h5>
                                         <div class="pull-right text-right order-item-r">
                                             <p class="order-item-prince">￥{$v.price}</p>
                                             <p class="order-item-length">x {$v.quantity}</p>
@@ -47,10 +47,15 @@
                         </h4>
                         <p class="text-right order-item-sum">合计 {$order.amount}（含运费 0.00元）</p>
                         <div class="order-item-btn pull-left">
-                            <button class="btn btn-sm btn-primary theme-bdcolor theme-bgcolor">修改</button> 备注：
+                            {if condition="$order.status eq 'W'"}
+                            <button class="btn btn-sm btn-primary theme-bdcolor theme-bgcolor" id="JB_update_{$order.id}" onclick="update_note({$order.id})">修改</button>
+                            {/if}
+                            备注：<span id="JV_note_{$order.id}"><?php echo sfsubstr_ellipsis($order['note'], 50) ?></span>
                         </div>
                         <div class="order-item-btn pull-right">
-                            <button class="btn btn-sm btn-default">取消订餐</button>
+                            {if condition="$order.status eq 'W'"}
+                            <button id="JB_cancel_{$order.id}" class="btn btn-sm btn-default" onclick="close_order({$order.id})">取消订餐</button>
+                            {/if}
                         </div>
                     </div>
                 </div>
@@ -60,7 +65,51 @@
     </div>
 </section>
 <script>
+    function close_order(id) {
+        $.prompt({
+            title: '请输入取消原因',
+            text: '（50字以内）',
+            input: '',
+            empty: false,
+            onOK: function (input) {
+                $.showLoading();
+                $.post('<?php echo sfurl("/indent/order/close") ?>', {id: id, content: input}, function (ret) {
+                    $.hideLoading();
+                    ret = eval('(' + ret + ')');
+                    if (ret.code == 1) {
+                        $.toast('取消成功');
+                        $('#JB_update_' + id).hide();
+                        $('#JB_cancel_' + id).hide();
+                        $('#JV_status_' + id).html('已取消');
+                    } else {
+                        $.toast(ret.msg, "cancel");
+                    }
+                });
+            }
+        });
+    }
 
+    function update_note(id) {
+        let el = $('#JV_note_' + id);
+        $.prompt({
+            title: '请输入外卖备注',
+            text: '（50字以内）',
+            input: el.html(),
+            empty: true,
+            onOK: function (input) {
+                $.showLoading();
+                $.post('<?php echo sfurl("/indent/order/updateNote") ?>', {id: id, content: input}, function (ret) {
+                    $.hideLoading();
+                    ret = eval('(' + ret + ')');
+                    if (ret.code == 1) {
+                        el.html(input);
+                    } else {
+                        $.toast(ret.msg, "cancel");
+                    }
+                });
+            }
+        });
+    }
     function open_location(name, longitude, latitude) {
         wx.openLocation({
             latitude: latitude,

@@ -35,7 +35,7 @@
             </div>
             <p class="weui-flex__label">待配餐</p>
         </a>
-        <a href="<?php echo sfurl('/indent/order/show/status/S') ?>" class="weui-flex__item">
+        <a href="<?php echo sfurl('/indent/order/show/status/P') ?>" class="weui-flex__item">
             <div class="weui-flex__icon">
                 <img src="__STATIC__/home/img/svg/home-dsh.svg" alt="">
             </div>
@@ -70,7 +70,7 @@
 </section>
 <script type="text/javascript">
     function update_telephone() {
-        let memberTelephone = '<?php echo app\base\model\Session::instance()->getTelephone() ?>' || window.localStorage.getItem('member_telephone');
+        let memberTelephone = '<?php echo app\base\model\Session::instance()->getTelephone() ?>';
         $.prompt({
             title: '请输入您的联系方式',
             text: '（手机或座机）',
@@ -78,7 +78,6 @@
             empty: false,
             onOK: function (input) {
                 window.memberTelephone = input;
-                window.localStorage.setItem('member_telephone', window.memberTelephone);
                 $.getJSON('<?php echo sfurl("/base/session/saveInfo") ?>', {telephone: window.memberTelephone}, function (ret) {
                 });
             },
@@ -87,7 +86,7 @@
         });
     }
     function update_name() {
-        let memberName = '<?php echo app\base\model\Session::instance()->getName() ?>' || window.localStorage.getItem('member_name');
+        let memberName = '<?php echo app\base\model\Session::instance()->getName() ?>';
         $.prompt({
             title: '请输入您的昵称',
             text: '（2-6长度）',
@@ -99,7 +98,6 @@
                     read_member_name();
                 }
                 window.memberName = input;
-                window.localStorage.setItem('member_name', window.memberName);
                 $.getJSON('<?php echo sfurl("/base/session/saveInfo") ?>', {name: window.memberName}, function (ret) {
                 });
                 if ($('.JU_name').length > 0) {

@@ -28,7 +28,10 @@ input::-moz-placeholder {
     font-size: 100%!important;
     color: #A8C9FF !important;
 }
-
+.weui-icon_toast {
+    margin: 22px auto 0;
+    width: 64px;
+}
 .zyw-container{width: 100%; max-width: 640px; margin: 0 auto; position: relative;}
 .zyw-footer .zyw-container .weui-tabbar {
     background-color: #fff;

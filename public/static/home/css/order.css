@@ -59,6 +59,7 @@
 }
 .order-group .order-item-btn{
     margin: 0;
+    line-height: 2rem;
 }
 .order-group .order-item-btn button{
     border-radius: 50px;

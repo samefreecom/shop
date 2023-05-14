@@ -4,18 +4,16 @@ namespace app\admin\controller;
 
 use think\facade\Request;
 
-class Item
+class Error
 {
     public function _empty()
     {
         define('FALG_ADMIN', true);
-        $model = Request::action();
+        $model = Request::controller();
         $class = "app\\" . $model . "\\controller\\Admin";
         if (class_exists($class)) {
             $obj = new $class();
-            $param = Request::param();
-            $firstKey = key($param);
-            $action = basename($firstKey);
+            $action = Request::action();
             if (empty($action) || $model == $action) {
                 $action = 'index';
             }

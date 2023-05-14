@@ -28,7 +28,7 @@
                             $nameAdd = '';
                         }
                 ?>
-                <li><a href="<?php echo sfurl('/seat/group/food/id/' . $v['id']) ?>"><span class="name"><?php echo sfsubstr_ellipsis($name, 4) ?>{$nameAdd}</span>{$f.name} x {$f.quantity}</a></li>
+                <li><a href="<?php echo sfurl('/seat/group/food/id/' . $v['id']) ?>"><span class="name"><?php echo sfsubstr_ellipsis($name, 5) ?>{$nameAdd}</span>{$f.name} x {$f.quantity}</a></li>
                 <?php endforeach; ?>
                 {/notempty}
                 <li style="margin-top: 10px">

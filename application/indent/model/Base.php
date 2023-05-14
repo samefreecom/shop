@@ -30,6 +30,7 @@ class Base extends BaseModel
         }
         try {
             $this->startTrans();
+            $group = Db::table(sfp('group'))->where('id', 'eq', $param['group_id'])->field('group_no')->find();
             $mapId = array_flip($param['ids']);
             $mapData = [];
             $sumPrice = 0.00;
@@ -46,10 +47,12 @@ class Base extends BaseModel
                 }
             }
             $exists = Db::table(sfp('indent'))->where('account_id', 'eq', $param['account_id'])->where('status', 'eq', 'W')->where('to_days(created_at) = to_days(now())')->find();
+            $max = Db::table(sfp('indent'))->where('created_at', '>=', date('Y-m-d'))->count('1');
+            $autoNo = sprintf('%03d', $max + 1);
             $bind = [
                 'group_id' => $param['group_id']
                 , 'account_id' => $param['account_id']
-                , 'indent_no' => sfget_unique()
+                , 'indent_no' => $group['group_no'] . $autoNo
                 , 'amount' => $sumPrice
                 , 'created_at' => date('Y-m-d H:i:s')
                 , 'created_ip' => sfget_ip()
@@ -63,25 +66,40 @@ class Base extends BaseModel
             }
             if (Db::table(sfp('indent'))->insert($bind)) {
                 $indentId = Db::table(sfp('indent'))->getLastInsID();
-                $foodBindList = [];
-                foreach ($mapData as $value) {
-                    $foodBindList[] = array(
-                        'indent_id' => $indentId
-                        , 'food_id' => $value['id']
-                        , 'price' => $value['price']
-                        , 'quantity' => $value['qty']
-                        , 'created_at' => date('Y-m-d H:i:s')
-                        , 'updated_at' => date('Y-m-d H:i:s')
-                    );
-                }
-                if (Db::table(sfp('indent_food'))->insertAll($foodBindList)) {
-                    if (!empty($exists)) {
-                        Db::table(sfp('indent'))->where('id', 'eq', $exists['id'])->update(array('status' => 'E', 'updated_at' => date('Y-m-d H:i:s')));
+                //防止tag_no冲突尝试十次
+                for ($i = 0; $i < 10; $i++) {
+                    try {
+                        $max = Db::table(sfp('indent_food'))->where('created_at', '>=', date('Y-m-d'))->count('1');
+                        $autoNo = $max + 1;
+                        $foodBindList = [];
+                        foreach ($mapData as $value) {
+                            $foodBindList[] = array(
+                                'group_id' => $param['group_id']
+                                , 'indent_id' => $indentId
+                                , 'food_id' => $value['id']
+                                , 'tag_no' => $autoNo++
+                                , 'price' => $value['price']
+                                , 'quantity' => $value['qty']
+                                , 'created_at' => date('Y-m-d H:i:s')
+                                , 'updated_at' => date('Y-m-d H:i:s')
+                            );
+                        }
+                        if (Db::table(sfp('indent_food'))->insertAll($foodBindList)) {
+                            if (!empty($exists)) {
+                                Db::table(sfp('indent'))->where('id', 'eq', $exists['id'])->update(array('status' => 'E', 'updated_at' => date('Y-m-d H:i:s')));
+                            }
+                            $this->commit();
+                            return true;
+                        } else {
+                            sleep(1);
+                        }
+                    } catch (\Exception $e) {
+                        if ($i == 9) {
+                            throw new \Exception('插入数据库失败，请联系技术客服！');
+                        } else {
+                            sleep(1);
+                        }
                     }
-                    $this->commit();
-                    return true;
-                } else {
-                    throw new \Exception('插入数据库失败，请联系技术客服！');
                 }
             } else {
                 throw new \Exception('插入数据库失败，请联系技术客服！');
@@ -136,5 +154,78 @@ class Base extends BaseModel
         }
         $list = array_merge($fmtIndentList);
         return $list;
+    }
+
+    public function getGroupList($param)
+    {
+        $base = Db::table(sfp('indent t'))
+            ->leftJoin(sfp('group g'), 't.group_id = g.id')
+            ->leftJoin(sfp('status s'), 't.status = s.status_code')
+            ->where('t.account_id', 'eq', $accountId)
+            ->order('t.id desc')
+            ->field(['t.*', 'g.title', 'g.lon', 'g.lat', 's.status_indent']);
+        if (!empty($param['status']) && $param['status'] != 'A') {
+            $base->where('status', 'eq', $param['status']);
+        }
+        $list = $base->select();
+        $indentIdList = [];
+        $foodIdList = [];
+        $fmtIndentList = [];
+        foreach ($list as $value) {
+            $indentIdList[] = $value['id'];
+            $value['foodList'] = [];
+            $value['food_sum_qty'] = 0;
+            $fmtIndentList[$value['id']] = $value;
+        }
+        $indentFoodList = Db::table(sfp('indent_food'))->where('indent_id', 'in', $indentIdList)->select();
+        foreach ($indentFoodList as $value) {
+            $foodIdList[] = $value['food_id'];
+        }
+        $foodList = Db::table(sfp('food'))->where('id', 'in', $foodIdList)->select();
+        $fmtFoodList = [];
+        foreach ($foodList as $value) {
+            $fmtFoodList[$value['id']] = $value;
+        }
+        foreach ($indentFoodList as $value) {
+            if (isset($fmtFoodList[$value['food_id']])) {
+                $value['name'] = $fmtFoodList[$value['food_id']]['name'];
+                $value['image'] = $fmtFoodList[$value['food_id']]['image'];
+            } else {
+                $value['name'] = '已作废';
+                $value['image'] = '';
+            }
+            $fmtIndentList[$value['indent_id']]['foodList'][] = $value;
+            $fmtIndentList[$value['indent_id']]['food_sum_qty'] += $value['quantity'];
+        }
+        $list = array_merge($fmtIndentList);
+        return $list;
+    }
+
+    public function updateNote($param)
+    {
+        sftrim($param);
+        $keyMap = ['id' => '外卖编号', 'account_id' => '用户编号', 'content' => '备注'];
+        if (($key = sfis_valid($param, array('id', 'account_id', 'content'))) !== true) {
+            return $this->setErrorCode(404)->setError('%s 不能为空或不符合！', $keyMap[$key]);
+        }
+        $bind = ['note' => $param['content'], 'updated_at' => date('Y-m-d H:i:s')];
+        if (Db::table(sfp('indent'))->where('id', 'eq', $param['id'])->where('account_id', 'eq', $param['account_id'])->update($bind)) {
+            return true;
+        }
+        return $this->setErrorCode(500)->setError('无权修改，请刷新后再试');
+    }
+
+    public function close($param)
+    {
+        sftrim($param);
+        $keyMap = ['id' => '外卖编号', 'account_id' => '用户编号', 'content' => '原因'];
+        if (($key = sfis_valid($param, array('id', 'account_id', 'content'))) !== true) {
+            return $this->setErrorCode(404)->setError('%s 不能为空或不符合！', $keyMap[$key]);
+        }
+        $bind = ['remark' => $param['content'], 'status' => 'N', 'updated_at' => date('Y-m-d H:i:s')];
+        if (Db::table(sfp('indent'))->where('id', 'eq', $param['id'])->where('account_id', 'eq', $param['account_id'])->where('status', 'in', ['W'])->update($bind)) {
+            return true;
+        }
+        return $this->setErrorCode(500)->setError('无权取消，请刷新后再试');
     }
 }

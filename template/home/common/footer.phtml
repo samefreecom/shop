@@ -30,8 +30,7 @@
                     read_member_name();
                 }
                 window.memberName = input;
-                window.localStorage.setItem('member_name', window.memberName);
-                $.getJSON('<?php echo sfurl("/base/session/saveInfo") ?>', {name: window.memberName}, function (ret) {
+                $.getJSON('<?php echo sfurl("/base/session/saveInfo") ?>', {name: window.memberName, sess_id:'<?php echo sfenstr(session_id()) ?>'}, function (ret) {
                 });
                 if ($('.JU_name').length > 0) {
                     $('.JU_name').html(window.memberName);
@@ -64,7 +63,7 @@
     if (typeof sfinit == 'function') {
         sfinit();
     }
-    window.memberName = '<?php echo app\base\model\Session::instance()->getName() ?>' || window.localStorage.getItem('member_name');
+    window.memberName = '<?php echo app\base\model\Session::instance()->getName() ?>';
     if (!window.memberName || window.memberName.toLowerCase() == 'null' || window.memberName.length == 0) {
         read_member_name();
     }

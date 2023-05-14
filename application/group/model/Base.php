@@ -61,7 +61,7 @@ class Base extends BaseModel
         $max = Db::table(sfp('group'))->where('expired_at', '>=', date('Y-m-d'))->count('1');
         $autoNo = sprintf('%02d', $max + 1);
         $bind = [
-            'group_no' => date('Ymd') . $autoNo
+            'group_no' => date('ymd') . $autoNo
             , 'auto_no' => $autoNo
             , 'title' => $param['title']
             , 'name' => $param['name']
@@ -72,6 +72,7 @@ class Base extends BaseModel
             , 'lon' => $param['lon']
             , 'lat' => $param['lat']
             , 'created_at' => date('Y-m-d H:i:s')
+            , 'created_id' => Session::instance()->getId()
             , 'expired_at' => date('Y-m-d')
         ];
         if (Db::table(sfp('group'))->insert($bind)) {

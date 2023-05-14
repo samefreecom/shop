@@ -11,9 +11,10 @@
 <section class="zyw-container">
     <div class="weui-tab">
         <div class="weui-navbar">
-            <a class="weui-navbar__item weui-bar__item--on" href="#order_all">全部</a>
-            <a class="weui-navbar__item" href="#order_dfk">待处理</a>
-            <a class="weui-navbar__item" href="#order_dpj">已完成</a>
+            <a class="weui-navbar__item{if condition='$status eq "A"'} weui-bar__item--on{/if}" href="<?php echo sfurl('/admin/indent/order') ?>">全部</a>
+            <a class="weui-navbar__item{if condition='$status eq "W"'} weui-bar__item--on{/if}" href="<?php echo sfurl('/admin/indent/order/status/W') ?>">待配餐</a>
+            <a class="weui-navbar__item{if condition='$status eq "P"'} weui-bar__item--on{/if}" href="<?php echo sfurl('/admin/indent/order/status/P') ?>">待收货</a>
+            <a class="weui-navbar__item{if condition='$status eq "C"'} weui-bar__item--on{/if}" href="<?php echo sfurl('/admin/indent/order/status/C') ?>">已收货</a>
         </div>
         <div class="weui-tab__bd">
             <div id="order_all" class="weui-tab__bd-item weui-tab__bd-item--active">

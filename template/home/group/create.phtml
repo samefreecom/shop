@@ -158,7 +158,7 @@ $menuSeat = true;
     }, false);
     $(function () {
         let telephone = $('#frm_main input[name="telephone"]');
-        telephone.val('<?php echo app\base\model\Session::instance()->getTelephone() ?>' || window.localStorage.getItem('member_telephone'));
+        telephone.val('<?php echo app\base\model\Session::instance()->getTelephone() ?>');
         if (telephone.val().length == 0) {
             telephone.focus();
         }

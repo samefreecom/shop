@@ -96,11 +96,11 @@ class Session extends \app\BaseModel
     
     public function saveSession($param = array())
     {
-        if (!isset($param['session_id'])) {
+        if (!isset($param['sess_id'])) {
             $sessionId = session_id();
         } else {
-            session_id($param['session_id']);
-            $sessionId = $param['session_id'];
+            $sessionId = sfdestr($param['sess_id']);
+            session_id($sessionId);
         }
         $oldSession = $_SESSION;
         $time = time();
@@ -146,7 +146,7 @@ class Session extends \app\BaseModel
             } catch (\Exception $e) {
                 session_regenerate_id(true);
                 $sessionId = session_id();
-                $param['session_id'] = $sessionId;
+                $param['sess_id'] = sfenstr($sessionId);
                 $_SESSION = $oldSession;
                 setcookie('PHPSESSID', $sessionId, time() + 3156000, '/');
                 $this->saveSession($param);

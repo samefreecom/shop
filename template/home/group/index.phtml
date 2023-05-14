@@ -117,7 +117,7 @@ $menuSeat = true;
                         withCredentials: true
                     },
                     type: 'GET',
-                    data : {lon: window.longitude, lat: window.latitude, name: ('<?php echo app\base\model\Session::instance()->getName() ?>' || window.localStorage.getItem('member_name')), telephone: ('<?php echo app\base\model\Session::instance()->getTelephone() ?>' || window.localStorage.getItem('member_telephone'))},
+                    data : {lon: window.longitude, lat: window.latitude, name: '<?php echo app\base\model\Session::instance()->getName() ?>', telephone: '<?php echo app\base\model\Session::instance()->getTelephone() ?>'},
                     dataType: 'json',
                     success: function (ret) {
                         load_item();

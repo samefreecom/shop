@@ -2035,4 +2035,9 @@ function sfdesensitize($string, $start = 0, $length = 0, $re = '*') {
 session_start();
 $phpsessionid = session_id();
 setcookie('PHPSESSID', $phpsessionid, time() + 3156000, '/');
+/*
+foreach ($_COOKIE as $key => $value) {
+    setcookie($key, '', time() - 60);
+}
+*/
 //custom end

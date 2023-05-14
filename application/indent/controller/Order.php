@@ -1,5 +1,6 @@
 <?php
 namespace app\indent\controller;
+use app\base\model\Session;
 use app\indent\model\Base;
 use think\facade\Request;
 
@@ -19,5 +20,29 @@ class Order
     public function show()
     {
         return $this->index();
+    }
+    
+    public function updateNote()
+    {
+        $param = Request::param();
+        $param['account_id'] = Session::instance()->getId();
+        $mIndent = new Base();
+        if ($mIndent->updateNote($param)) {
+            sfresponse(1);
+        } else {
+            sfresponse(0, $mIndent->getError());
+        }
+    }
+    
+    public function close()
+    {
+        $param = Request::param();
+        $param['account_id'] = Session::instance()->getId();
+        $mIndent = new Base();
+        if ($mIndent->close($param)) {
+            sfresponse(1);
+        } else {
+            sfresponse(0, $mIndent->getError());
+        }
     }
 }
