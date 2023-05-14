@@ -1,0 +1,75 @@
+<?php $menuMember = true; ?>
+{include file="common:header" /}
+<link rel="stylesheet" href="__STATIC__/home/css/order.css__URL_CACHE__">
+<header class="zyw-header">
+    <div class="zyw-container white-color">
+        <div class="head-l"><a href="javascript:window.history.back(-1)" target="_self"><img src="__STATIC__/home/img/svg/head-return.svg" alt=""></a></div>
+        <h1>外卖订单</h1>
+        <div class="head-r"></div>
+    </div>
+</header>
+<section class="zyw-container">
+    <div class="weui-tab">
+        <div class="weui-navbar">
+            <a class="weui-navbar__item{if condition='$status eq "A"'} weui-bar__item--on{/if}" href="<?php echo sfurl('/indent/order') ?>">全部</a>
+            <a class="weui-navbar__item{if condition='$status eq "W"'} weui-bar__item--on{/if}" href="<?php echo sfurl('/indent/order/show/status/W') ?>">待配餐</a>
+            <a class="weui-navbar__item{if condition='$status eq "S"'} weui-bar__item--on{/if}" href="<?php echo sfurl('/indent/order/show/status/S') ?>">待收货</a>
+            <a class="weui-navbar__item{if condition='$status eq "C"'} weui-bar__item--on{/if}" href="<?php echo sfurl('/indent/order/show/status/C') ?>">已收货</a>
+        </div>
+        <div class="weui-tab__bd">
+            <div id="order_all" class="weui-tab__bd-item weui-tab__bd-item--active">
+                {foreach name="list" item="order"}
+                <div class="order-group">
+                    <div class="order-group-item clearfix">
+                        <div class="order-item-box">
+                            <h4 class="order-item-id">订单号：{$order.indent_no}
+                                <span class="order-item-state theme-color pull-right">{$order.status_indent}</span>
+                            </h4>
+                            {foreach name="order.foodList" item="v"}
+                            <div class="media">
+                                <div class="pull-left">
+                                    <img class="media-object order-item-img" src="<?php echo sfimg($v['image'], 115, 115) ?>">
+                                </div>
+                                <div class="media-body">
+                                    <div class="order-item-info">
+                                        <h5 class="order-item-title">{$v.name}</h5>
+                                        <div class="pull-right text-right order-item-r">
+                                            <p class="order-item-prince">￥{$v.price}</p>
+                                            <p class="order-item-length">x {$v.quantity}</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            {/foreach}
+                        </div>
+                        <h4 class="order-item-id"><a href="javascript:open_location('{$order.title}', {$order.lon}, {$order.lat});"><i class="head-l-svg black-icon" aria-hidden="true"></i> <strong>{$order.title}</strong></a>
+                            <span class="order-item-state pull-right" style="color: red">您共计 {$order.food_sum_qty} 份</span>
+                        </h4>
+                        <p class="text-right order-item-sum">合计 {$order.amount}（含运费 0.00元）</p>
+                        <div class="order-item-btn pull-left">
+                            <button class="btn btn-sm btn-primary theme-bdcolor theme-bgcolor">修改</button> 备注：
+                        </div>
+                        <div class="order-item-btn pull-right">
+                            <button class="btn btn-sm btn-default">取消订餐</button>
+                        </div>
+                    </div>
+                </div>
+                {/foreach}
+            </div>
+        </div>
+    </div>
+</section>
+<script>
+
+    function open_location(name, longitude, latitude) {
+        wx.openLocation({
+            latitude: latitude,
+            longitude: longitude,
+            name: name,
+            address: name,
+            scale: 20,
+            infoUrl: '<?php echo sfurl("./") ?>'
+        });
+    }
+</script>
+{include file="common:footer" /}

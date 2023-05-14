@@ -14,19 +14,26 @@ $(function () {
 		if (n>=999) {
 			n = 999;
 		}
+		let isAdd = true;
 		$('#tab1-con1 .right-con, #tab1-con2 .right-con, .my-self').each(function () {
 			$(this).find('ul li').each(function(){
 				if(m==$(this).find('h4').text()){
 					e=$(this).find('.add').prev();
-					e.css("display","inline-block")
-					e.prev().css("display","inline-block")
-					e.text(n);
+					if (n > e.attr('max-val')) {
+						isAdd = false;
+					} else {
+						e.css("display","inline-block");
+						e.prev().css("display","inline-block");
+						e.text(n);
+					}
 				}
 			});
 		});
-		$(this).parent().prev().children("span:nth-child(2)").text((a*n).toFixed(2));
-		$("#totalcountshow").text(parseInt($("#totalcountshow").text())+1);
-		$("#totalpriceshow").text((s+a).toFixed(2));
+		if (isAdd) {
+			$(this).parent().prev().children("span:nth-child(2)").text((a*n).toFixed(2));
+			$("#totalcountshow").text(parseInt($("#totalcountshow").text())+1);
+			$("#totalpriceshow").text((s+a).toFixed(2));
+		}
 	});
 
     $(".JP_food_admin .add").click(function(){
@@ -95,58 +102,9 @@ $(function () {
 		$(this).next().text(n);
 		e.text(n);
 	});
-	//购物车 - 加
-	$(document).on('click','.ad2',function(){
-		var n = parseInt($(this).prev().text())+1;
-		$(this).prev().text(n);    //当前商品数量+1
-		e.text(n);    //赋值给商品列表的数量
-		var p = parseFloat($(this).next().text());    //隐藏的价格
-		$(this).parent().prev().children("span.accountPrice").text((p*n).toFixed(2));  //计算该商品规格的总价值
-
-		$("#totalcountshow").text(parseFloat($("#totalcountshow").text())+1);   //总数量＋1
-		$("#totalpriceshow").text((parseFloat($("#totalpriceshow").text())+p).toFixed(2));   //总价加上该商品价格
+	$('.all_check').click(function () {
+		$('#tab .aui-tab-item:eq(1)').click();
 	});
-
-	//购物车 - 减
-	$('.list-content').on('click','.ms2',function(){
-		var e;
-		var m = $(this).parent().parent().find(".accountName").text();  //当前商品名字
-		var a = parseFloat($(this).siblings(".price").text());  //当前商品单价
-		var n = parseInt($(this).next().text())-1;  //当前商品数量
-		var s = parseFloat($("#totalpriceshow").text());  //总金额
-		var znum=0;
-
-		$(".list-content ul li").each(function(){
-			znum = znum + parseInt($(this).find('.li_acount').text());
-		})
-		znum = znum-1;
-
-		$('.right-con ul li').each(function(){
-			if(m==$(this).find('h4').text()){
-				e=$(this).find('.add').prev();
-			}
-		})
-		if(n == 0){
-			$(this).parent().parent().remove();
-
-			e.css("display","none");
-            e.prev().css("display","none")
-
-            if(znum==0){
-            	$(".up1").hide();
-            }
-		}
-		$(this).next().text(n);
-	    e.text(n);    //赋值给商品列表的数量
-		$(this).parent().prev().children("span:nth-child(2)").text((a*n).toFixed(2));
-
-		$("#totalcountshow").text(parseInt($("#totalcountshow").text())-1);
-		$("#totalpriceshow").text((s-a).toFixed(2));
-		if(parseFloat($("#totalcountshow").text())==0){
-			$(".shopcart-list").hide();
-		}
-	});
-
     function jss() {
         var m = $("#totalcountshow").html();
         if (m > 0) {
@@ -155,7 +113,15 @@ $(function () {
             $(".right").find("a").addClass("disable");
         }
     };
-	
+	setInterval(function () {
+		$('.has-ed li').each(function () {
+			if (parseInt($(this).find('i').html()) == 0) {
+				$(this).hide();
+			} else {
+				$(this).show();
+			}
+		});
+	}, 100);
     //选项卡
     $(".con>div").hide();
     $(".con>div:eq(0)").show();

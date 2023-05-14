@@ -642,13 +642,11 @@ function sfstr_contact($value, $exp)
 
 function sfsubstr_ellipsis($str, $end, $start = 0, $add = ' ...')
 {
+    $str = strip_tags($str);
+    $len = mb_strlen($str, 'utf-8');
     if ($start >= 0) {
-        $str = strip_tags($str);
-        $len = strlen($str);
         return mb_substr($str, $start, $end, 'utf-8') . ($len > $end ? $add : '');
     } else {
-        $str = strip_tags($str);
-        $len = strlen($str);
         return ($len > $end ? $add : '') . mb_substr($str, $len - $end, $end, 'utf-8');
     }
 }
@@ -1216,7 +1214,7 @@ function sfurl($path = '/', $param = null)
 {
     if ($path == './') {
         $request = \think\Container::get('request');
-        $url = $request->url();
+        $url = SITEURL_ROOT . $request->url();
     } else {
         $url = BASEDIR . $path;
         $index = strlen($url);
@@ -1365,6 +1363,9 @@ function sfresponse($result = 1, $message = '成功', $data = '', $redirect = nu
     }
     if ($result === false) {
         $result = 0;
+    }
+    if (is_numeric($result)) {
+        $result = $result;
     }
     $header = true;
     $ret = array(
@@ -1994,3 +1995,44 @@ function sfquit($message = null, $header = true)
     }
     exit();
 }
+
+/**
+ * 求两个已知经纬度之间的距离,单位为米
+ * @param $lon1 经度1
+ * @param $lat1 纬度1
+ * @param $lon2 经度2
+ * @param $lat2 纬度2
+ * @return float|int 米的距离
+ */
+function sfdiff_distance($lon1, $lat1, $lon2, $lat2){
+    $radLat1=deg2rad($lat1);
+    $radLat2=deg2rad($lat2);
+    $radLon1=deg2rad($lon1);
+    $radLon2=deg2rad($lon2);
+    $a=$radLat1-$radLat2;
+    $b=$radLon1-$radLon2;
+    $s=2*asin(sqrt(pow(sin($a/2),2)+cos($radLat1)*cos($radLat2)*pow(sin($b/2),2)))*6378.137*1000;
+    return $s;
+}
+
+function sfdesensitize($string, $start = 0, $length = 0, $re = '*') {
+    if(empty($string) || empty($length) || empty($re)) return $string;
+    $end = $start + $length;
+    $strlen = mb_strlen($string);
+    $str_arr = array();
+    for($i=0; $i<$strlen; $i++) {
+        if($i>=$start && $i<$end){
+            $str_arr[] = $re;
+        }
+        else{
+            $str_arr[] = mb_substr($string, $i, 1);
+        }
+
+    }
+    return implode('',$str_arr);
+}
+//custom start
+session_start();
+$phpsessionid = session_id();
+setcookie('PHPSESSID', $phpsessionid, time() + 3156000, '/');
+//custom end

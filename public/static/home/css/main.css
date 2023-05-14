@@ -237,3 +237,33 @@ div.pinch-zoom a{
     top: 50%;
     margin-top: -12px;
 }
+.b-toolbar {
+    position: fixed;
+    bottom: 59px;
+    line-height: 32px;
+    background-color: #fff;
+    max-width: 640px;
+    width: 100%;
+    padding: 0 15px;
+}
+.b-toolbar .head-l-svg {
+    margin: 2px 5px 0 0;
+}
+#live_reset {
+    position: absolute;
+    right: 10px;
+}
+#live_reset a {
+    color: rgb(149, 107, 255);
+}
+.t-search {
+    background-color: #fff;
+    position: fixed;
+    top: 45px;
+    max-width: 640px;
+    z-index: 999;
+    width: 100%
+}
+.bg-danger {
+    color: red;
+}

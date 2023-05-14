@@ -2,45 +2,84 @@
     $mWechat = app\wx\model\Base::instance();
     $jsSign = $mWechat->getJsSign();
 ?>
+<script type="text/javascript" src="https://api.map.baidu.com/api?v=1.0&&type=webgl&ak=fXn6eIrdLeSuNZylUTP4RVE6hGFKQsuE"></script>
 <script type="text/javascript" src="http://res.wx.qq.com/open/js/jweixin-1.6.0.js"></script>
 <script type="text/javascript">
+    function scan_qrcode()
+    {
+        wx.scanQRCode({
+            needResult: 0, // 默认为0，扫描结果由微信处理，1则直接返回扫描结果，
+            scanType: ["qrCode","barCode"], // 可以指定扫二维码还是一维码，默认二者都有
+            success: function (res) {
+                var result = res.resultStr; // 当needResult 为 1 时，扫码返回的结果
+            }
+        });
+    }
     <?php if (FLAG_WX) : ?>
     <?php endif; ?>
+    function read_member_name()
+    {
+        let randName = '<?php echo app\base\model\Common::instance()->getRandNetName() ?>';
+        $.prompt({
+            title: '请输入您的昵称',
+            text: '（2-6长度）',
+            input: randName,
+            empty: false, // 是否允许为空
+            onOK: function (input) {
+                while(!input || input.toLowerCase() == 'null' || input.length == 0) {
+                    read_member_name();
+                }
+                window.memberName = input;
+                window.localStorage.setItem('member_name', window.memberName);
+                $.getJSON('<?php echo sfurl("/base/session/saveInfo") ?>', {name: window.memberName}, function (ret) {
+                });
+                if ($('.JU_name').length > 0) {
+                    $('.JU_name').html(window.memberName);
+                }
+                if ($('.JV_name').length > 0 && window.memberName && window.memberName.length > 0) {
+                    $('.JV_name').val(window.memberName);
+                }
+            },
+            onCancel: function () {
+                read_member_name();
+            }
+        });
+    }
     $(function () {
-        if (!wx) {
-            wx.config({
-                debug: true, // 开启调试模式,调用的所有api的返回值会在客户端alert出来，若要查看传入的参数，可以在pc端打开，参数信息会通过log打出，仅在pc端时才会打印。
-                appId: '{$jsSign.appId}', // 必填，公众号的唯一标识
-                timestamp: {$jsSign.timestamp}, // 必填，生成签名的时间戳
-                nonceStr: '{$jsSign.nonceStr}', // 必填，生成签名的随机串
-                signature: '{$jsSign.signature}',// 必填，签名
+        if (wx) {
+             wx.config({
+                debug: false,
+                appId: '{$jsSign.appId}',
+                timestamp: {$jsSign.timestamp},
+                nonceStr: '{$jsSign.nonceStr}',
+                signature: '{$jsSign.signature}',
                 jsApiList: [
                     'getLocation'
+                    , 'openLocation'
                     , 'scanQRCode'
-                ] // 必填，需要使用的JS接口列表
+                ]
             });
         }
     });
     if (typeof sfinit == 'function') {
         sfinit();
     }
-    let memberName = '<?php echo app\member\model\Session::instance()->getName() ?>' || window.localStorage.getItem('member_name');
-    if (!memberName || memberName.toLowerCase() == 'null' || memberName.length == 0) {
-        memberName = prompt("请输入您的昵称：", '<?php echo app\base\model\Common::instance()->getRandNetName() ?>');
-        while(!memberName || memberName.toLowerCase() == 'null' || memberName.length == 0) {
-            memberName = prompt("请输入您的昵称：（2-6长度）", '<?php echo app\base\model\Common::instance()->getRandNetName() ?>');
-        }
-        window.localStorage.setItem('member_name', memberName);
+    window.memberName = '<?php echo app\base\model\Session::instance()->getName() ?>' || window.localStorage.getItem('member_name');
+    if (!window.memberName || window.memberName.toLowerCase() == 'null' || window.memberName.length == 0) {
+        read_member_name();
     }
-    if ($('.JU_name').length > 0) {
-        $('.JU_name').html(memberName);
+    if ($('.JU_name').length > 0 && window.memberName && window.memberName.length > 0) {
+        $('.JU_name').html(window.memberName);
+    }
+    if ($('.JV_name').length > 0 && window.memberName && window.memberName.length > 0) {
+        $('.JV_name').val(window.memberName);
     }
     <?php
     $messages = defined('FALG_ADMIN') && FALG_ADMIN ? sfget_admin_tmp_messages() : sfget_tmp_messages();
     if(!empty($messages)) :
     foreach ($messages as $msg):
     ?>
-    $.toptip('<?php echo addslashes($msg['content']) ?>', 'warning');
+    $.toptip('<?php echo addslashes($msg['content']) ?>');
     <?php
     endforeach;
     endif;

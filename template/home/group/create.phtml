@@ -1,0 +1,167 @@
+<?php
+$menuSeat = true;
+?>
+{include file="common:header" /}
+<link rel="stylesheet" href="__STATIC__/home/css/find.css__URL_CACHE__">
+<style>
+    label {
+        margin-bottom: 0;
+    }
+</style>
+<header class="zyw-header">
+    <div class="zyw-container white-color">
+        <div class="head-l"><a href="javascript:window.history.back(-1)" target="_self"><img src="__STATIC__/home/img/svg/head-return.svg" alt=""></a></div>
+        <h1>新建团体（<?php echo date('m月d日') ?>）</h1>
+    </div>
+</header>
+<section class="zyw-container">
+    <form id="frm_main" method="post" onsubmit="return valid_frm(this)">
+        <div class="weui-cell">
+            <div class="weui-cell__hd"><label class="weui-label">您的称呼*</label></div>
+            <div class="weui-cell__bd">
+                <input name="name" class="weui-input JV_name" type="text" placeholder="请输入您的称呼" value="<?php echo sfret('name') ?>">
+            </div>
+        </div>
+        <div class="weui-cell">
+            <div class="weui-cell__hd"><label class="weui-label">联系方式*</label></div>
+            <div class="weui-cell__bd">
+                <input name="telephone" class="weui-input" type="text" placeholder="请输入您的联系方式" value="<?php echo sfret('telephone') ?>">
+            </div>
+        </div>
+        <iframe id="mapPage" width="100%" height="340px" frameborder=0
+                src="https://apis.map.qq.com/tools/locpicker?search=1&type=1&coordtype=2&key=7KTBZ-ZUDYN-ZPTF5-SZECU-QWT66-FXB2M&referer=myapp">
+        </iframe>
+        <div class="weui-cell">
+            <div class="weui-cell__hd"><label class="weui-label">标题*</label></div>
+            <div class="weui-cell__bd">
+                <input type="text" name="title" class="weui-input" value="<?php echo sfret('title') ?>" />
+            </div>
+        </div>
+        <div class="weui-cell">
+            <div class="weui-cell__hd"><label class="weui-label">配送地址*</label></div>
+            <div class="weui-cell__bd">
+                <input type="hidden" name="lon" value="<?php echo sfret('lon') ?>" />
+                <input type="hidden" name="lat" value="<?php echo sfret('lat') ?>" />
+                <input name="address" class="weui-input" type="text" placeholder="请点击上方列表确认地址" value="<?php echo sfret('address') ?>">
+            </div>
+        </div>
+        <div class="weui-cell">
+            <div class="weui-cell__hd"><label class="weui-label">备注详情*</label></div>
+            <div class="weui-cell__bd">
+                <input name="note" class="weui-input" type="text" placeholder="请输入详细的楼房或编号" value="<?php echo sfret('note') ?>">
+            </div>
+        </div>
+        <div class="weui-cell">
+            <div class="weui-cell__hd"><label class="weui-label">团体密码</label></div>
+            <div class="weui-cell__bd">
+                <input name="pwd" class="weui-input" type="text" value="666" placeholder="无需密码" value="<?php echo sfret('pwd') ?>">
+            </div>
+        </div>
+        <div class="login-btn mt-2"><button type="submit" class="weui-btn weui-btn_warn theme-bgcolor">确认</button></div>
+    </form>
+</section>
+<script>
+    function valid_frm(frm)
+    {
+        if (frm.name.value.trim().length == 0) {
+            $.toptip('请输入“您的昵称”');
+            frm.name.focus();
+            frm.name.select();
+            return false;
+        }
+        if (frm.telephone.value.trim().length == 0) {
+            $.toptip('请输入“联系方式”');
+            frm.telephone.focus();
+            frm.telephone.select();
+            return false;
+        } else {
+            var message = '';
+            var flag = false;
+            var telephone = frm.telephone.value.trim();
+            var regMobilephone = /^1[356789]\d{9}$/;
+            var regTellphone1 = /^([0-9]{3,4})?[0-9]{7,8}$|^([0-9]{3,4}-)?[0-9]{7,8}$/;
+            var regTellphone2 = /^(0\d{3})(\d{5})$/;
+            var regTellphone3 = /^[\d]{5}$/;
+            var regTellphone4 = /^[\d]{7}$/;
+            var regTellphone5 = /^(\d{4})-(\d{7})$/;
+            if (telephone.length == 11) {
+                if (regMobilephone.test(telephone)) {
+                    flag = true;
+                } else if (/^[\d]{11}$/.test(telephone)) {
+                    flag = true;
+                }
+            } else if (telephone.length == 12) {
+                if (regTellphone5.test(telephone)) {
+                    flag = true;
+                }
+            } else if (telephone.length == 8) {
+                if (regTellphone1.test(telephone)) {
+                    flag = true;
+                }
+            } else if (telephone.length == 9) {
+                if (regTellphone2.test(telephone)) {
+                    flag = true;
+                }
+            } else if (telephone.length == 5) {
+                if (regTellphone3.test(telephone)) {
+                    flag = true;
+                }
+            } else if (telephone.length == 7) {
+                if (regTellphone4.test(telephone)) {
+                    flag = true;
+                }
+            }
+            if (!flag) {
+                $.toptip("请输入有效的“联系方式”！");
+                frm.telephone.focus();
+                frm.telephone.select();
+                return false;
+            }
+        }
+        if (frm.title.value.trim().length == 0) {
+            $.toptip('请输入“标题”');
+            frm.title.focus();
+            frm.title.select();
+            return false;
+        }
+        if (frm.address.value.trim().length == 0) {
+            $.toptip('请输入“配送地址”');
+            frm.address.focus();
+            frm.address.select();
+            return false;
+        }
+        if (frm.note.value.trim().length == 0) {
+            $.toptip('请输入“备注详情”');
+            frm.note.focus();
+            frm.note.select();
+            return false;
+        }
+        return true;
+    }
+    window.addEventListener('message', function(event) {
+        var loc = event.data;
+        var frm = $('#frm_main').get(0);
+        if (loc && loc.module == 'locationPicker') {
+            frm.lon.value = loc.latlng.lng;
+            frm.lat.value = loc.latlng.lat;
+            frm.address.value = loc.poiaddress;
+            if (loc.poiname == '我的位置') {
+                frm.title.value = '';
+                frm.title.focus();
+            } else {
+                frm.title.value = loc.poiname;
+                if (frm.note) {
+                    frm.note.focus().select();
+                }
+            }
+        }
+    }, false);
+    $(function () {
+        let telephone = $('#frm_main input[name="telephone"]');
+        telephone.val('<?php echo app\base\model\Session::instance()->getTelephone() ?>' || window.localStorage.getItem('member_telephone'));
+        if (telephone.val().length == 0) {
+            telephone.focus();
+        }
+    });
+</script>
+{include file="common:footer" /}

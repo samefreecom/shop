@@ -1,55 +1,144 @@
-<?php $menuSeat = true; ?>
+<?php
+$menuSeat = true;
+?>
 {include file="common:header" /}
 <link rel="stylesheet" href="__STATIC__/home/css/find.css__URL_CACHE__">
 <header class="zyw-header">
     <div class="zyw-container white-color">
         <div class="head-l"><a href="javascript:window.history.back(-1)" target="_self"><img src="__STATIC__/home/img/svg/head-return.svg" alt=""></a></div>
-        <h1>选择团体（4月20日）</h1>
-        <div class="head-r"><a href="">+ 新建</a></div>
+        <h1>选择团体（<?php echo date('m月d日') ?>）</h1>
+        <div class="head-r"><a href="<?php echo sfurl('/group/create') ?>">+ 新建</a></div>
     </div>
 </header>
-<section class="zyw-container">
-    <div class="weui-cell weui-cell_vcode mb-625" style="background-color: #fff">
+<section class="zyw-container" style="padding: 54px 0 32px;">
+    <div class="weui-cell weui-cell_vcode mb-625 t-search">
         <div class="weui-cell__hd">
             <label class="weui-label" style="margin-bottom: 0">关键字</label>
         </div>
         <div class="weui-cell__bd">
-            <input class="weui-input" type="text" placeholder="请输入团体所在地关键字">
+            <input class="weui-input" type="text" id="keyword" placeholder="请输入团体所在地关键字" onkeydown="if (event.keyCode == 13) do_search()" onclick="this.select()">
         </div>
         <div class="weui-cell__ft">
-            <button class="weui-btn btn-primary theme-bgcolor theme-right">搜索</button>
+            <button class="weui-btn btn-primary theme-bgcolor theme-right" onclick="do_search()">搜索</button>
         </div>
     </div>
-    <div class="find-group1">
-        <div class="find-group1-item mb-625 white-bgcolor">
-            <div class="group1-hd clearfix mb-625">
-                <div class="pull-left hd-img"><img src="__STATIC__/home/img/user4.png" alt=""></div>
-                <div class="pull-left">
-                    <p class="hd-name"><a href="<?php echo sfurl('/seat') ?>">南山区卓越前海壹号T3写字楼</a></p>
-                    <span class="hd-time">2023-04-20</span>
-                </div>
-                <a href="<?php echo sfurl('/seat') ?>" class="pull-right hd-take">+ 进入点餐</a>
-            </div>
-            <div class="group1-bd clearfix">
-                <div class="pull-left bd-l">
-                    <div class="bd-img"><a href="<?php echo sfurl('/seat') ?>"><img src="https://img10.360buyimg.com/n4/jfs/t19768/164/187787594/229738/a7cbf352/5a6296c9Nf984db1f.jpg" alt=""></a></div>
-                </div>
-                <div class="pull-right bd-r">
-                    <h4 class="bd-title">
-                        <ul>
-                            <li>香煎鱼腩饭 x 3</li>
-                            <li>砂锅猪脚饭 x 2</li>
-                            <li>可乐鸭饭 x 2</li>
-                            <li>辣子鸡饭 x 1</li>
-                            <li>辣子鸡饭 x 1</li>
-                            <li>辣子鸡饭 x 1</li>
-                            <li>...</li>
-                        </ul>
-                    </h4>
-                </div>
-                <span class="bd-intro">2 公里</span>
-            </div>
-        </div>
+    <div id="list">
     </div>
 </section>
+<div class="b-toolbar"><i class="head-l-svg black-icon" aria-hidden="true"></i><span id="live_text">-</span><span id="live_reset"><a href="javascript:reset_location();">重新定位</a></span></div>
+<script>
+    function do_search() {
+        window.param = window.param || {};
+        let keyword = $('#keyword').val();
+        window.param.keyword = keyword;
+        window.page = 1;
+        window.lastPage = 0;
+        window.param.page = 1;
+        $('#list').html('');
+        exec_search();
+    }
+
+    function fmtlocation(longitude, latitude) {
+        let x_pi = 3.14159265358979324 * 3000.0 / 180.0;
+        let x = longitude - 0.0065;
+        let y = latitude - 0.006;
+        let z = Math.sqrt(x * x + y * y) - 0.00002 * Math.sin(y * x_pi);
+        let wz = Math.atan2(y, x) - 0.000003 * Math.cos(x * x_pi);
+        let lon = z * Math.cos(wz);
+        let lat = z * Math.sin(wz);
+        longitude = lon;
+        latitude = lat;
+        return [longitude, latitude];
+    }
+    function open_location(name, longitude, latitude) {
+        wx.openLocation({
+            latitude: latitude,
+            longitude: longitude,
+            name: name,
+            address: name,
+            scale: 20,
+            infoUrl: '<?php echo sfurl("./") ?>'
+        });
+    }
+    function exec_search() {
+        if (window.isLoad) {
+            return;
+        }
+        window.isLoad = true;
+        $.showLoading();
+        $.ajax({
+            url: '<?php echo sfurl("/group/search") ?>',
+            xhrFields: {
+                withCredentials: true
+            },
+            type: 'GET',
+            data : window.param,
+            dataType: 'json',
+            success: function (ret) {
+                if (ret.data.length == 0) {
+                    window.lastPage = window.page
+                    $.hideLoading();
+                    $.toast("没有了", "text");
+                } else {
+                    $('#list').append(ret.data);
+                    window.loading = false;
+                    $.hideLoading();
+                }
+                window.isLoad = false;
+            }
+        });
+    }
+    function load_item() {
+        window.page = ++window.page || 1;
+        window.lastPage = window.lastPage || 0;
+        window.param = window.param || {};
+        if (window.page > window.lastPage) {
+            window.param.page = window.page;
+            exec_search();
+        }
+    }
+    function reset_location() {
+        <?php if (FLAG_WX) : ?>
+        <?php else: ?>
+        $.toast("只支持微信端定位!", "text");
+        load_item();
+        return;
+        <?php endif; ?>
+        $('#live_text').html('获取定位中。。。');
+        let local = wx.getLocation({
+            type: 'gcj02',
+            isHighAccuracy: true,
+            success: function (res) {
+                window.latitude = res.latitude;
+                window.longitude = res.longitude;
+                $.ajax({
+                    url: '<?php echo sfurl("/base/session/saveLocation") ?>',
+                    xhrFields: {
+                        withCredentials: true
+                    },
+                    type: 'GET',
+                    data : {lon: window.longitude, lat: window.latitude, name: ('<?php echo app\base\model\Session::instance()->getName() ?>' || window.localStorage.getItem('member_name')), telephone: ('<?php echo app\base\model\Session::instance()->getTelephone() ?>' || window.localStorage.getItem('member_telephone'))},
+                    dataType: 'json',
+                    success: function (ret) {
+                        load_item();
+                    }
+                });
+                var point = new BMapGL.Point(window.longitude, window.latitude);
+                var gc = new BMapGL.Geocoder();
+                gc.getLocation(point, function (rs) {
+                    $('#live_text').html(rs.address);
+                });
+            }
+        });
+    }
+    $(function () {
+        window.loading = false;  //状态标记
+        $(document.body).infinite().on("infinite", function() {
+            if(window.loading) return;
+            window.loading = true;
+            load_item();
+        });
+        setTimeout(reset_location, 1500);
+    });
+</script>
 {include file="common:footer" /}

@@ -14,7 +14,6 @@
     .aui-bar-nav{border:none;background: #f5f5f5;}
     .main{height: calc(100% - 4.5rem);}
 
-    #tab1-con1{padding-bottom: 3rem;}
     #tab1-con1,#tab1-con2,#tab1-con3{height: 100%;}
     .aui-tab{border-bottom: solid 1px #eee;background: #fff;height: 42px;}
     .aui-tab-item{color: #666;width: 25%; height: 36px; line-height: 36px}
@@ -73,7 +72,7 @@
                 </dt>
                 <dd>免运费</dd>
             </dl>
-            <a class="settle_btn" href="javascript:void(0);" id="confirm_cart">确认</a>
+            <a class="settle_btn" href="javascript:void(0);" onclick="do_confirm()" id="confirm_cart">确认</a>
         </div>
     </div>
 </footer>
@@ -81,7 +80,7 @@
     <div class="aui-tab" id="tab">
         <div class="aui-tab-item aui-active">全部</div>
         <div class="aui-tab-item">当前已点</div>
-        <div class="aui-tab-item">团体已点</div>
+        <div class="aui-tab-item">团体已下单</div>
     </div>
     <div class="main">
         <div class="aui-item" id="tab1-con1">
@@ -95,9 +94,9 @@
             </div>
             <div class="con">
                 <div class="right-con con-active" style="display: none;">
-                    <ul>
+                    <ul id="item_all">
                         {foreach name='list' item='v'}
-                        <li>
+                        <li data-id="{$v.id}">
                             <div class="menu-img"><img src="<?php echo sfimg($v['image'], 115, 115) ?>" orgimg="<?php echo sfimg($v['image'], null, 1440) ?>"></div>
                             <div class="menu-txt">
                                 <h4 class="accountName">{$v.name}</h4>
@@ -105,9 +104,9 @@
                                 <p class="list2">
                                     <b>￥</b><b>{$v.price}</b>
                                 </p>
-                                <div class="btn">
+                                <div class="btn JI_food" foodid="{$v.id}">
                                     <button class="minus"></button>
-                                    <i>0</i>
+                                    <i max-val="{$v.quantity}">0</i>
                                     <button class="add"></button>
                                     <i class="price">{$v.price}</i>
                                 </div>
@@ -130,7 +129,7 @@
                                 </p>
                                 <div class="btn">
                                     <button class="minus"></button>
-                                    <i>0</i>
+                                    <i max-val="{$v.quantity}">0</i>
                                     <button class="add"></button>
                                     <i class="price">{$v.price}</i>
                                 </div>
@@ -150,7 +149,7 @@
             </div>
             <div class="con">
                 <div class="right-con con-active">
-                    <ul>
+                    <ul class="has-ed">
                         {foreach name='list' item='v'}
                         <li>
                             <div class="menu-img"><img src="<?php echo sfimg($v['image'], 115, 115) ?>" orgimg="<?php echo sfimg($v['image'], null, 1440) ?>"></div>
@@ -162,7 +161,7 @@
                                 </p>
                                 <div class="btn">
                                     <button class="minus"></button>
-                                    <i>0</i>
+                                    <i max-val="{$v.quantity}">0</i>
                                     <button class="add"></button>
                                     <i class="price">{$v.price}</i>
                                 </div>
@@ -177,52 +176,57 @@
             <div class="left-menu">
                 <ul>
                     <li><span>所有</span></li>
-                    <li><span>自己</span></li>
+                    <?php
+                    $groupFoodList = array_merge($groupFoodList);
+                    ?>
+                    {foreach name="groupFoodList" item="v"}
+                    <li><span>{$v.name}</span></li>
+                    {/foreach}
                 </ul>
             </div>
             <div class="con">
-                <div class="right-con con-active">
-                    <ul>
-                        {foreach name='list' item='v'}
+                <div class="right-con con-active" style="display: none;">
+                    <ul id="item_all">
+                        {foreach name="groupFoodList" item="list"}
+                        {foreach name='list.foodList' item='v'}
                         <li>
                             <div class="menu-img"><img src="<?php echo sfimg($v['image'], 115, 115) ?>" orgimg="<?php echo sfimg($v['image'], null, 1440) ?>"></div>
                             <div class="menu-txt">
-                                <h4 class="accountName">{$v.name}</h4>
-                                <p class="list1">月销量：{$v.quantity}</p>
+                                <h4 class="accountName">{$v.food_name}</h4>
+                                <p class="list1">销量：{$v.quantity_sale}</p>
                                 <p class="list2">
                                     <b>￥</b><b>{$v.price}</b>
                                 </p>
                                 <div class="btn">
-                                    <i style="display: inline-block">0</i>
-                                    <i class="price">{$v.price}</i>
+                                    x <i style="display: inline-block">{$v.quantity}</i>
+                                </div>
+                            </div>
+                        </li>
+                        {/foreach}
+                        {/foreach}
+                    </ul>
+                </div>
+                {foreach name="groupFoodList" item="list"}
+                <div class="right-con" style="display: none;">
+                    <ul class="has-ed">
+                        {foreach name='list.foodList' item='v'}
+                        <li>
+                            <div class="menu-img"><img src="<?php echo sfimg($v['image'], 115, 115) ?>" orgimg="<?php echo sfimg($v['image'], null, 1440) ?>"></div>
+                            <div class="menu-txt">
+                                <h4 class="accountName">{$v.food_name}</h4>
+                                <p class="list1">销量：{$v.quantity_sale}</p>
+                                <p class="list2">
+                                    <b>￥</b><b>{$v.price}</b>
+                                </p>
+                                <div class="btn">
+                                    x <i style="display: inline-block">{$v.quantity}</i>
                                 </div>
                             </div>
                         </li>
                         {/foreach}
                     </ul>
                 </div>
-                <div class="right-con my-self" style="display: none;">
-                    <ul>
-                        {foreach name='list' item='v'}
-                        <li>
-                            <div class="menu-img"><img src="<?php echo sfimg($v['image'], 115, 115) ?>" orgimg="<?php echo sfimg($v['image'], null, 1440) ?>"></div>
-                            <div class="menu-txt">
-                                <h4 class="accountName">{$v.name}</h4>
-                                <p class="list1">月销量：{$v.quantity}</p>
-                                <p class="list2">
-                                    <b>￥</b><b>{$v.price}</b>
-                                </p>
-                                <div class="btn">
-                                    <button class="minus"></button>
-                                    <i>0</i>
-                                    <button class="add"></button>
-                                    <i class="price">{$v.price}</i>
-                                </div>
-                            </div>
-                        </li>
-                        {/foreach}
-                    </ul>
-                </div>
+                {/foreach}
             </div>
         </div>
     </div>
@@ -281,6 +285,38 @@
                 });
             });
         });
+        {notempty name="indentFoodList"}
+            {foreach name="indentFoodList" item="v"}
+            $('.JI_food[foodid="{$v.food_id}"] .add').each(function () {
+                for (let i = 1; i <= {$v.quantity}; i++) {
+                    $(this).click();
+                }
+            });
+            {/foreach}
+        {/notempty}
     });
+    function do_confirm() {
+        let param = {ids:[], qtys:[], group_id: <?php echo $groupId ?>};
+        $('#item_all li').each(function () {
+            let qty = parseInt($(this).find('i').html());
+            if (qty > 0) {
+                let id = $(this).attr('data-id');
+                param.ids.push(id);
+                param.qtys.push(qty);
+            }
+        });
+        if (param.ids.length > 0) {
+            $.showLoading('正在提交');
+            $.post('<?php echo sfurl("/seat/group/saveIndent") ?>', param, function (ret) {
+               ret = eval('(' + ret + ')');
+                $.hideLoading();
+               if (ret.code == 1) {
+                   $.toast("下单成功");
+               } else {
+                   $.toast(ret.msg, "cancel");
+               }
+            });
+        }
+    }
 </script>
 {include file="common:footer" /}

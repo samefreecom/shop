@@ -1,12 +1,6 @@
 <?php $menuMember = true; ?>
 {include file="common:header" /}
-<link rel="stylesheet" href="__STATIC__/home/css/weui.min.css">
-<link rel="stylesheet" href="__STATIC__/home/css/jquery-weui.min.css">
-<link href="__STATIC__/home/css/bootstrap.min.css" rel="stylesheet">
-<link rel="stylesheet" href="__STATIC__/home/css/font-awesome.min.css">
-<link rel="stylesheet" href="__STATIC__/home/css/main.css">
 <link rel="stylesheet" href="__STATIC__/home/css/home.css">
-<link rel="stylesheet" href="__STATIC__/home/css/theme-color.css">
 <section class="zyw-container">
     <div class="home-head white-bgcolor clearfix">
         <div class="head-img">
@@ -25,7 +19,7 @@
         </div>
     </div>
     <div class="home-cont weui-cells mt-625">
-        <a class="weui-cell weui-cell_access" href="<?php echo sfurl('/seat/order') ?>">
+        <a class="weui-cell weui-cell_access" href="<?php echo sfurl('/indent/order') ?>">
             <div class="weui-cell__bd">
                 <p class="choose-text"><img src="__STATIC__/home/img/svg/home-1.svg" alt=""> 外卖订单</p>
             </div>
@@ -35,19 +29,19 @@
         </a>
     </div>
     <div class="weui-flex home-order white-bgcolor mb-625">
-        <a href="order.html" class="weui-flex__item">
+        <a href="<?php echo sfurl('/indent/order/show/status/W') ?>" class="weui-flex__item">
             <div class="weui-flex__icon">
                 <img src="__STATIC__/home/img/svg/home-dfh.svg" alt="">
             </div>
             <p class="weui-flex__label">待配餐</p>
         </a>
-        <a href="order.html" class="weui-flex__item">
+        <a href="<?php echo sfurl('/indent/order/show/status/S') ?>" class="weui-flex__item">
             <div class="weui-flex__icon">
                 <img src="__STATIC__/home/img/svg/home-dsh.svg" alt="">
             </div>
             <p class="weui-flex__label">待收货</p>
         </a>
-        <a href="order.html" class="weui-flex__item">
+        <a href="<?php echo sfurl('/indent/order/show/status/C') ?>" class="weui-flex__item">
             <div class="weui-flex__icon">
                 <img src="__STATIC__/home/img/svg/home-dpj.svg" alt="">
             </div>
@@ -55,11 +49,12 @@
         </a>
     </div>
     <div class="home-cont weui-cells mb-625">
-        <a class="weui-cell weui-cell_access" href="javascript:;">
+        <a class="weui-cell weui-cell_access" href="javascript:update_telephone();">
             <div class="weui-cell__bd">
                 <p class="choose-text"><img src="__STATIC__/home/img/svg/home-4.svg" alt=""> 填补手机号</p>
             </div>
             <div class="weui-cell__ft choose-des">
+                <?php echo sfdesensitize(app\base\model\Session::instance()->getTelephone(), 3, 4) ?>
             </div>
         </a>
     </div>
@@ -74,16 +69,47 @@
     </div>
 </section>
 <script type="text/javascript">
+    function update_telephone() {
+        let memberTelephone = '<?php echo app\base\model\Session::instance()->getTelephone() ?>' || window.localStorage.getItem('member_telephone');
+        $.prompt({
+            title: '请输入您的联系方式',
+            text: '（手机或座机）',
+            input: memberTelephone,
+            empty: false,
+            onOK: function (input) {
+                window.memberTelephone = input;
+                window.localStorage.setItem('member_telephone', window.memberTelephone);
+                $.getJSON('<?php echo sfurl("/base/session/saveInfo") ?>', {telephone: window.memberTelephone}, function (ret) {
+                });
+            },
+            onCancel: function () {
+            }
+        });
+    }
     function update_name() {
-        let memberName = '<?php echo app\member\model\Session::instance()->getName() ?>' || window.localStorage.getItem('member_name');
-        memberName = prompt("请输入您的昵称：", memberName);
-        while(!memberName || memberName.toLowerCase() == 'null' || memberName.length == 0) {
-            memberName = prompt("请输入您的昵称：（2-6长度）", '<?php echo app\base\model\Common::instance()->getRandNetName() ?>');
-        }
-        window.localStorage.setItem('member_name', memberName);
-        if ($('.JU_name').length > 0) {
-            $('.JU_name').html(memberName);
-        }
+        let memberName = '<?php echo app\base\model\Session::instance()->getName() ?>' || window.localStorage.getItem('member_name');
+        $.prompt({
+            title: '请输入您的昵称',
+            text: '（2-6长度）',
+            input: memberName,
+            empty: false,
+            onOK: function (input) {
+                console.debug(input);
+                while(!input || input.toLowerCase() == 'null' || input.length == 0) {
+                    read_member_name();
+                }
+                window.memberName = input;
+                window.localStorage.setItem('member_name', window.memberName);
+                $.getJSON('<?php echo sfurl("/base/session/saveInfo") ?>', {name: window.memberName}, function (ret) {
+                });
+                if ($('.JU_name').length > 0) {
+                    $('.JU_name').html(window.memberName);
+                }
+            },
+            onCancel: function () {
+                read_member_name();
+            }
+        });
     }
 </script>
 {include file="common:footer" /}

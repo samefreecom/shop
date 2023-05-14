@@ -10,7 +10,12 @@ class Base extends BaseModel
         $base = Db::table(sfp('food t'));
         $base->join(sfp('variety v'), 't.variety_id = v.id');
         $base->order('v.sort desc');
+        $base->order('t.sort desc');
+        $base->order('t.id desc');
         $base->field(['t.*', 'v.id' => 'variety_id', 'v.name' => 'variety_name', 'v.sort' => 'variety_sort']);
+        if (isset($param['min_quantity'])) {
+            $base->where('quantity', '>=', $param['min_quantity']);
+        }
         $list = $base->select();
         return $list;
     }

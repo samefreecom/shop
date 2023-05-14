@@ -135,8 +135,8 @@ class Base extends BaseModel
     private $encodingaeskey = 'VXqQc3Zmn3iHaMlNAbPiE7gzMfnXzEUZCx9le0wKh7B';
     private $appid = 'wx9a4095ab944a0ab5';
     private $appsecret = '9e5f0f0d4024735a6edf0137e4257078';
-    private $debug = false;
-    private $logcallback = false;
+    private $debug = true;
+    private $logcallback = true;
     private $wechat = null;
 
     public function getAppID()
@@ -173,10 +173,10 @@ class Base extends BaseModel
         $auth = $mWechat->checkAuth();
         $js_ticket = $mWechat->getJsTicket();
         if (!$js_ticket) {
-            sfdebug(__FILE__ . '微信获取JsSign错误，错误代码：' . $mWechat->errCode, 'fatal');
+            sfdebug(__FILE__ . '微信获取JsSign错误：' . $mWechat->errMsg . '，代码：' . $mWechat->errCode, 'fatal');
             return ['appId' => '', 'timestamp' => 0, 'nonceStr' => '', 'signature' => ''];
         }
-        $url = SITEURL;
+        $url = sfurl('./');
         return $mWechat->getJsSign($url);
     }
 }
