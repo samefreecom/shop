@@ -61,7 +61,7 @@
     margin: 0;
     line-height: 2rem;
 }
-.order-group .order-item-btn button{
+.order-group .order-item-btn .btn {
     border-radius: 50px;
     margin: 5px 0 8px 10px;
     font-size: 1rem;

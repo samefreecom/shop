@@ -46,7 +46,7 @@ class Base extends BaseModel
                     $sumPrice += $mapData[$value['id']]['price'] * $qty;
                 }
             }
-            $exists = Db::table(sfp('indent'))->where('account_id', 'eq', $param['account_id'])->where('status', 'eq', 'W')->where('to_days(created_at) = to_days(now())')->find();
+            $exists = Db::table(sfp('indent'))->where('account_id', 'eq', $param['account_id'])->where('group_id', 'eq', $param['group_id'])->where('status', 'eq', 'W')->where('to_days(created_at) = to_days(now())')->find();
             $max = Db::table(sfp('indent'))->where('created_at', '>=', date('Y-m-d'))->count('1');
             $autoNo = sprintf('%03d', $max + 1);
             $bind = [
@@ -112,6 +112,9 @@ class Base extends BaseModel
 
     public function getList($param)
     {
+        if (isset($param['status'])) {
+            $param['status'] = strtoupper($param['status']);
+        }
         $accountId = Session::instance()->getId();
         $base = Db::table(sfp('indent t'))
             ->leftJoin(sfp('group g'), 't.group_id = g.id')
@@ -120,7 +123,13 @@ class Base extends BaseModel
             ->order('t.id desc')
             ->field(['t.*', 'g.title', 'g.lon', 'g.lat', 's.status_indent']);
         if (!empty($param['status']) && $param['status'] != 'A') {
-            $base->where('status', 'eq', $param['status']);
+            if ($param['status'] == 'W') {
+                $base->where('t.status', 'in', ['W', 'S']);
+            } else {
+                $base->where('t.status', 'eq', $param['status']);
+            }
+        } else {
+            $base->where('t.status', 'not in', ['E', 'N']);
         }
         $list = $base->select();
         $indentIdList = [];
@@ -129,7 +138,7 @@ class Base extends BaseModel
         foreach ($list as $value) {
             $indentIdList[] = $value['id'];
             $value['foodList'] = [];
-            $value['food_sum_qty'] = 0;
+            $value['foodSumQty'] = 0;
             $fmtIndentList[$value['id']] = $value;
         }
         $indentFoodList = Db::table(sfp('indent_food'))->where('indent_id', 'in', $indentIdList)->select();
@@ -150,7 +159,7 @@ class Base extends BaseModel
                 $value['image'] = '';
             }
             $fmtIndentList[$value['indent_id']]['foodList'][] = $value;
-            $fmtIndentList[$value['indent_id']]['food_sum_qty'] += $value['quantity'];
+            $fmtIndentList[$value['indent_id']]['foodSumQty'] += $value['quantity'];
         }
         $list = array_merge($fmtIndentList);
         return $list;
@@ -158,26 +167,51 @@ class Base extends BaseModel
 
     public function getGroupList($param)
     {
-        $base = Db::table(sfp('indent t'))
-            ->leftJoin(sfp('group g'), 't.group_id = g.id')
+        if (isset($param['status'])) {
+            $param['status'] = strtoupper($param['status']);
+        }
+        $base = Db::table(sfp('group t'))
+            ->where('to_days(created_at) = to_days(now())')
             ->leftJoin(sfp('status s'), 't.status = s.status_code')
-            ->where('t.account_id', 'eq', $accountId)
-            ->order('t.id desc')
-            ->field(['t.*', 'g.title', 'g.lon', 'g.lat', 's.status_indent']);
+            ->field(['t.*', 's.status_indent'])
+            ->order('t.id desc');
         if (!empty($param['status']) && $param['status'] != 'A') {
-            $base->where('status', 'eq', $param['status']);
+            if ($param['status'] == 'W') {
+                $base->where('status', 'in', ['W', 'S']);
+            } else {
+                $base->where('status', 'eq', $param['status']);
+            }
+        } else {
+            $base->where('status', 'not in', ['E', 'N']);
         }
         $list = $base->select();
+        $groupIdList = [];
         $indentIdList = [];
         $foodIdList = [];
-        $fmtIndentList = [];
+        $fmtGroupList = [];
         foreach ($list as $value) {
+            $groupIdList[] = $value['id'];
+            $value['indentList'] = [];
+            $value['foodSumQty'] = 0;
+            $value['sumAmount'] = 0;
+            $fmtGroupList[$value['id']] = $value;
+        }
+        $baseIndent = Db::table(sfp('indent t'))
+            ->leftJoin(sfp('account a'), 't.account_id = a.id')
+            ->field(['t.*', 'a.name' => 'account_name'])
+            ->where('group_id', 'in', $groupIdList);
+        $baseIndent->where('status', 'not in', ['E', 'N']);
+        $indentList = $baseIndent->select();
+        $fmtIndentList = [];
+        foreach ($indentList as $value) {
             $indentIdList[] = $value['id'];
             $value['foodList'] = [];
-            $value['food_sum_qty'] = 0;
+            $value['foodSumQty'] = 0;
             $fmtIndentList[$value['id']] = $value;
         }
-        $indentFoodList = Db::table(sfp('indent_food'))->where('indent_id', 'in', $indentIdList)->select();
+        $baseIndentFood = Db::table(sfp('indent_food t'))
+            ->where('t.indent_id', 'in', $indentIdList);
+        $indentFoodList = $baseIndentFood->select();
         foreach ($indentFoodList as $value) {
             $foodIdList[] = $value['food_id'];
         }
@@ -195,9 +229,21 @@ class Base extends BaseModel
                 $value['image'] = '';
             }
             $fmtIndentList[$value['indent_id']]['foodList'][] = $value;
-            $fmtIndentList[$value['indent_id']]['food_sum_qty'] += $value['quantity'];
+            $fmtIndentList[$value['indent_id']]['foodSumQty'] += $value['quantity'];
         }
-        $list = array_merge($fmtIndentList);
+        foreach ($fmtIndentList as $value) {
+            if (!empty($value['foodList'])) {
+                $fmtGroupList[$value['group_id']]['indentList'][] = $value;
+                $fmtGroupList[$value['group_id']]['foodSumQty'] += $value['foodSumQty'];
+                $fmtGroupList[$value['group_id']]['sumAmount'] += $value['amount'];
+            }
+        }
+        foreach ($fmtGroupList as $key => $value) {
+            if (empty($value['indentList'])) {
+                unset($fmtGroupList[$key]);
+            }
+        }
+        $list = array_merge($fmtGroupList);
         return $list;
     }
 

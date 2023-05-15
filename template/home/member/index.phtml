@@ -53,7 +53,7 @@
             <div class="weui-cell__bd">
                 <p class="choose-text"><img src="__STATIC__/home/img/svg/home-4.svg" alt=""> 填补手机号</p>
             </div>
-            <div class="weui-cell__ft choose-des">
+            <div class="weui-cell__ft choose-des" id="member_telephone">
                 <?php echo sfdesensitize(app\base\model\Session::instance()->getTelephone(), 3, 4) ?>
             </div>
         </a>
@@ -70,16 +70,28 @@
 </section>
 <script type="text/javascript">
     function update_telephone() {
-        let memberTelephone = '<?php echo app\base\model\Session::instance()->getTelephone() ?>';
+        let memberTelephone = window.memberTelephone || '<?php echo app\base\model\Session::instance()->getTelephone() ?>';
         $.prompt({
             title: '请输入您的联系方式',
             text: '（手机或座机）',
             input: memberTelephone,
             empty: false,
             onOK: function (input) {
-                window.memberTelephone = input;
-                $.getJSON('<?php echo sfurl("/base/session/saveInfo") ?>', {telephone: window.memberTelephone}, function (ret) {
-                });
+                if (sfvalidtelephone(input)) {
+                    $.showLoading();
+                    window.memberTelephone = input;
+                    $.getJSON('<?php echo sfurl("/base/session/saveInfo") ?>', {telephone: window.memberTelephone}, function (ret) {
+                        $.hideLoading();
+                        if (ret.code == 1) {
+                            window.memberTelephone = input;
+                            $('#member_telephone').html(input);
+                        } else {
+                            $.toast(ret.msg, 'cancel');
+                        }
+                    });
+                } else {
+                    $.toptip('联系方式填写不正确！');
+                }
             },
             onCancel: function () {
             }
@@ -93,7 +105,6 @@
             input: memberName,
             empty: false,
             onOK: function (input) {
-                console.debug(input);
                 while(!input || input.toLowerCase() == 'null' || input.length == 0) {
                     read_member_name();
                 }

@@ -35,7 +35,7 @@ class Base extends BaseModel
             ->leftJoin(sfp('account a'), 'i.account_id = a.id')
             ->field(['t.*', 'f.name', 'i.group_id', 'a.name' => 'account_name'])
             ->where('i.group_id', 'in', $groupIdList)
-            ->where('i.status', 'neq', 'E')
+            ->where('i.status', 'neq', 'not in', ['E', 'N'])
             ->order('a.id desc')->select();
         foreach ($foodList as $value) {
             $idKey = $idMap[$value['group_id']];
@@ -80,5 +80,43 @@ class Base extends BaseModel
         } else {
             return $this->setError('插入数据库失败，请联系技术客服！');
         }
+    }
+
+    public function doLock($param)
+    {
+        $keyMap = ['id' => '团体编号'];
+        if (($key = sfis_valid($param, array('id'))) !== true) {
+            return $this->setErrorCode(404)->setError('%s 不能为空或不符合！', $keyMap[$key]);
+        }
+        try {
+            $this->startTrans();
+            Db::table(sfp('indent'))->where('group_id', 'eq', $param['id'])->where('status', 'eq', 'W')->update(['status' => 'S']);
+            if (Db::table(sfp('group'))->where('id', 'eq', $param['id'])->update(['status' => 'S', 'updated_at' => date('Y-m-d H:i:s')])) {
+                $this->commit();
+                return true;
+            }
+        } catch (\Exception $e) {
+            $this->rollback();
+        }
+        return $this->setErrorCode(500)->setError('锁定失败，请刷新后再试');
+    }
+
+    public function doDlivery($param)
+    {
+        $keyMap = ['id' => '团体编号'];
+        if (($key = sfis_valid($param, array('id'))) !== true) {
+            return $this->setErrorCode(404)->setError('%s 不能为空或不符合！', $keyMap[$key]);
+        }
+        try {
+            $this->startTrans();
+            Db::table(sfp('indent'))->where('group_id', 'eq', $param['id'])->where('status', 'in', ['W', 'S'])->update(['status' => 'P']);
+            if (Db::table(sfp('group'))->where('id', 'eq', $param['id'])->update(['status' => 'P', 'updated_at' => date('Y-m-d H:i:s')])) {
+                $this->commit();
+                return true;
+            }
+        } catch (\Exception $e) {
+            $this->rollback();
+        }
+        return $this->setErrorCode(500)->setError('发货失败，请刷新后再试');
     }
 }

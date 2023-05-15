@@ -247,4 +247,43 @@ window.sfidcard = {
         }
         return card;
     }
+};
+function sfvalidtelephone(telephone) {
+
+    var flag = false;
+    telephone = telephone.trim();
+    var regMobilephone = /^1[356789]\d{9}$/;
+    var regTellphone1 = /^([0-9]{3,4})?[0-9]{7,8}$|^([0-9]{3,4}-)?[0-9]{7,8}$/;
+    var regTellphone2 = /^(0\d{3})(\d{5})$/;
+    var regTellphone3 = /^[\d]{5}$/;
+    var regTellphone4 = /^[\d]{7}$/;
+    var regTellphone5 = /^(\d{4})-(\d{7})$/;
+    if (telephone.length == 11) {
+        if (regMobilephone.test(telephone)) {
+            flag = true;
+        } else if (/^[\d]{11}$/.test(telephone)) {
+            flag = true;
+        }
+    } else if (telephone.length == 12) {
+        if (regTellphone5.test(telephone)) {
+            flag = true;
+        }
+    } else if (telephone.length == 8) {
+        if (regTellphone1.test(telephone)) {
+            flag = true;
+        }
+    } else if (telephone.length == 9) {
+        if (regTellphone2.test(telephone)) {
+            flag = true;
+        }
+    } else if (telephone.length == 5) {
+        if (regTellphone3.test(telephone)) {
+            flag = true;
+        }
+    } else if (telephone.length == 7) {
+        if (regTellphone4.test(telephone)) {
+            flag = true;
+        }
+    }
+    return flag;
 }

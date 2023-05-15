@@ -11,6 +11,30 @@
     .btn {
         padding-top: 10px;
     }
+    .right-con li .btn {
+        bottom: 2px;
+        right: 5px;
+        padding: 0;
+        width: 86px;
+        text-align: left;
+    }
+    .right-con li .btn a {
+        color: rgb(179, 115, 253);
+        text-decoration: underline!important;
+    }
+    .right-con li .menu-txt {
+        width: 60%;
+    }
+    .weui-cell_swiped * {
+        padding: 2px 0 1px;
+        margin: 0;
+    }
+    .weui-cell_swiped span {
+        line-height: 28px;
+        padding-left: 1px;
+        padding-right: 1px;
+    }
+
     .main{height: calc(100% - 4.5rem);}
 
     #tab1-con1{padding-bottom: 3rem;}
@@ -40,75 +64,278 @@
         display: block;
         left: 25%;
     }
+    .toolbar .title {
+        font-size: 14px;
+        line-height: 1px;
+    }
+    .weui-grid {
+        min-height: 102px;
+    }
 </style>
 <header class="zyw-header">
     <div class="zyw-container white-color">
         <div class="head-l"><a href="javascript:window.history.back(-1)" target="_self"><img src="__STATIC__/home/img/svg/head-return.svg" alt=""></a></div>
         <h1>共乐社区店 - 菜单管理</h1>
-        <div class="head-r"><a href="<?php echo sfurl('/admin/item/food/add') ?>">+ 新增</a></div>
+        <div class="head-r"><a href="<?php echo sfurl('/admin/food/add') ?>">+ 新增</a></div>
     </div>
 </header>
 <section class="zyw-container content JP_food_admin">
     <div class="aui-tab" id="tab">
         <div class="aui-tab-item aui-active">全部</div>
-        <span class="p-right">点击图片或名字进行编辑、下架</span>
+        <span class="p-right">点图片或名字可编辑，左滑上下架</span>
     </div>
     <div class="main">
         <div class="aui-item" id="tab1-con1">
             <div class="left-menu left" id="left">
                 <ul>
-                    <li><span>营养套餐</span></li>
-                    <li><span>加菜</span></li>
+                    <li><span>所有</span></li>
+                    {foreach name="varietyList" item="v"}
+                    <li><span>{$v.name}</span></li>
+                    {/foreach}
                 </ul>
             </div>
             <div class="con">
                 <div class="right-con con-active" style="display: none;">
                     <ul>
                         {foreach name='list' item='v'}
-                        <li>
-                            <div class="menu-img"><a href="#"><img src="<?php echo sfimg($v['image'], 115, 115) ?>"></a></div>
+                        <li class="JP_food_{$v.id}">
+                            <div class="menu-img"><a href="<?php echo sfurl('/admin/food/edit/id/' . $v['id']) ?>"><img src="<?php echo sfimg($v['image'], 115, 115) ?>"></a><label class="JV_status">{$v.status_indent}</label></div>
                             <div class="menu-txt">
-                                <h4><a href="#">{$v.name}</a></h4>
-                                <p class="list1">月销量：{$v.quantity_sale}</p>
+                                <div class="weui-cell weui-cell_swiped">
+                                    <div class="weui-cell__bd" style="transform: translate3d(0px, 0px, 0px);">
+                                        <div class="weui-cell">
+                                            <div class="weui-cell__bd">
+                                                <a href="<?php echo sfurl('/admin/food/edit/id/' . $v['id']) ?>"><p class="JV_name">{$v.name}</p></a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="weui-cell__ft JP_status_operate">
+                                        {if condition='$v.status eq "A"'}
+                                        <span class="weui-swiped-btn weui-swiped-btn_warn delete-swipeout" onclick="do_status_down({$v.id})">&nbsp;下架&nbsp;</span>
+                                        {else/}
+                                        <span class="weui-swiped-btn weui-swiped-btn_warn delete-swipeout" onclick="do_status_up({$v.id})">&nbsp;上架&nbsp;</span>
+                                        {/if}
+                                    </div>
+                                </div>
+                                <p class="list1">&nbsp;</p>
                                 <p class="list2">
                                     <b>￥</b><b>{$v.price}</b>
                                 </p>
                                 <div class="btn">
-                                    <button class="minus"></button>
-                                    <i>{$v.quantity}</i>
-                                    <button class="add"></button>
-                                    <i class="price">{$v.price}</i>
+                                    <div class="weui-cell weui-cell_swiped">
+                                        <div class="weui-cell__bd" style="transform: translate3d(0px, 0px, 0px);">
+                                            <div class="weui-cell">
+                                                <div class="weui-cell__bd">
+                                                    <a href="javascript:update_quantity({$v.id});">改库存: <span class="JV_quantity">{$v.quantity}</span></a>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="weui-cell__ft">
+                                            <span class="weui-swiped-btn weui-swiped-btn_warn delete-swipeout" onclick="save_quantity({$v.id}, 0)">&nbsp;清空&nbsp;</span>
+                                        </div>
+                                    </div>
+
                                 </div>
                             </div>
                         </li>
                         {/foreach}
                     </ul>
                 </div>
+                {foreach name="varietyList" item="data"}
                 <div class="right-con" style="display: none;">
                     <ul>
-                        {foreach name='list' item='v'}
-                        <li>
-                            <div class="menu-img"><img src="<?php echo sfimg($v['image'], 115, 115) ?>"></div>
+                        {foreach name='data.list' item='v'}
+                        <li class="JP_food_{$v.id}">
+                            <div class="menu-img"><a href="<?php echo sfurl('/admin/food/edit/id/' . $v['id']) ?>"><img src="<?php echo sfimg($v['image'], 115, 115) ?>"></a><label class="JV_status">{$v.status_indent}</label></div>
                             <div class="menu-txt">
-                                <h4 data-icon="00">{$v.name}</h4>
-                                <p class="list1">月销量：{$v.quantity_sale}</p>
+                                <div class="weui-cell weui-cell_swiped">
+                                    <div class="weui-cell__bd" style="transform: translate3d(0px, 0px, 0px);">
+                                        <div class="weui-cell">
+                                            <div class="weui-cell__bd">
+                                                <a href="<?php echo sfurl('/admin/food/edit/id/' . $v['id']) ?>"><p class="JV_name">{$v.name}</p></a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="weui-cell__ft JP_status_operate">
+                                        {if condition='$v.status eq "A"'}
+                                        <span class="weui-swiped-btn weui-swiped-btn_warn delete-swipeout" onclick="do_status_down({$v.id})">&nbsp;下架&nbsp;</span>
+                                        {else/}
+                                        <span class="weui-swiped-btn weui-swiped-btn_warn delete-swipeout" onclick="do_status_up({$v.id})">&nbsp;上架&nbsp;</span>
+                                        {/if}
+                                    </div>
+                                </div>
+                                <p class="list1">&nbsp;</p>
                                 <p class="list2">
                                     <b>￥</b><b>{$v.price}</b>
                                 </p>
                                 <div class="btn">
-                                    <button class="minus"></button>
-                                    <i>{$v.quantity}</i>
-                                    <button class="add"></button>
-                                    <i class="price">{$v.price}</i>
+                                    <div class="weui-cell weui-cell_swiped">
+                                        <div class="weui-cell__bd" style="transform: translate3d(0px, 0px, 0px);">
+                                            <div class="weui-cell">
+                                                <div class="weui-cell__bd">
+                                                    <a href="javascript:update_quantity({$v.id});">改库存: <span class="JV_quantity">{$v.quantity}</span></a>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="weui-cell__ft">
+                                            <span class="weui-swiped-btn weui-swiped-btn_warn delete-swipeout" onclick="save_quantity({$v.id}, 0)">&nbsp;清空&nbsp;</span>
+                                        </div>
+                                    </div>
+
                                 </div>
                             </div>
                         </li>
                         {/foreach}
                     </ul>
                 </div>
+                {/foreach}
             </div>
         </div>
 </section>
+<div id="box_quantity" class='weui-popup__container popup-bottom'>
+    <input type="hidden" class="JV_id" />
+    <div class="weui-popup__overlay"></div>
+    <div class="weui-popup__modal">
+        <div class="toolbar">
+            <div class="toolbar-inner">
+                <a href="javascript:;" class="picker-button close-popup JU_close">关闭</a>
+                <h1 class="title"></h1>
+            </div>
+        </div>
+        <div class="modal-content">
+            <div class="weui-grids">
+                <a href="javascript:quantity_minus();" class="weui-grid js_grid">
+                    <div class="weui-grid__icon">
+                        <img src="__STATIC__/home/img/minus.png" alt="">
+                    </div>
+                    <p class="weui-grid__label">
+                        减少
+                    </p>
+                </a>
+                <a href="javascript:;" class="weui-grid js_grid" data-id="progress">
+                    <input class="weui-grid__label JV_quantity" style="font-size: 32px;font-weight: bold; width: 100%" value="0" onfocus="this.select()" />
+                </a>
+                <a href="javascript:quantity_add();" class="weui-grid js_grid">
+                    <div class="weui-grid__icon">
+                        <img src="__STATIC__/home/img/add.png" alt="">
+                    </div>
+                    <p class="weui-grid__label">
+                        增加
+                    </p>
+                </a>
+                <a href="javascript:quantity_clear();" class="weui-grid js_grid">
+                    <div class="weui-grid__icon">
+                        <img src="__STATIC__/home/img/clear.png" alt="">
+                    </div>
+                    <p class="weui-grid__label">
+                        清空
+                    </p>
+                </a>
+                <a href="javascript:quantity_save();" class="weui-grid js_grid" >
+                    <div class="weui-grid__icon">
+                        <img src="__STATIC__/home/img/save.png" alt="">
+                    </div>
+                    <p class="weui-grid__label">
+                        确认保存
+                    </p>
+                </a>
+                <a href="javascript:quantity_top();" class="weui-grid js_grid">
+                    <div class="weui-grid__icon">
+                        <img src="__STATIC__/home/img/top.png" alt="">
+                    </div>
+                    <p class="weui-grid__label">
+                        叠满
+                    </p>
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
 <script type="text/javascript" src="__STATIC__/home/js/add.js__URL_CACHE__"></script>
 <script type="text/javascript" src="__STATIC__/home/js/aui-tab.js" ></script>
+<script>
+    function do_status_down(id) {
+        $.showLoading();
+        $.post('<?php echo sfurl("/admin/food/doDown") ?>', {id: id}, function (ret) {
+            $.hideLoading();
+            $('.weui-cell_swiped').swipeout('close');
+            ret = eval('(' + ret + ')');
+            if (ret.code == 1) {
+                $.toptip('下架成功');
+                $('.JP_food_' + id + ' .JV_status').html('已下架');
+                $('.JP_food_' + id + ' .JP_status_operate').html('<span class="weui-swiped-btn weui-swiped-btn_warn delete-swipeout" onclick="do_status_up(' + id + ')">&nbsp;上架&nbsp;</span>');
+            } else {
+                $.toast(ret.msg, "cancel");
+            }
+        });
+    }
+    function do_status_up(id) {
+        $.showLoading();
+        $.post('<?php echo sfurl("/admin/food/doUp") ?>', {id: id}, function (ret) {
+            $.hideLoading();
+            $('.weui-cell_swiped').swipeout('close');
+            ret = eval('(' + ret + ')');
+            if (ret.code == 1) {
+                $.toptip('上架成功');
+                $('.JP_food_' + id + ' .JV_status').html('生效');
+                $('.JP_food_' + id + ' .JP_status_operate').html('<span class="weui-swiped-btn weui-swiped-btn_warn delete-swipeout" onclick="do_status_down(' + id + ')">&nbsp;下架&nbsp;</span>');
+            } else {
+                $.toast(ret.msg, "cancel");
+            }
+        });
+    }
+    function quantity_minus() {
+        let qty = parseInt($('#box_quantity .JV_quantity').val());
+        if (qty > 0) {
+            $('#box_quantity .JV_quantity').val(qty - 1);
+        }
+    }
+    function quantity_add() {
+        let qty = parseInt($('#box_quantity .JV_quantity').val());
+        if (qty < 999) {
+            $('#box_quantity .JV_quantity').val(qty + 1);
+        }
+    }
+    function quantity_clear() {
+        $('#box_quantity .JV_quantity').val(0);
+    }
+    function quantity_top() {
+        $('#box_quantity .JV_quantity').val(999);
+    }
+    function save_quantity(id, qty) {
+        $.showLoading();
+        $.post('<?php echo sfurl("/admin/food/saveQuantity") ?>', {id: id, quantity: qty}, function (ret) {
+            $.hideLoading();
+            $('.weui-cell_swiped').swipeout('close');
+            ret = eval('(' + ret + ')');
+            if (ret.code == 1) {
+                $.toptip('修改成功');
+                $('.JP_food_' + id).each(function () {
+                    $(this).find('.JV_quantity').html(qty);
+                });
+                if ($('#box_quantity .JU_close').length > 0) {
+                    $('#box_quantity .JU_close').click();
+                }
+            } else {
+                $.toast(ret.msg, "cancel");
+            }
+        });
+    }
+    function quantity_save() {
+        let id = $('#box_quantity .JV_id').val();
+        let qty = parseInt($('#box_quantity .JV_quantity').val());
+        save_quantity(id, qty);
+    }
+    function update_quantity(id)
+    {
+        let jp = $('.JP_food_' + id).first();
+        $('#box_quantity .JV_id').val(id);
+        $('#box_quantity .title').html('修改 ' + jp.find('.JV_name').html() + ' 库存');
+        $('#box_quantity .JV_quantity').val(jp.find('.JV_quantity').html());
+        $("#box_quantity").popup();
+    }
+    $(function () {
+        $('.weui-cell_swiped').swipeout()
+    });
+</script>
 {include file="common:footer" /}

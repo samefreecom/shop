@@ -10,8 +10,8 @@ class Order
     {
         $param = Request::param();
         $status = sfret('status', 'A');
-        $mIndent = new Base();
         $bind = ['title' => '全部外卖'];
+        $mIndent = new Base();
         $bind['list'] = $mIndent->getList($param);
         $bind['status'] = $status;
         return view('indent/order/index', $bind);

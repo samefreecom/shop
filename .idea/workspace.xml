@@ -3,34 +3,27 @@
   <component name="ChangeListManager">
     <list default="true" id="3acf79bb-89f4-462b-9c5b-7274dad1687c" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/admin/controller/Item.php" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/base/model/Session.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/base/model/Session.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/common.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/common.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/application/food/controller/Admin.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/food/controller/Admin.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/application/food/model/Base.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/food/model/Base.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/application/group/model/Base.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/group/model/Base.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/application/indent/controller/Admin.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/indent/controller/Admin.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/application/indent/controller/Order.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/indent/controller/Order.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/application/indent/model/Base.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/indent/model/Base.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/seat/controller/Admin.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/indent/controller/Admin.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/static/home/css/find.css" beforeDir="false" afterPath="$PROJECT_DIR$/public/static/home/css/find.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/static/home/css/main - 副本.css" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/static/home/css/main.css" beforeDir="false" afterPath="$PROJECT_DIR$/public/static/home/css/main.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/application/indent/model/Food.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/indent/model/Food.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/application/seat/controller/Group.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/seat/controller/Group.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/application/tool/controller/Image.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/tool/controller/Image.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/public/static/home/css/cart.css" beforeDir="false" afterPath="$PROJECT_DIR$/public/static/home/css/cart.css" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/public/static/home/css/order.css" beforeDir="false" afterPath="$PROJECT_DIR$/public/static/home/css/order.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/template/home/admin/index - 副本.phtml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/public/static/home/js/lib.js" beforeDir="false" afterPath="$PROJECT_DIR$/public/static/home/js/lib.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/template/home/admin/index.phtml" beforeDir="false" afterPath="$PROJECT_DIR$/template/home/admin/index.phtml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/template/home/category/index - 副本.phtml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/template/home/common/admin_header - 副本.phtml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/template/home/common/footer.phtml" beforeDir="false" afterPath="$PROJECT_DIR$/template/home/common/footer.phtml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/template/home/common/header - 副本.phtml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/template/home/common/admin_header.phtml" beforeDir="false" afterPath="$PROJECT_DIR$/template/home/common/admin_header.phtml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/template/home/food/admin/add.phtml" beforeDir="false" afterPath="$PROJECT_DIR$/template/home/food/admin/add.phtml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/template/home/food/admin/index.phtml" beforeDir="false" afterPath="$PROJECT_DIR$/template/home/food/admin/index.phtml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/template/home/group/create.phtml" beforeDir="false" afterPath="$PROJECT_DIR$/template/home/group/create.phtml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/template/home/group/index - 副本.phtml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/template/home/group/index.phtml" beforeDir="false" afterPath="$PROJECT_DIR$/template/home/group/index.phtml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/template/home/group/item.phtml" beforeDir="false" afterPath="$PROJECT_DIR$/template/home/group/item.phtml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/template/home/indent/admin/order.phtml" beforeDir="false" afterPath="$PROJECT_DIR$/template/home/indent/admin/order.phtml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/template/home/indent/order/index.phtml" beforeDir="false" afterPath="$PROJECT_DIR$/template/home/indent/order/index.phtml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/template/home/index/index - 副本.phtml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/template/home/member/index - 副本.phtml" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/template/home/member/index.phtml" beforeDir="false" afterPath="$PROJECT_DIR$/template/home/member/index.phtml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/template/home/seat/admin/order.phtml" beforeDir="false" afterPath="$PROJECT_DIR$/template/home/indent/admin/order.phtml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/template/home/seat/group/index.phtml" beforeDir="false" afterPath="$PROJECT_DIR$/template/home/seat/group/index.phtml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/template/home/seat/index - 副本.phtml" beforeDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -99,7 +92,7 @@
   </component>
   <component name="PropertiesComponent">
     <property name="WebServerToolWindowFactoryState" value="false" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/application/group/controller" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/template/home/food/admin" />
     <property name="node.js.detected.package.eslint" value="true" />
     <property name="node.js.detected.package.tslint" value="true" />
     <property name="node.js.path.for.package.eslint" value="project" />
@@ -110,18 +103,18 @@
     <property name="settings.editor.selected.configurable" value="editing.templates" />
   </component>
   <component name="RecentsManager">
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="D:\BaiduSyncdisk\www\php5\shop\template\home\food\admin" />
+      <recent name="D:\BaiduSyncdisk\www\php5\shop\application\group\controller" />
+      <recent name="D:\BaiduSyncdisk\www\php5\shop\application\base\controller" />
+      <recent name="D:\BaiduSyncdisk\www\php5\shop\application\group\model" />
+      <recent name="D:\BaiduSyncdisk\www\php5\shop\application\indent\model" />
+    </key>
     <key name="MoveFile.RECENT_KEYS">
       <recent name="D:\BaiduSyncdisk\www\php5\shop\template\home\indent\admin" />
       <recent name="D:\BaiduSyncdisk\www\php5\shop\application\indent\controller" />
       <recent name="D:\BaiduSyncdisk\www\php5\shop\public\static\asset" />
       <recent name="D:\BaiduSyncdisk\www\php5\shop\template\home\seat\admin" />
-    </key>
-    <key name="CopyFile.RECENT_KEYS">
-      <recent name="D:\BaiduSyncdisk\www\php5\shop\application\group\controller" />
-      <recent name="D:\BaiduSyncdisk\www\php5\shop\application\base\controller" />
-      <recent name="D:\BaiduSyncdisk\www\php5\shop\application\group\model" />
-      <recent name="D:\BaiduSyncdisk\www\php5\shop\application\indent\model" />
-      <recent name="D:\BaiduSyncdisk\www\php5\shop\template\home\common" />
     </key>
   </component>
   <component name="RunDashboard">
@@ -161,7 +154,8 @@
       <workItem from="1683276209131" duration="21741000" />
       <workItem from="1683708996705" duration="29463000" />
       <workItem from="1683942954528" duration="3076000" />
-      <workItem from="1683952353570" duration="34935000" />
+      <workItem from="1683952353570" duration="54481000" />
+      <workItem from="1684146823011" duration="8219000" />
     </task>
     <servers />
   </component>

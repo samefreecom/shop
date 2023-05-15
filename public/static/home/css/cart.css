@@ -199,3 +199,16 @@ a.rig_shai {
     font-size: 13px;
     line-height: 32px
 }
+
+.zyw-container.content .right-con li label {
+    background-color: #655;
+    background-image: radial-gradient(#f5dab8 30%, transparent 0);
+    background-size: 3px 3px;
+    position: absolute;
+    left: 2px;
+    top: 2px;
+    color: #fff;
+    font-size: 12px!important;
+    padding: 3px 5px;
+    opacity: 0.8;
+}

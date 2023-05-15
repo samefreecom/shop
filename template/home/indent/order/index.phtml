@@ -43,7 +43,7 @@
                             {/foreach}
                         </div>
                         <h4 class="order-item-id"><a href="javascript:open_location('{$order.title}', {$order.lon}, {$order.lat});"><i class="head-l-svg black-icon" aria-hidden="true"></i> <strong>{$order.title}</strong></a>
-                            <span class="order-item-state pull-right" style="color: red">您共计 {$order.food_sum_qty} 份</span>
+                            <span class="order-item-state pull-right" style="color: red">您共计 {$order.foodSumQty} 份</span>
                         </h4>
                         <p class="text-right order-item-sum">合计 {$order.amount}（含运费 0.00元）</p>
                         <div class="order-item-btn pull-left">
@@ -110,6 +110,7 @@
             }
         });
     }
+
     function open_location(name, longitude, latitude) {
         wx.openLocation({
             latitude: latitude,

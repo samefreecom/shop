@@ -14,7 +14,7 @@ class Food extends BaseModel
             ->where('i.group_id', 'eq', $groupId)
             ->where('account_id', 'eq', $accountId)
             ->where('to_days(i.created_at) = to_days(now())')
-            ->where('i.status', 'neq', 'E')
+            ->where('i.status', 'eq', 'W')
             ->field(['t.*']);
         $list = $base->select();
         return $list;
@@ -28,7 +28,7 @@ class Food extends BaseModel
             ->leftJoin(sfp('food f'), 't.food_id = f.id')
             ->where('i.group_id', 'eq', $groupId)
             ->where('to_days(i.created_at) = to_days(now())')
-            ->where('i.status', 'neq', 'E')
+            ->where('i.status', 'not in', ['E', 'N'])
             ->field(['t.*', 'i.account_id', 'a.name' => 'account_name', 'f.name' => 'food_name', 'f.quantity_sale', 'f.image']);
         $list = $base->select();
         $fmtList = [];

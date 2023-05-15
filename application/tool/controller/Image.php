@@ -55,7 +55,7 @@
                     } else {
                         move_uploaded_file($_FILES['file']['tmp_name'], ROOT . $path);
                     }
-                    $ret['code'] = 200;
+                    $ret['code'] = 1;
                     $ret['msg'] = '';
                     $ret['data']['path'] = $path;
                     $minWidth = isset($param['min_width']) ? $param['min_width'] : null;

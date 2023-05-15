@@ -13,7 +13,7 @@ class Group
         $param = Request::param();
         $bind = ['title' => '点餐', 'groupId' => $param['id']];
         $mFood = new Base();
-        $bind['list'] = $mFood->findList(array('min_quantity' => 1));
+        $bind['list'] = $mFood->findList(array('status' => 'A'));
         $fmtVariety = [];
         $varietyList = [];
         foreach ($bind['list'] as $value) {

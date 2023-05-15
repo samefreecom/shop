@@ -18,55 +18,70 @@
         </div>
         <div class="weui-tab__bd">
             <div id="order_all" class="weui-tab__bd-item weui-tab__bd-item--active">
+                {foreach name="list" item="order"}
                 <div class="order-group">
                     <div class="order-group-item clearfix">
                         <div class="order-item-box">
-                            <h4 class="order-item-id">订单号：52145859543856977
-                                <span class="order-item-state theme-color pull-right">待发货</span>
+                            <h4 class="order-item-id">团体号：{$order.group_no}
+                                <span class="order-item-state theme-color pull-right">{$order.status_indent}</span>
                             </h4>
-                            <div class="media">
-                                <a href="" class="pull-left">
-                                    <img class="media-object order-item-img" src="<?php echo sfimg('/public/static/asset/img/20230421181042.jpg', 115, 115) ?>">
-                                </a>
-                                <div class="media-body">
-                                    <div class="order-item-info">
-                                        <h5 class="order-item-title">Apple iPhone X (A1865) 64GB 银色 移动联通电信4G手机</h5>
-                                        <div class="pull-right text-right order-item-r">
-                                            <p class="order-item-prince">￥4800.00</p>
-                                            <p class="order-item-length">x 2</p>
+                            {notempty name="order.indentList"}
+                                {foreach name="order.indentList" item="indent" key="i"}
+                            <div class="order-item-id" style="border-bottom: 1px solid #ccc; padding: 0 8px; {if condition='$i eq 0'}border-top: 1px solid #ccc; padding: 0 8px;{/if}">
+                                <h5 style="text-align: right; border-bottom: 1px dotted #ccc; line-height: 32px; margin: 0">订单号：{$indent.indent_no}
+                                    <span class="order-item-state theme-color pull-left">{$indent.account_name}</span></h5>
+                                {foreach name="indent.foodList" item="v"}
+                                <div class="media">
+                                    <div class="pull-left">
+                                        <img class="media-object order-item-img" src="<?php echo sfimg($v['image'], 115, 115) ?>">
+                                    </div>
+                                    <div class="media-body">
+                                        <div class="order-item-info">
+                                            <h5 class="order-item-title">#{$v.tag_no} {$v.name}</h5>
+                                            <div class="pull-right text-right order-item-r">
+                                                <p class="order-item-prince">￥{$v.price}</p>
+                                                <p class="order-item-length">x {$v.quantity}</p>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
+                                {/foreach}
+                                <h5 style="border-top: 1px dotted #ccc; line-height: 32px; margin: 0">备注：{$indent.note}</h5>
                             </div>
-                            <div class="media">
-                                <a href="" class="pull-left">
-                                    <img class="media-object order-item-img" src="<?php echo sfimg('/public/static/asset/img/20230421181042.jpg', 115, 115) ?>">
-                                </a>
-                                <div class="media-body">
-                                    <div class="order-item-info">
-                                        <h5 class="order-item-title">Apple iPhone X (A1865) 64GB 银色 移动联通电信4G手机</h5>
-                                        <div class="pull-right text-right order-item-r">
-                                            <p class="order-item-prince">￥4800.00</p>
-                                            <p class="order-item-length">x 2</p>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
+                                {/foreach}
+                            {/notempty}
                         </div>
-                        <h4 class="order-item-id"><a href="javascript:;"><i class="head-l-svg black-icon" aria-hidden="true"></i> <strong>南山区卓越前海壹号T3写字楼</strong></a>
-                            <span class="order-item-state pull-right" style="color: red">共计 1 份</span>
+                        <h4 class="order-item-id"><a href="javascript:open_location('{$order.title}', {$order.lon}, {$order.lat});"><i class="head-l-svg black-icon" aria-hidden="true"></i> <strong>{$order.title}</strong></a>
+                            <span class="order-item-state pull-right" style="color: red">共计 {$order.foodSumQty} 份</span>
                         </h4>
-                        <p class="text-right order-item-sum">合计 4815.00（含运费 0.00元）</p>
+                        <p class="text-right order-item-sum">合计 {$order.sumAmount}（含运费 0.00元）</p>
+                        {if condition="$order.status eq 'W'"}
                         <div class="order-item-btn pull-left">
-                            备注：
+                            <a class="btn btn-sm btn-success" href="<?php echo sfurl('/admin/indent/dolock//id/' . $order['id']) ?>" onclick="$.showLoading()">锁定配餐</a>
                         </div>
+                        {/if}
+                        {if condition="$order.status eq 'W' or $order.status eq 'S'"}
                         <div class="order-item-btn pull-right">
-                            <button class="btn btn-sm btn-danger">确认发货</button>
+                            <a class="btn btn-sm btn-danger" href="<?php echo sfurl('/admin/indent/dodlivery/id/' . $order['id']) ?>" onclick="$.showLoading()">确认发货</a>
                         </div>
+                        {/if}
                     </div>
                 </div>
+                {/foreach}
             </div>
         </div>
     </div>
 </section>
+<script>
+    function open_location(name, longitude, latitude) {
+        wx.openLocation({
+            latitude: latitude,
+            longitude: longitude,
+            name: name,
+            address: name,
+            scale: 20,
+            infoUrl: '<?php echo sfurl("./") ?>'
+        });
+    }
+</script>
 {include file="common:footer" /}

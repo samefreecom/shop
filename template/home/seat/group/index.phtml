@@ -97,7 +97,12 @@
                     <ul id="item_all">
                         {foreach name='list' item='v'}
                         <li data-id="{$v.id}">
-                            <div class="menu-img"><img src="<?php echo sfimg($v['image'], 115, 115) ?>" orgimg="<?php echo sfimg($v['image'], null, 1440) ?>"></div>
+                            <div class="menu-img">
+                                <img src="<?php echo sfimg($v['image'], 115, 115) ?>" orgimg="<?php echo sfimg($v['image'], null, 1440) ?>">
+                                {if condition="$v.quantity eq 0"}
+                                    <label class="JV_status">售罄</label>
+                                {/if}
+                            </div>
                             <div class="menu-txt">
                                 <h4 class="accountName">{$v.name}</h4>
                                 <p class="list1">月销量：{$v.quantity_sale}</p>
@@ -107,7 +112,9 @@
                                 <div class="btn JI_food" foodid="{$v.id}">
                                     <button class="minus"></button>
                                     <i max-val="{$v.quantity}">0</i>
+                                    {if condition='$v.quantity gt 0'}
                                     <button class="add"></button>
+                                    {/if}
                                     <i class="price">{$v.price}</i>
                                 </div>
                             </div>
@@ -120,7 +127,12 @@
                     <ul>
                         {foreach name='data.list' item='v'}
                         <li>
-                            <div class="menu-img"><img src="<?php echo sfimg($v['image'], 115, 115) ?>" orgimg="<?php echo sfimg($v['image'], null, 1440) ?>"></div>
+                            <div class="menu-img">
+                                <img src="<?php echo sfimg($v['image'], 115, 115) ?>" orgimg="<?php echo sfimg($v['image'], null, 1440) ?>">
+                                {if condition="$v.quantity eq 0"}
+                                <label class="JV_status">售罄</label>
+                                {/if}
+                            </div>
                             <div class="menu-txt">
                                 <h4 class="accountName">{$v.name}</h4>
                                 <p class="list1">月销量：{$v.quantity}</p>
@@ -130,7 +142,9 @@
                                 <div class="btn">
                                     <button class="minus"></button>
                                     <i max-val="{$v.quantity}">0</i>
+                                    {if condition='$v.quantity gt 0'}
                                     <button class="add"></button>
+                                    {/if}
                                     <i class="price">{$v.price}</i>
                                 </div>
                             </div>
@@ -162,7 +176,9 @@
                                 <div class="btn">
                                     <button class="minus"></button>
                                     <i max-val="{$v.quantity}">0</i>
+                                    {if condition='$v.quantity gt 0'}
                                     <button class="add"></button>
+                                    {/if}
                                     <i class="price">{$v.price}</i>
                                 </div>
                             </div>
