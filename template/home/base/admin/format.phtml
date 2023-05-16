@@ -1,0 +1,56 @@
+<?php
+        $value['value'] = isset($value['value']) ? $value['value'] : '';
+        switch($value['format']) {
+        case 'text':
+ ?>
+
+<?php
+    if (strlen($value['value']) < 100) :
+?>
+<input type="text" name="id[<?php echo $value['site_id']; ?>__<?php echo $value['id']; ?>]" value="<?php echo $value['value']; ?>" data="<?php echo $value['value']; ?>" class="weui-input" style="height: 28px" onfocus="this.select()"/>
+<?php
+    else:
+?>
+<textarea name="id[<?php echo $value['site_id']; ?>__<?php echo $value['id']; ?>]" class="weui-textarea" data="<?php echo $value['value']; ?>" onfocus="this.select()"><?php echo $value['value']; ?></textarea>
+<?php
+    endif;
+?>
+
+<?php
+        break;
+        case 'select':
+?>
+
+<div class="layui-input-inline">
+    <select class="weui-select" name="id[<?php echo $value['site_id']; ?>__<?php echo $value['id']; ?>]" data="<?php echo $value['value']; ?>" value="<?php echo $value['value']; ?>" onfocus="this.select()">
+        <?php
+            $formatData = json_decode($value['format_data'], true);
+            foreach ($formatData as $v) :
+        ?>
+        <option value="<?php echo $v['code']; ?>"<?php echo $v['code'] == $value['value'] ? ' selected' : ''; ?>><?php echo $v['name']; ?></option>
+        <?php
+            endforeach;
+        ?>
+    </select>
+</div>
+
+<?php
+        break;
+        case 'checkbox':
+?>
+
+<input type="hidden" id="id_<?php echo $value['site_id']; ?>__<?php echo $value['id']; ?>" name="id[<?php echo $value['site_id']; ?>__<?php echo $value['id']; ?>]" value="<?php echo $value['value']; ?>" data="<?php echo $value['value']; ?>" />
+<label for="switchCP" class="weui-switch-cp">
+    <input id="switchCP" class="weui-switch-cp__input" type="checkbox"<?php echo $value['value'] != 1 ? '' : ' checked=""'; ?> data-id="id_<?php echo $value['site_id']; ?>__<?php echo $value['id']; ?>" value="<?php echo $value['value']; ?>">
+    <div class="weui-switch-cp__box"></div>
+</label>
+<?php
+        break;
+            case 'image':
+                ?>
+            <input type="hidden" name="id[<?php echo $value['site_id']; ?>__<?php echo $value['id']; ?>]" value="<?php echo $value['value']; ?>" data="<?php echo $value['value']; ?>" style="height: 28px; width: 300px"/>
+            <img title="点击选择图片" src="<?php echo $value['value']; ?>?v<?php echo time() ?>" onclick="$(this).parent().find('input').last().click()" /><a href="<?php echo $value['value']; ?>" target="_blank" style="float: right">点击查看</a>
+            <input type="file" onchange="sfupload(this, change_upload, '<?php echo $value['site_id']; ?>__<?php echo $value['id']; ?>')" style="position:absolute; top:0; right:80px; height:24px; filter:alpha(opacity:0);opacity: 0;" />
+<?php
+        }
+?>

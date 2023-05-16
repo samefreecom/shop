@@ -1,6 +1,6 @@
 $(function () {
-
-    $(".left-menu:first-child li:first-child").addClass("active");
+	if (!window.leftMenuNotAuto)
+    	$(".left-menu:first-child li:first-child").addClass("active");
     var e;
 	//商品点击增加
 

@@ -99,16 +99,16 @@
                     <input type="hidden" name="group" value="<?php echo sfret('group', 'default'); ?>">
                     {foreach name='list' item='value'}
                     <div class="weui-cell{if condition="$value.format eq 'select'"} weui-cell_select{/if}">
-                    <div class="weui-cell__hd"><label class="weui-label"{if condition="$value.format eq 'checkbox'"} style="margin-top: -11px"{/if}>{$value.name}</label></div>
-                    <div class="weui-cell__bd">
-                        {include file="base:admin:format" /}
+                        <div class="weui-cell__hd"><label class="weui-label"{if condition="$value.format eq 'checkbox'"} style="margin-top: -11px"{/if}>{$value.name}</label></div>
+                        <div class="weui-cell__bd">
+                            {include file="base:admin:format" /}
+                        </div>
                     </div>
+                    <div class="weui-cells__tips">&nbsp;{$value.note}</div>
+                    {/foreach}
+                </form>
             </div>
-            <div class="weui-cells__tips">&nbsp;{$value.note}</div>
-            {/foreach}
-            </form>
         </div>
-    </div>
     </div>
 </section>
 <script type="text/html" id="bar_gallery">
@@ -166,6 +166,6 @@
                 });
             });
         });
-    });
+     });
 </script>
 {include file="common:footer" /}
