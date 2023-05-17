@@ -22,9 +22,7 @@
                 <div class="order-group">
                     <div class="order-group-item clearfix">
                         <div class="order-item-box">
-                            <h4 class="order-item-id">订单号：{$order.indent_no}
-                                <span class="order-item-state theme-color pull-right" id="JV_status_{$order.id}">{$order.status_indent}</span>
-                            </h4>
+                            <h4 class="order-item-id">订单号：{$order.indent_no}<span class="order-item-state theme-color pull-right" id="JV_status_{$order.id}">{$order.status_indent}</span></h4>
                             {foreach name="order.foodList" item="v"}
                             <div class="media">
                                 <div class="pull-left">
@@ -43,7 +41,7 @@
                             {/foreach}
                         </div>
                         <h4 class="order-item-id">
-                            {if condition="$order.title eq '快捷下单（点击复制订单号发给商家）'"}
+                            {if condition="$order.title eq '属于快捷下单（点击复制订单号发给商家）'"}
                             <a class="copy" href="javascript:;" data-clipboard-target="#indent_no_{$order.id}"><i class="head-l-svg black-icon" aria-hidden="true"></i> <strong>{$order.title}</strong></a><input id="indent_no_{$order.id}" type="hidden" value="{$order.indent_no}">
                             {else/}
                             <a href="javascript:open_location('{$order.title}', {$order.lon}, {$order.lat});"><i class="head-l-svg black-icon" aria-hidden="true"></i> <strong>{$order.title}</strong></a>

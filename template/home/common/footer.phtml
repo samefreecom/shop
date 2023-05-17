@@ -62,7 +62,13 @@
         $('.j-sfloading').click(function () {
             $.showLoading();
         });
-        new ClipboardJS('.copy');
+        let copyBtn = new ClipboardJS('.copy');
+        copyBtn.on("success",function(e){
+            $.toptip('复制成功');
+        });
+        copyBtn.on("error",function(e){
+            $.toptip('复制失败，请手动复制');
+        });
     });
     if (typeof sfinit == 'function') {
         sfinit();

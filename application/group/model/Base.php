@@ -16,6 +16,7 @@ class Base extends BaseModel
             $autoNo = sprintf('%02d', $param['keyword']);
             $base->where('title like "%' . $param['keyword'] . '%" or auto_no = "' . $autoNo . '"');
         }
+        $base->where('title', 'neq', '属于快捷下单（点击复制订单号发给商家）');
         $base->where('expired_at', '>=', date('Y-m-d'));
         $base->where('lon > ' . $lon . ' - 0.01 or lon <= ' . $lon . ' + 0.01');
         $base->where('lat > ' . $lat . ' - 0.01 or lat <= ' . $lat . ' + 0.01');
@@ -123,28 +124,27 @@ class Base extends BaseModel
     public function getQuick()
     {
         $mSession = new Session();
+        $createdId = $mSession->getId();
         $telephone = $mSession->getTelephone();
-        if (!empty($telephone)) {
-            $exists = Db::table(sfp('group'))->where('telephone', 'eq', $telephone)->where('title', '快捷下单')->where('expired_at', 'eq', date('Y-m-d'))->limit(1)->find();
-            if (!empty($exists)) {
-                return $exists;
-            }
+        $exists = Db::table(sfp('group'))->where('created_id', 'eq', $createdId)->where('title', '属于快捷下单（点击复制订单号发给商家）')->where('expired_at', 'eq', date('Y-m-d'))->limit(1)->find();
+        if (!empty($exists)) {
+            return $exists;
         }
         $max = Db::table(sfp('group'))->where('expired_at', '>=', date('Y-m-d'))->count('1');
         $autoNo = sprintf('%02d', $max + 1);
         $bind = [
             'group_no' => date('ymd') . $autoNo
             , 'auto_no' => $autoNo
-            , 'title' => '快捷下单'
+            , 'title' => '属于快捷下单（点击复制订单号发给商家）'
             , 'name' => $mSession->getName()
-            , 'telephone' => $mSession->getTelephone()
+            , 'telephone' => $telephone
             , 'address' => '隐藏地址'
             , 'note' => '未知'
             , 'pwd' => '666'
             , 'lon' => 0
             , 'lat' => 0
             , 'created_at' => date('Y-m-d H:i:s')
-            , 'created_id' => $mSession->getId()
+            , 'created_id' => $createdId
             , 'expired_at' => date('Y-m-d')
         ];
         if (Db::table(sfp('group'))->insert($bind)) {
