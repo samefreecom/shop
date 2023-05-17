@@ -1217,7 +1217,7 @@ function sfurl($path = '/', $param = null)
         $request = \think\Container::get('request');
         $url = SITEURL_ROOT . $request->url();
     } else {
-        $url = BASEDIR . $path;
+        $url = SITEURL_ROOT . $path;
         $index = strlen($url);
         if ($url[$index - 1] == '?') {
             $url = substr($url, 0, $index - 1);

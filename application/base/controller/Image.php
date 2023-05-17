@@ -12,6 +12,6 @@
         public function qrcode()
         {
             $image = new \Lib_Image();
-            $image->qrcode($_GET['no'], 'png', null, $_GET['size']);
+            $image->qrcode($_GET['no'], 'png', null, sfret('size', '3'));
         }
     }
