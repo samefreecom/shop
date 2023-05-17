@@ -42,7 +42,12 @@
                             </div>
                             {/foreach}
                         </div>
-                        <h4 class="order-item-id"><a href="javascript:open_location('{$order.title}', {$order.lon}, {$order.lat});"><i class="head-l-svg black-icon" aria-hidden="true"></i> <strong>{$order.title}</strong></a>
+                        <h4 class="order-item-id">
+                            {if condition="$order.title eq '快捷下单（点击复制订单号发给商家）'"}
+                            <a class="copy" href="javascript:;" data-clipboard-target="#indent_no_{$order.id}"><i class="head-l-svg black-icon" aria-hidden="true"></i> <strong>{$order.title}</strong></a><input id="indent_no_{$order.id}" type="hidden" value="{$order.indent_no}">
+                            {else/}
+                            <a href="javascript:open_location('{$order.title}', {$order.lon}, {$order.lat});"><i class="head-l-svg black-icon" aria-hidden="true"></i> <strong>{$order.title}</strong></a>
+                            {/if}
                             <span class="order-item-state pull-right" style="color: red">您共计 {$order.foodSumQty} 份</span>
                         </h4>
                         <p class="text-right order-item-sum">合计 {$order.amount}（含运费 0.00元）</p>
