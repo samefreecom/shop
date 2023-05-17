@@ -49,7 +49,7 @@
             case 'image':
                 ?>
             <input type="hidden" name="id[<?php echo $value['site_id']; ?>__<?php echo $value['id']; ?>]" value="<?php echo $value['value']; ?>" data="<?php echo $value['value']; ?>" style="height: 28px; width: 300px"/>
-            <img title="点击选择图片" src="<?php echo $value['value']; ?>?v<?php echo time() ?>" onclick="$(this).parent().find('input').last().click()" /><a href="<?php echo $value['value']; ?>" target="_blank" style="float: right">点击查看</a>
+            <img title="点击选择图片" src="<?php echo $value['value']; ?>__URL_CACHE__" onclick="$(this).parent().find('input').last().click()" /><a href="<?php echo $value['value']; ?>" target="_blank" style="float: right">点击查看</a>
             <input type="file" onchange="sfupload(this, change_upload, '<?php echo $value['site_id']; ?>__<?php echo $value['id']; ?>')" style="position:absolute; top:0; right:80px; height:24px; filter:alpha(opacity:0);opacity: 0;" />
 <?php
         }

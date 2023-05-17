@@ -1,10 +1,10 @@
 <?php $menuHome = true; ?>
 {include file="common:header" /}
-<link rel="stylesheet" href="__STATIC__/home/css/index.css?v<?php echo time() ?>">
+<link rel="stylesheet" href="__STATIC__/home/css/index.css__URL_CACHE__">
 <link rel="stylesheet" href="__STATIC__/home/css/swiper.min.css">
 <header class="zyw-header">
     <div class="zyw-container white-color">
-        <div class="head-l"><i class="head-l-svg" aria-hidden="true"></i> 共乐社区店</div>
+        <div class="head-l"><i class="head-l-svg" aria-hidden="true"></i> <?php echo \app\base\model\Setting::instance()->getValue('site_name_as') ?></div>
         <div class="head-search">
             <i class="fa fa-search" aria-hidden="true"></i>
             <input type="text" placeholder="输入要搜索的菜品或商品" class="white-color">
@@ -25,11 +25,19 @@
     <div class="index-class white-bgcolor">
         <div class="weui-flex">
             <div class="weui-flex__item">
-                <a href="group">
+                <a href="<?php echo sfurl('/group') ?>">
                     <div class="index-class-img">
                         <img src="__STATIC__/home/img/sjtx.png" alt="">
                     </div>
                     <p class="index-class-text">团体点餐</p>
+                </a>
+            </div>
+            <div class="weui-flex__item">
+                <a href="<?php echo sfurl('/seat/group/quickFood') ?>">
+                    <div class="index-class-img">
+                        <img src="__STATIC__/home/img/sjtx.png" alt="">
+                    </div>
+                    <p class="index-class-text">快速点餐</p>
                 </a>
             </div>
         </div>

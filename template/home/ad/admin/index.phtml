@@ -1,8 +1,8 @@
 <?php $menuAll = true; ?>
 {include file="common:admin_header" /}
 <link rel="stylesheet" href="__STATIC__/home/css/aui.css">
-<link rel="stylesheet" href="__STATIC__/home/css/cart.css?v<?php echo time() ?>"">
-<link rel="stylesheet" href="__STATIC__/home/css/classify.css?v<?php echo time() ?>">
+<link rel="stylesheet" href="__STATIC__/home/css/cart.css__URL_CACHE__">
+<link rel="stylesheet" href="__STATIC__/home/css/classify.css__URL_CACHE__">
 <style>
     html,body{height: 100%;max-width: 640px;margin:0 auto;}
     h1 {
@@ -11,9 +11,33 @@
     .btn {
         padding-top: 10px;
     }
-    .aui-bar-nav{border:none;background: #f5f5f5;}
+    .right-con li .btn {
+        bottom: 28px;
+        right: 5px;
+        padding: 0;
+        width: 86px;
+        text-align: center;
+    }
+    .right-con li .btn a {
+        color: rgb(179, 115, 253);
+        text-decoration: underline!important;
+    }
+    .right-con li .menu-txt {
+        width: 60%;
+    }
+    .weui-cell_swiped * {
+        padding: 2px 0 1px;
+        margin: 0;
+    }
+    .weui-cell_swiped span {
+        line-height: 28px;
+        padding-left: 1px;
+        padding-right: 1px;
+    }
+
     .main{height: calc(100% - 4.5rem);}
 
+    #tab1-con1{padding-bottom: 3rem;}
     #tab1-con1,#tab1-con2,#tab1-con3{height: 100%;}
     .aui-tab{border-bottom: solid 1px #eee;background: #fff;height: 42px;}
     .aui-tab-item{color: #666;width: 25%; height: 36px; line-height: 36px}
@@ -25,36 +49,11 @@
     .zyw-container.content * {
         font-size: 16px!important;
     }
-    .zyw-container.content .right-con * {
-        font-size: 14px!important;
-    }
-    .weui-label {
-        margin: 0;
-        width: 86px;
-    }
-    input.weui-input {
-        border: 1px solid #ccc;
-        padding: 0 5px;
-    }
-    .weui-cells__tips {
-        text-align: right;
-        margin: -10px 0 0;
-    }
-
     .settle_box .total_amount dt p {
         font-size: 16px;
     }
     .settle_box .total_amount dd {
         font-size: 14px;
-    }
-    #total_price {
-        width: 200px;
-    }
-    .settle_box .all_check {
-        margin-top: 0px;
-    }
-    .settle_box .settle_btn {
-        line-height: 26px;
     }
     .settle_box .total_amount dt span {
         color: #f34347;
@@ -65,28 +64,35 @@
         display: block;
         left: 25%;
     }
-    .weui-cell_select {
-        padding: 10px 15px;
+    .toolbar .title {
+        font-size: 14px;
+        line-height: 1px;
+    }
+    .weui-grid {
+        min-height: 102px;
+    }
+    .right-con li .menu-img {
+        width: 186px;
+    }
+    .right-con li .menu-img img {
+        width: 186px;
+        height: 140px;
     }
 </style>
 <header class="zyw-header">
     <div class="zyw-container white-color">
         <div class="head-l"><a href="javascript:window.history.back(-1)" target="_self"><img src="__STATIC__/home/img/svg/head-return.svg" alt=""></a></div>
-        <h1>店铺设置</h1>
+        <h1>广告列表</h1>
     </div>
 </header>
 <section class="zyw-container content JP_seat">
     <div class="main">
         <div class="left-menu left">
             <ul>
-                <li{if condition="$group eq 'default'"} class="active" isActive="1"{/if}><a class="j-sfloading" href="<?php echo sfurl('/base/admin/setting'); ?>"><span>基础</span></a></li>
                 <?php
-                foreach ($groupList as $value) :
-                    if ($value['code'] == 'default') {
-                        continue;
-                    }
+                foreach ($moldList as $value) :
                     ?>
-                    <li{if condition="$group eq $value.code"} class="active" isActive="1"{/if}><a class="j-sfloading" href="<?php echo sfurl('/base/admin/setting/group/' . $value['code']); ?>"><span><?php echo $value['code']; ?></span></a></li>
+                    <li{if condition="$type eq $value.type"} class="active" isActive="1"{/if}><a class="j-sfloading" href="<?php echo sfurl('/ad/admin/index/type/' . $value['type']); ?>"><span><?php echo $value['name']; ?></span></a></li>
                 <?php
                 endforeach;
                 ?>
@@ -94,21 +100,37 @@
         </div>
         <div class="con">
             <div class="right-con con-active" style="display: none;">
-                <form id="frm_main" method="post" onsubmit="return sfsubmiting(check_change)">
-                    <input type="hidden" name="site" value="<?php echo sfret('site', 0); ?>">
-                    <input type="hidden" name="group" value="<?php echo sfret('group', 'default'); ?>">
-                    {foreach name='list' item='value'}
-                    <div class="weui-cell{if condition="$value.format eq 'select'"} weui-cell_select{/if}">
-                    <div class="weui-cell__hd"><label class="weui-label"{if condition="$value.format eq 'checkbox'"} style="margin-top: -11px"{/if}>{$value.name}</label></div>
-                    <div class="weui-cell__bd">
-                        {include file="base:admin:format" /}
-                    </div>
+                <ul>
+                    {foreach name='list' item='v'}
+                    <li class="JP_food_{$v.id}">
+                        <div class="menu-img"><a href="#"><img src="<?php echo sfimg($v['img'], 186, 140) ?>"></a></div>
+                        <div class="menu-txt">
+                            <div class="weui-cell weui-cell_swiped">
+                                <div class="weui-cell__bd" style="transform: translate3d(0px, 0px, 0px);">
+                                    <div class="weui-cell">
+                                        <div class="weui-cell__bd">
+                                            <a href="#"><p class="JV_name">{$v.title}</p></a>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="weui-cell__ft JP_status_operate">
+                                    {if condition='$v.status eq "Y"'}
+                                    <span class="weui-swiped-btn weui-swiped-btn_warn delete-swipeout" onclick="do_status_down({$v.id})">&nbsp;下架&nbsp;</span>
+                                    {else/}
+                                    <span class="weui-swiped-btn weui-swiped-btn_warn delete-swipeout" onclick="do_status_up({$v.id})">&nbsp;上架&nbsp;</span>
+                                    {/if}
+                                </div>
+                            </div>
+                            <p class="list1">点击数<b>{$v.value}</b></p>
+                            <div class="btn">
+                                <a href="javascript:;">编辑</a>
+                            </div>
+                        </div>
+                    </li>
+                    {/foreach}
+                </ul>
             </div>
-            <div class="weui-cells__tips">&nbsp;{$value.note}</div>
-            {/foreach}
-            </form>
         </div>
-    </div>
     </div>
 </section>
 <script type="text/html" id="bar_gallery">
@@ -129,7 +151,6 @@
 <script type="text/javascript" src="__STATIC__/home/js/aui-tab.js" ></script>
 <script type="text/javascript" src="__STATIC__/home/js/pinchzoom.js__URL_CACHE__" ></script>
 <script type="text/javascript">
-    window.leftMenuNotAuto = true;
     apiready = function() {
         api.parseTapmode();
     }
@@ -155,17 +176,6 @@
                 siblings(activeC)[i].className = "aui-hide";
             }
         }
-    });
-    $(function () {
-        $('.menu-img img').click(function () {
-            $('#gallery').html($('#bar_gallery').html());
-            $('#galleryImg').html('<img src="' + $(this).attr('orgimg') + '" style="max-height: 100%; display: none" />');
-            $('#gallery').fadeIn(100, 'swing', function () {
-                $('div.pinch-zoom').each(function () {
-                    new RTP.PinchZoom($(this), {});
-                });
-            });
-        });
     });
 </script>
 {include file="common:footer" /}
