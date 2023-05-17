@@ -1,13 +1,16 @@
 {foreach name="list" item="v"}
+<?php
+    $seatUrl = sfurl('/seat/group/food/id/' . $v['id']);
+?>
 <div class="find-group1">
     <div class="find-group1-item mb-625 white-bgcolor">
         <div class="group1-hd clearfix mb-625">
             <div class="pull-left auto_no" onclick="open_location('{$v.title}', {$v.lon}, {$v.lat})">#{$v.auto_no}</div>
             <div class="pull-left">
-                <p class="hd-name"><a href="<?php echo sfurl('/seat/group/food/id/' . $v['id']) ?>">{$v.title}</a></p>
+                <p class="hd-name"><a href="{$seatUrl}">{$v.title}</a></p>
                 <span class="hd-time"><?php echo $v['address'] . $v['note'] ?></span>
             </div>
-            <a href="<?php echo sfurl('/seat/group/food/id/' . $v['id']) ?>" class="pull-right hd-take">+ 进入点餐</a>
+            <a href="{$seatUrl}" class="pull-right hd-take">+ 进入点餐</a>
         </div>
         <div class="group1-bd clearfix">
             <ul>
@@ -28,12 +31,12 @@
                             $nameAdd = '';
                         }
                 ?>
-                <li><a href="<?php echo sfurl('/seat/group/food/id/' . $v['id']) ?>"><span class="name"><?php echo sfsubstr_ellipsis($name, 5) ?>{$nameAdd}</span>{$f.name} x {$f.quantity}</a></li>
+                <li><a href="{$seatUrl}"><span class="name"><?php echo sfsubstr_ellipsis($name, 5) ?>{$nameAdd}</span>{$f.name} x {$f.quantity}</a></li>
                 <?php endforeach; ?>
                 {/notempty}
                 <li style="margin-top: 10px">
-                    <strong>联系人：{$v.name}</strong>
-                    <span class="bd-intro" onclick="open_location('{$v.name}', {$v.lon}, {$v.lat})">约 <?php echo round($v['diff'] / 1000, 2) ?> 公里</span>
+                    <strong onclick="do_share('{$seatUrl}', '#{$v.auto_no}')">联系人：{$v.name} <i class="icon-share" aria-hidden="true"></i></strong>
+                    <span class="bd-intro" onclick="open_location('{$v.name}', {$v.lon}, {$v.lat})"><i class="head-l-svg black-icon" aria-hidden="true"></i> 约 <?php echo round($v['diff'] / 1000, 2) ?> 公里</span>
                 </li>
             </ul>
 

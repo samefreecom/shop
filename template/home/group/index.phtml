@@ -3,6 +3,18 @@ $menuSeat = true;
 ?>
 {include file="common:header" /}
 <link rel="stylesheet" href="__STATIC__/home/css/find.css__URL_CACHE__">
+<style>
+    .weui-photo-browser-modal .photo-container img {
+        margin-left: auto;
+        margin-right: auto;
+    }
+    .swiper-pagination-bullets {
+        display: none;
+    }
+    .caption-item {
+        margin-top: -32px;
+    }
+</style>
 <header class="zyw-header">
     <div class="zyw-container white-color">
         <div class="head-l"><a href="javascript:window.history.back(-1)" target="_self"><img src="__STATIC__/home/img/svg/head-return.svg" alt=""></a></div>
@@ -26,7 +38,37 @@ $menuSeat = true;
     </div>
 </section>
 <div class="b-toolbar"><i class="head-l-svg black-icon" aria-hidden="true"></i><span id="live_text">-</span><span id="live_reset"><a href="javascript:reset_location();">重新定位</a></span></div>
+<input id="copylink" type="hidden" />
+<script src="__STATIC__/home/js/swiper.photo.js"></script>
 <script>
+    function do_share(url, text) {
+        $('#copylink').val(url);
+        $.actions({
+            title: "分享团体点餐方式",
+            actions: [{
+                text: "二维码",
+                onClick: function() {
+                    $.photoBrowser({items:[{image: '<?php echo sfurl("/base/image/qrcode") ?>?size=8&no=_no_'.replace('_no_', $('#copylink').val()), caption: '<strong style="font-size: 32px;">' + text + '</strong?'}]}).open();
+                }
+            },{
+                text: "<a class='copy_share' href='javascript:;'  data-clipboard-target='#copylink'>文本</a>"
+            }]
+        });
+        setTimeout(function () {
+            let copyBtn = new ClipboardJS('.copy_share');
+            copyBtn.on("success",function(e){
+                $.toptip('复制成功');
+            });
+            copyBtn.on("error",function(e){
+                $.prompt({
+                    title: '分享团体点餐文本',
+                    text: '请手动复制文本',
+                    input: url,
+                    empty: false
+                });
+            });
+        }, 1000);
+    }
     function do_search() {
         window.param = window.param || {};
         let keyword = $('#keyword').val();

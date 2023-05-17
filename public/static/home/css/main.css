@@ -28,6 +28,14 @@ input::-moz-placeholder {
     font-size: 100%!important;
     color: #A8C9FF !important;
 }
+.weui-actionsheet__title {
+    height: 32px;
+    line-height: 32px;
+}
+.weui-actionsheet__title p {
+    padding: 0;
+    margin: 0;
+}
 .weui-icon_toast {
     margin: 22px auto 0;
     width: 64px;
@@ -126,6 +134,13 @@ a{color: inherit; text-decoration: none !important;}
 }
 .head-l-svg.black-icon {
     background: url("../img/svg/geo-alt-black.svg");
+}
+.icon-share {
+    display: inline-block;
+    width: 16px;
+    height: 20px;
+    background: url("../img/svg/share.svg");
+    vertical-align: middle;
 }
 .head-r-svg{
     display: inline-block;
