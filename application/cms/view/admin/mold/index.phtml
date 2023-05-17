@@ -1,0 +1,192 @@
+{include file="admin@admin:header" /}
+<div class="weadmin-nav">
+    <span class="layui-breadcrumb" style="visibility: visible;">
+        <a href="javascript:;">首页</a><span lay-separator="">/</span> <a href="javascript:;">内容管理</a><span
+            lay-separator="">/</span>
+        <a href="javascript:;"> <cite>类目管理</cite></a>
+    </span>
+    <a class="layui-btn layui-btn-sm" style="margin-top:3px;float:right"
+       href="javascript:sfreload();" title="刷新">
+        <i class="layui-icon layui-icon-refresh"></i>
+    </a>
+</div>
+<div class="weadmin-body">
+    <div class="layui-row layui-col-space15">
+        <div class="layui-col-md8">
+            <fieldset class="layui-elem-field layui-field-title">
+                <legend>
+                    <?php
+                        foreach ($moldList as $list) :
+                            foreach ($list as $key => $value) :
+                    if ($key == $type) :
+                    ?>
+                    <?php echo $value; ?>
+                    <?php
+                                    break;
+                                endif;
+                                endforeach;
+                            endforeach;
+                        ?>
+                    （可拖动节点改变层级，可右键节点弹出操作菜单）</legend>
+                <div class="weadmin-block layui-layout-right">
+                    <button class="layui-btn layui-btn-normal"
+                            onclick="WeAdminShow('添加类目', '<?php echo sfurl('/cms/admin/addMold/type/' . $type); ?>', 400, 240)">
+                        <i class="layui-icon"></i>添加
+                    </button>
+                </div>
+                <div style="margin-top: 24px" class="eleTree" id="treeMain" lay-filter="data"></div>
+            </fieldset>
+        </div>
+        <div class="layui-col-md4">
+            <fieldset class="layui-elem-field layui-field-title">
+                <legend>类目列表</legend>
+                <table class="layui-table">
+                    <colgroup>
+                        <col>
+                        <col width="120">
+                    </colgroup>
+                    <thead>
+                    <tr>
+                        <th>名称</th>
+                        <th>操作</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <?php
+                            foreach ($moldList as $list) :
+                                foreach ($list as $key => $value) :
+                    ?>
+                    <tr>
+                        <td><a class="j-sfloading"
+                               href="<?php echo sfurl('/cms/admin/mold/type/' . $key); ?>"><?php echo $value; ?></a>
+                        </td>
+                        <td>
+                            <a class="layui-btn layui-btn-xs j-sfloading"
+                               href="<?php echo sfurl('/cms/admin/mold/type/' . $key); ?>">查看</a>
+                        </td>
+                    </tr>
+                    <?php
+                                endforeach;
+                            endforeach;
+                        ?>
+                    </tbody>
+                </table>
+            </fieldset>
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript">
+    function update_sort(parent_id, mode) {
+        window.children = null;
+        window.treeMain.search(parent_id);
+        if (window.children) {
+            var ids = {};
+            var firstId = null;
+            for (var i = 0, len = window.children.length; i < len; i++) {
+                if (ids['id' + window.children[i].id]) {
+                    if (mode == "next") {
+                        if (firstId) {
+                            window.children.splice(firstId, 1);
+                            break;
+                        } else {
+                            firstId = window.children[i].id
+                        }
+                    } else {
+                        window.children.splice(i, 1);
+                        break;
+                    }
+                }
+                ids['id' + window.children[i].id] = 1;
+            }
+            var sorts = [];
+            for (var i = 0, len = window.children.length; i < len; i++) {
+                sorts.push({id: window.children[i].id, sort: len - i});
+            }
+            sflock('更新中……');
+            $.post('<?php echo sfurl('/cms/admin/modifyMoldSort'); ?>', {sorts: sorts}, function(ret) {
+                sfreload();
+            });
+        }
+    }
+    function sfinit() {
+        layui.use(['eleTree'], function () {
+            var eleTree = layui.eleTree;
+            var data = <?php echo json_encode($tree); ?>;
+            var obj = {
+                elem: '#treeMain',
+                data: data,
+                renderAfterExpand: true,
+                expandOnClickNode: true,
+                draggable: true,
+                contextmenuList: [{eventName: "up", text: "上移"}, {eventName: "down", text: "下移"}, 'edit', 'remove'],
+                showLine: true,
+                searchNodeMethod: function (value, data) {
+                    if (value == 0) {
+                        window.children = window.treeMain.getAllNodeData();
+                    } else {
+                        if (value == data.id) {
+                            window.children = data.children;
+                        }
+                    }
+                    return true;
+                }
+            };
+            window.treeMain = eleTree.render(obj);
+            eleTree.on("nodeUp(data)",function(d) {
+                var parents = d.node.parent().offsetParent();
+                var parentId = parents[0].dataset.id || 0;
+                var ps = d.node.prev();
+                if (ps.length > 0) {
+                    treeMain.insertBefore(ps[0].dataset.id, d.data);
+                    d.node.remove();
+                    update_sort(parentId, 'prev');
+                }
+            });
+            eleTree.on("nodeDown(data)",function(d) {
+                var parents = d.node.parent().offsetParent();
+                var parentId = parents[0].dataset.id || 0;
+                var ps = d.node.next();
+                if (ps.length > 0) {
+                    treeMain.insertAfter(ps[0].dataset.id, d.data);
+                    d.node.remove();
+                    update_sort(parentId, 'next');
+                }
+            });
+            eleTree.on("nodeDrag(data)",function(d) {
+                var id = d.current.data.currentData.id;
+                var parent_id = d.target.data.currentData.id;
+                $.post('<?php echo sfurl('/cms/admin/modifyMoldParent'); ?>', {id: id, parent_id: parent_id}, function(ret) {});
+            });
+            eleTree.on("nodeEdit(data)",function(d) {
+                if (d.value == d.data.label) {
+                    return;
+                }
+                var oldHtml = d.node[0].outerHTML
+                sflock('更新中……');
+                $.post('<?php echo sfurl('/cms/admin/modifyMoldName'); ?>', {id: d.data.id, name: d.value}, function(ret) {
+                    sfunlock();
+                    ret = eval('(' + ret +  ')');
+                    if (!ret.result) {
+                        d.node[0].outerHTML = oldHtml
+                    }
+                });
+            });
+            eleTree.on("nodeRemove(data)",function(d) {
+                d.stop();
+                sflock('删除中……');
+                $.post('<?php echo sfurl('/cms/admin/delMold'); ?>', {id: d.data.id}, function(ret) {
+                    sfunlock();
+                    ret = eval('(' + ret +  ')');
+                    if (ret.code) {
+                        d.node.hide({duration: 1000});
+                    } else {
+                        layer.msg(ret.msg);
+                    }
+                });
+            })
+            treeMain.expandAll();
+        });
+    }
+</script>
+{include file="admin@admin:footer" /}

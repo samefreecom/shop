@@ -1,0 +1,95 @@
+{include file="admin@admin:header" /}
+<br />
+<form id="frmMain" class="layui-form" method="post" onsubmit="return sfsubmiting()">
+    <input type="hidden" name="mold_id" value="<?php echo $mold_id; ?>" />
+    <div class="layui-form-item">
+        <label class="layui-form-label">名称</label>
+        <div class="layui-input-block"  style="padding-right: 20px">
+            <input type="text" name="name" lay-verify="title" autocomplete="off" placeholder="请输入导航名称" class="layui-input" value="<?php echo sfret('name'); ?>">
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">链接</label>
+        <div class="layui-input-block"  style="padding-right: 20px">
+            <input type="text" name="url" lay-verify="title" autocomplete="off" placeholder="例如：/about，http://www.xxx.com" class="layui-input" value="<?php echo sfret('url', '/'); ?>" style="width: 90%">
+            <button type="button" class="layui-btn" style="float: right;margin-top: -38px;z-index: 999;" onclick="sfshowurl(window, function(url) {$('input[name=url]').val(url)})">选择</button>
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">打开方式</label>
+        <div class="layui-input-block"  style="padding-right: 20px">
+            <select name="target">
+                <option value="_self"<?php echo sfret('target') == '_self' ? ' selected="selected"' : ''; ?>>当前窗口</option>
+                <option value="_blank"<?php echo sfret('target') == '_blank' ? ' selected="selected"' : ''; ?>>新的窗口</option>
+            </select>
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">图标</label>
+        <div class="layui-input-block">
+            <input type="hidden" name="img" id="upload" />
+            <div class="layui-upload">
+                <div class="layui-upload-drag" id="uploadDrag">
+                    <i class="layui-icon"></i>
+                    <p>点击上传，或将文件拖拽到此处</p>
+                </div>
+                <div class="layui-upload-list">
+                    <img class="layui-upload-img" id="uploadImg" style="max-height: 120px">
+                    <p id="uploadMsg"></p>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <div class="layui-input-block">
+            <button type="submit" class="layui-btn" lay-submit="">立即提交</button>
+        </div>
+    </div>
+</form>
+<script type="text/javascript">
+    function callback_name() {
+        $('#frmMain input[name="name"]').focus();
+        $('#frmMain input[name="name"]').select();
+    }
+    $(function () {
+        callback_name();
+    });
+    layui.use(['form', 'upload'], function() {
+        var $ = layui.jquery
+            , upload = layui.upload;
+        //拖拽上传
+        var uploadInst = upload.render({
+            elem: '#uploadDrag'
+            , url: '<?php echo sfurl('/cms/admin/upload/type/nav'); ?>'
+            , accept: 'images'
+            , before: function (obj) {
+                //预读本地文件示例，不支持ie8
+                obj.preview(function (index, file, result) {
+                    $('#uploadImg').attr('src', result); //图片链接（base64）
+                });
+            }
+            , done: function (ret) {
+                //如果上传失败
+                if (ret.code != 1) {
+                    this.error();
+                    return layer.msg(ret.msg);
+                }
+                //上传成功
+                $('#uploadMsg').html('');
+                $('#uploadImg').attr('src', ret.data.url);
+                $('#upload').val(ret.data.path);
+            }
+            , error: function () {
+                $('#uploadImg').attr('src', '<?php echo sfurl('/public/asset/no_image.png'); ?>');
+                $('#upload').val('');
+                //演示失败状态，并实现重传
+                var uploadMsg = $('#uploadMsg');
+                uploadMsg.html('<span style="color: #FF5722;">上传失败</span> <a class="layui-btn layui-btn-xs demo-reload">重试</a>');
+                uploadMsg.find('.demo-reload').on('click', function () {
+                    uploadInst.upload();
+                });
+            }
+        });
+    });
+</script>
+{include file="admin@admin:footer" /}

@@ -1,0 +1,252 @@
+{include file="admin@admin:header" /}
+<style>
+    ul, li {
+        list-style-type: none;
+        color: #555;
+        border: 1px solid #ddd;
+    }
+
+    ul.sTree, ul {
+        padding: 0px;
+        background-color: #fff;
+    }
+
+    ul.sTree li {
+        padding-left: 50px;
+        margin: 5px;
+        border: 1px solid #ddd;
+        background-color: #eee;
+    }
+
+    li div {
+        padding: 7px;
+        background-color: #fff;
+    }
+
+    li, ul, div {
+        border-radius: 3px;
+    }
+
+
+    #sTree {
+        margin: 10px auto;
+    }
+</style>
+<script type="text/javascript" defer="defer">
+    function get_sort(ui) {
+        var sort = 0, isOk = false;
+        $('#sTree li').each(function (i, el) {
+            if ($(el).attr('val-id') && $(el).attr('val-id') == ui.attr('val-id')) {
+                isOk = true;
+            } else if (!isOk) {
+                sort++;
+            }
+        });
+        var sort = $('#sTree li').length - sort;
+        return {id: ui.attr('val-id'), val: sort};
+    }
+
+    $(function () {
+        var options = {
+                placeholderCss: {'background-color': '#ff8'},
+                hintCss: {'background-color': '#bbf'},
+                isAllowed: function (cEl, hint, target) {
+                    console.info(arguments)
+                    if (target.prevObject) {
+                        window.lastUi = target;
+                    } else {
+                        window.lastUi = null;
+                    }
+                    if (hint.parents('li').first().data('module') === 'c' && cEl.data('module') !== 'c') {
+                        hint.css('background-color', '#ff9999');
+                        return false;
+                    } else {
+                        hint.css('background-color', '#99ff99');
+                        return true;
+                    }
+                },
+                complete: function (ui) {
+                    var parentId = 0;
+                    if (window.lastUi) {
+                        parentId = window.lastUi.attr('val-id');
+                    }
+                    setTimeout(function () {
+                        var sort = get_sort(ui);
+                        var sorts = [];
+                        $('#sTree li').each(function (i, el) {
+                            sorts.push(get_sort($(el)));
+                        });
+                        if (ui.attr('val-id')) {
+                            $.post("<?php echo sfurl('/cms/admin/relateNav'); ?>", {
+                                id: sort.id,
+                                parent_id: parentId,
+                                sort: sort.val,
+                                sorts: sorts
+                            }, function (ret) {
+                            });
+                        }
+                    }, 1000);
+                },
+                opener: {
+                    active: true,
+                    openerCss: {
+                        'display': 'inline-block',
+                        'width': '18px',
+                        'height': '18px',
+                        'float': 'left',
+                        'margin-left': '-22px',
+                        'margin-right': '5px',
+                        'background-position': 'center center',
+                        'background-repeat': 'no-repeat'
+                    },
+                    openerClass: ''
+                }
+            },
+
+            sWrapper = $('#settingsWrapper');
+
+        $('#sTree').sortableLists(options);
+    });
+</script>
+<div class="weadmin-nav">
+    <span class="layui-breadcrumb" style="visibility: visible;">
+        <a href="javascript:;">首页</a><span lay-separator="">/</span> <a href="javascript:;">内容管理</a><span
+            lay-separator="">/</span>
+        <a href="javascript:;"> <cite>导航管理</cite></a>
+    </span>
+    <a class="layui-btn layui-btn-sm" style="margin-top:3px;float:right"
+       href="javascript:sfreload();" title="刷新">
+        <i class="layui-icon layui-icon-refresh"></i>
+    </a>
+</div>
+<div class="weadmin-body">
+    <div class="layui-row layui-col-space15">
+        <div class="layui-col-md8">
+            {notempty name="mold"}
+            <fieldset class="layui-elem-field layui-field-title">
+                <legend><?php echo $mold['name']; ?> （可拖动头部改变排序或层级）</legend>
+                <div class="weadmin-block layui-layout-right">
+                    <button class="layui-btn layui-btn-normal"
+                            onclick="WeAdminShow('添加导航', '<?php echo sfurl('/cms/admin/addNav/mold_id/' . $mold['id']); ?>', 780, 520)">
+                        <i class="layui-icon"></i>添加
+                    </button>
+                </div>
+                {empty name="list"}
+                <br />
+                <blockquote class="layui-elem-quote">暂无数据，请点击右上角添加！</blockquote>
+                {else/}
+                <ul class="sTree listsClass" id="sTree">
+                    {foreach $list as $value}
+                    <li class="sortableListsOpen" data-module="b"
+                        style="width: auto; position: relative; top: 0px; left: 0px;"
+                        val-id="<?php echo $value['id']; ?>">
+                        <div><span class="sortableListsOpener"
+                                   style="float: left; display: inline-block; background-position: center center; background-repeat: no-repeat; width: 18px; height: 18px; margin-left: -22px; margin-right: 5px;"></span><?php echo $value['title']; ?>
+                            <span style="float: right; width: 150px; text-align: center"
+                                  onclick="delete_nav(this, <?php echo $value['id']; ?>)">
+                                    <a class="layui-btn layui-btn-danger layui-btn-xs">删除</a>
+                                </span>
+                            <span style="float: right; width: 150px; text-align: center"
+                                  onclick="WeAdminShow('编辑导航', '<?php echo sfurl('/cms/admin/editNav/id/' . $value['id']); ?>', 780, 520)">
+                                    <a class="layui-btn layui-btn-xs">编辑</a>
+                                </span>
+                        </div>
+                        {notempty name="value.childs"}
+                        <ul>
+                            {foreach $value['childs'] as $v}
+                            <li data-module="b" class="sortableListsOpen"
+                                style="width: auto; position: relative; top: 0px; left: 0px; visibility: visible;"
+                                val-id="<?php echo $v['id']; ?>">
+                                <div><?php echo $v['title']; ?>
+                                    <span style="float: right; width: 150px; text-align: center"
+                                          onclick="delete_nav(this, <?php echo $v['id']; ?>)">
+                                                        <a class="layui-btn layui-btn-danger layui-btn-xs">删除</a>
+                                                    </span>
+                                    <span style="float: right; width: 150px; text-align: center"
+                                          onclick="WeAdminShow('编辑导航', '<?php echo sfurl('/cms/admin/editNav/id/' . $v['id']); ?>', 780, 520)">
+                                                        <a class="layui-btn layui-btn-xs">编辑</a>
+                                                    </span>
+                                </div>
+                            </li>
+                            {/foreach}
+                        </ul>
+                        {/notempty}
+                    </li>
+                    {/foreach}
+                </ul>
+                {/empty}
+            </fieldset>
+            {else/}
+            {/notempty}
+        </div>
+        <div class="layui-col-md4">
+            <fieldset class="layui-elem-field layui-field-title">
+                <legend>导航列表（点击对应名称进行管理）</legend>
+                <div class="weadmin-block layui-layout-right">
+                    <button class="layui-btn layui-btn-normal"
+                            onclick="WeAdminShow('添加导航组', '<?php echo sfurl('/cms/admin/addNavGroup'); ?>', 400, 180)"><i
+                            class="layui-icon"></i>添加
+                    </button>
+                </div>
+                <table class="layui-table">
+                    <colgroup>
+                        <col>
+                        <col width="120">
+                    </colgroup>
+                    <thead>
+                    <tr>
+                        <th>名称</th>
+                        <th>操作</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {foreach $moldList as $value}
+                        <tr>
+                            <td><a class="j-sfloading"
+                                   href="{:sfurl('/cms/admin/nav/id/' . $value['id'])}">{$value['name']}</a>
+                            </td>
+                            <td>
+                                <a class="layui-btn layui-btn-xs"
+                                   onclick="WeAdminShow('编辑导航组', '{:sfurl('/cms/admin/editNavGroup/id/' . $value['id'])}', 400, 180)">编辑</a>
+                                <a
+                                        class="layui-btn layui-btn-danger layui-btn-xs"
+                                        onclick="delete_mold(this, {$value['id']})">删除</a>
+                            </td>
+                        </tr>
+                    {/foreach}
+                    </tbody>
+                </table>
+            </fieldset>
+        </div>
+    </div>
+</div>
+<script type="text/javascript">
+    function delete_nav(el, id) {
+        sfloading();
+        $.post('<?php echo sfurl('/cms/admin/delNav'); ?>', {id: id}, function (ret) {
+            sfunlock();
+            ret = eval('(' + ret + ')');
+            if (ret.code) {
+                layer.msg('删除成功！');
+                $(el).parents('li').first().hide({duration: 1000});
+            } else {
+                layer.msg(ret.msg);
+            }
+        });
+    }
+
+    function delete_mold(el, id) {
+        sfloading();
+        $.post('<?php echo sfurl('/cms/admin/delNavGroup'); ?>', {id: id}, function (ret) {
+            sfunlock();
+            ret = eval('(' + ret + ')');
+            if (ret.code) {
+                layer.msg('删除成功！');
+                $(el).parents('tr').first().hide({duration: 1000});
+            } else {
+                layer.msg(ret.msg);
+            }
+        });
+    }
+</script>
+{include file="admin@admin:footer" /}

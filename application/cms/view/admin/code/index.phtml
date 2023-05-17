@@ -1,0 +1,89 @@
+{include file="admin@admin:header" /}
+    <div class="weadmin-nav">
+    <span class="layui-breadcrumb" style="visibility: visible;">
+        <a href="javascript:;">首页</a><span lay-separator="">/</span> <a href="javascript:;">内容管理</a><span
+                lay-separator="">/</span>
+        <a href="javascript:;"> <cite>模块管理</cite></a>
+    </span>
+        <a class="layui-btn layui-btn-sm" style="margin-top:3px;float:right"
+           href="javascript:sfreload();" title="刷新">
+            <i class="layui-icon layui-icon-refresh"></i>
+        </a>
+    </div>
+    <div class="weadmin-body">
+        <div class="weadmin-block tool">
+            <form id="frmMain" class="layui-form" onsubmit="return sfsubmiting()">
+                <input type="hidden" name="mold_id" value="<?php echo sfret('mold_id', 0); ?>" />
+                <div class="layui-form-item">
+                    <div class="layui-inline">
+                        <label class="layui-form-label">代码</label>
+                        <div class="layui-input-inline">
+                            <input type="text" id="code" name="code" value="<?php echo sfret('code'); ?>" autocomplete="off" class="layui-input" style="width: 240px">
+                        </div>
+                    </div>
+                    <div class="layui-inline">
+                        <label class="layui-form-label">概述</label>
+                        <div class="layui-input-inline">
+                            <input type="text" id="note" name="note" value="<?php echo sfret('note'); ?>" autocomplete="off" class="layui-input" style="width: 240px">
+                        </div>
+                    </div>
+                    <div class="layui-inline">
+                        <button type="submit" class="layui-btn">查询</button>
+                        <button type="reset" class="layui-btn layui-btn-danger">重置</button>
+                    </div>
+                    <div style="float: right">
+                        <button type="button" class="layui-btn layui-btn-normal" onclick="sfaddtab('添加模块', '<?php echo sfurl('/cms/admin/addCode'); ?>', 'ad_add')">添加模块</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+        <div class="layui-form">
+            <table class="layui-table" cellspacing="0" cellpadding="0" border="0">
+                <thead>
+                <tr>
+                    <th style="width: 28px;">序号</th>
+                    <th style="width: 80px">代码</th>
+                    <th style="width: 120px">图片</th>
+                    <th>概述</th>
+                    <th class="center" style="width: 140px;">修改时间</th>
+                    <th class="center" style="width: 60px;">操作</th>
+                </tr>
+                </thead>
+                <tbody>
+                <?php
+                    $i = 0;
+                    foreach ($list as $value) :
+                ?>
+                    <tr data-index="0" class="">
+                        <td class="center"><?php echo ++$i; ?></td>
+                        <td><?php echo $value['key']; ?></td>
+                        <td class="center"><img src="<?php echo sfimg($value['preview_path'], 120, 80); ?>" /></td>
+                        <td><?php echo $value['note']; ?></td>
+                        <td class="center"><?php echo $value['updated_at']; ?></td>
+                        <td class="center">
+                            <a class="layui-btn layui-btn-xs" href="javascript:;" onclick="sfaddtab('编辑模块', '<?php echo sfurl('/cms/admin/editCode/id/' . $value['id']); ?>', 'ad_edit_<?php echo $value['id']; ?>')">编辑</a>
+                        </td>
+                    </tr>
+                <?php
+                    endforeach;
+                ?>
+                </tbody>
+            </table>
+            <div id="page"></div>
+        </div>
+    </div>
+<script type="text/javascript">
+    layui.use(['laypage', 'layer', 'laydate'], function() {
+        var laypage = layui.laypage
+            , layer = layui.layer;
+        laypage.render({
+            elem: 'page'
+            , count: <?php echo $total; ?>
+            , layout: ['count', 'prev', 'page', 'next', 'limit', 'skip']
+            , jump: function(obj){
+                console.log(obj)
+            }
+        });
+    });
+</script>
+{include file="admin@admin:footer" /}

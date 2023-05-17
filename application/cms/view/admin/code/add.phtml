@@ -1,0 +1,96 @@
+{include file="admin@admin:header" /}
+<div class="weadmin-nav">
+    <span class="layui-breadcrumb" style="visibility: visible;">
+        <a href="javascript:;">首页</a><span lay-separator="">/</span> <a href="javascript:;">内容管理</a><span
+            lay-separator="">/</span> <a href="javascript:;">模块管理</a><span
+            lay-separator="">/</span>
+        <a href="javascript:;"> <cite>添加模块</cite></a>
+    </span>
+    <a class="layui-btn layui-btn-sm" style="margin-top:3px;float:right"
+       href="javascript:sfreload();" title="刷新">
+        <i class="layui-icon layui-icon-refresh"></i>
+    </a>
+</div>
+<div class="weadmin-body">
+    <form class="layui-form" method="post" onsubmit="return sfsubmiting()">
+        <div class="weadmin-block" style="text-align: right">
+            <button class="layui-btn layui-btn-normal" lay-submit="" type="submit">保存</button>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">代码</label>
+            <div class="layui-input-block">
+                <input type="text" name="key" value="<?php echo sfret('key'); ?>" lay-verify="required" lay-reqtext="请输入唯一代码！" placeholder="请输入唯一代码" autocomplete="off" class="layui-input">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">概述</label>
+            <div class="layui-input-block">
+                <textarea type="text" lay-verify="required" lay-reqtext="请输入模块概述！" placeholder="请输入模块概述" autocomplete="off" class="layui-textarea" name="note"><?php echo sfret('note'); ?></textarea>
+            </div>
+        </div>
+        <div class="layui-form-item layui-form-text">
+            <label class="layui-form-label">内容</label>
+            <div class="layui-input-block">
+                <textarea id="content" name="content" class="layui-textarea" lay-verify="required" lay-reqtext="描述不可为空！"><?php echo sfret('content'); ?></textarea>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">预览图片</label>
+            <div class="layui-input-block">
+                <input type="hidden" name="img" id="upload" />
+                <div class="layui-upload">
+                    <div class="layui-upload-drag" id="uploadDrag">
+                        <i class="layui-icon"></i>
+                        <p>点击上传，或将文件拖拽到此处</p>
+                    </div>
+                    <div class="layui-upload-list">
+                        <img class="layui-upload-img" id="uploadImg" style="max-height: 120px">
+                        <p id="uploadMsg"></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+{include file="admin@admin:kindeditor" /}
+<script type="text/javascript">
+    layui.use(['form', 'upload'], function() {
+        var $ = layui.jquery
+            , upload = layui.upload;
+        $('span[data-name="source"]').click();
+        //拖拽上传
+        var uploadInst = upload.render({
+            elem: '#uploadDrag'
+            , url: '<?php echo sfurl('/cms/admin/upload/type/code'); ?>'
+            , accept: 'images'
+            , before: function (obj) {
+                //预读本地文件示例，不支持ie8
+                obj.preview(function (index, file, result) {
+                    $('#uploadImg').attr('src', result); //图片链接（base64）
+                });
+            }
+            , done: function (ret) {
+                //如果上传失败
+                if (ret.code != 1) {
+                    this.error();
+                    return layer.msg(ret.msg);
+                }
+                //上传成功
+                $('#uploadMsg').html('');
+                $('#uploadImg').attr('src', ret.data.url);
+                $('#upload').val(ret.data.path);
+            }
+            , error: function () {
+                $('#uploadImg').attr('src', '<?php echo sfurl('/public/asset/no_image.png'); ?>');
+                $('#upload').val('');
+                //演示失败状态，并实现重传
+                var uploadMsg = $('#uploadMsg');
+                uploadMsg.html('<span style="color: #FF5722;">上传失败</span> <a class="layui-btn layui-btn-xs demo-reload">重试</a>');
+                uploadMsg.find('.demo-reload').on('click', function () {
+                    uploadInst.upload();
+                });
+            }
+        });
+    });
+</script>
+{include file="admin@admin:footer" /}

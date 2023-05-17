@@ -29,7 +29,7 @@ class Lib_Image extends Lib_Base
             $baseDir = ROOT . DS;
         }
         if (empty($path)) {
-            return $baseDir . 'public/static/asset/no_image.png';
+            return $baseDir . 'application/assets/image/no_image.png';
         }
         $path = str_replace('\\', DS, $path);
         $path = str_replace('/', DS, $path);
@@ -42,7 +42,7 @@ class Lib_Image extends Lib_Base
             $path = 'asset' . DS . $tmpArrs[1];
         }
         if (empty($path) || !is_file($baseDir . $path)) {
-            $path   =   'public/static/asset/no_image.png';
+            $path   =   'application/assets/image/no_image.png';
         }
         $src = $baseDir . $path;
         return $src;
@@ -59,6 +59,10 @@ class Lib_Image extends Lib_Base
         $first = substr($path, 0, 4);
         if ($first == 'http') {
             return $path;
+        } else {
+            if (empty($path)) {
+
+            }
         }
         $path = str_replace('\\', DS, $path);
         $path = str_replace('/', DS, $path);
@@ -66,7 +70,7 @@ class Lib_Image extends Lib_Base
         $pDir = str_replace('\\', DS, $pDir);
         $pDir = str_replace('/', DS, $pDir);
         if ($baseDir === null) {
-            $baseDir = ROOT . DS;
+            $baseDir = ROOT . DS . BASEDIR . DS;
         }
         $asset = DS . 'public' . DS .  'asset' . DS;
         //转换绝对为相对
@@ -77,9 +81,11 @@ class Lib_Image extends Lib_Base
             $path = 'public' . DS .'asset' . DS . $tmpArrs[1];
         }
         if (empty($path) || !is_file($baseDir . $path)) {
-            $path   =   'public/static/asset/no_image.png';
+            $path = 'application' . DS . 'assets' . DS . 'image' . DS . 'no_image.png';
+            $src = ROOT_CORE . DS . $path;
+        } else {
+            $src = $baseDir . $path;
         }
-        $src = $baseDir . $path;
         $url = null;
         if (strpos($path, ':')=='') {
             //local
@@ -134,8 +140,11 @@ class Lib_Image extends Lib_Base
                 $root   =   ROOT . DS . self::CONVERT_PATH . DS . $dir;
             }
             $tmpArrs = explode($asset, $path);
-            //wrong on time
-            $tmpPath = 'asset' . DS . $tmpArrs[1];
+            if (isset($tmpArrs[1])) {
+                $tmpPath = 'asset' . DS . $tmpArrs[1];
+            } else {
+                $tmpPath = 'asset' . DS . $tmpArrs[0];
+            }
             $names  =   explode(DS, $pDir);
             //remove asset
             if (count($names) > 0 && $names[0] == 'asset') {
@@ -505,7 +514,7 @@ class Lib_Image extends Lib_Base
         for ($i = 0; $i < $line_num; $i++) {
             imageline($img, mt_rand(0, $imgWidth), mt_rand(0, $imgHeight), mt_rand(0, $imgWidth), mt_rand(0, $imgHeight), $line_color);
         }
-        $fontfile = ROOT . DS . 'public/font/arialbd.ttf';
+        $fontfile = ROOT_CORE . DS . 'application/assets/font/arialbd.ttf';
         $fontsiz = 16;
         $str    =   $code;
         imagettftext($img, $fontsiz, -50, 3, 10, $font_color, $fontfile, $str[0]);

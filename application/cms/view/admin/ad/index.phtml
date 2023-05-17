@@ -1,0 +1,143 @@
+{include file="admin@admin:header" /}
+    <div class="weadmin-nav">
+    <span class="layui-breadcrumb" style="visibility: visible;">
+        <a href="javascript:;">首页</a><span lay-separator="">/</span> <a href="javascript:;">内容管理</a><span
+                lay-separator="">/</span>
+        <a href="javascript:;"> <cite>广告管理</cite></a>
+    </span>
+        <a class="layui-btn layui-btn-sm" style="margin-top:3px;float:right"
+           href="javascript:sfreload();" title="刷新">
+            <i class="layui-icon layui-icon-refresh"></i>
+        </a>
+    </div>
+    <div class="weadmin-body">
+        <div class="weadmin-block tool">
+            <form id="frmMain" class="layui-form" onsubmit="return sfsubmiting()">
+                <input type="hidden" name="mold_id" value="<?php echo sfret('mold_id', 0); ?>" />
+                <div class="layui-form-item">
+                    <div class="layui-inline">
+                        <label class="layui-form-label">类目</label>
+                        <div class="layui-input-inline">
+                            <input type="text" name="mold" onclick="init_tree(event)" value="<?php echo sfret('mold', '可选择所属类目'); ?>" readonly="" autocomplete="off" class="layui-input">
+                            <div id="treeMain" lay-filter="data" style="display: none;position: absolute; z-index: 999; background: rgb(255, 255, 255) none repeat scroll 0% 0%; border: 1px solid rgb(204, 204, 204); width: 268px; padding: 5px 0;height: 120px; overflow-y: auto;" class="eleTree"></div>
+                        </div>
+                    </div>
+                    <div class="layui-inline">
+                        <label class="layui-form-label">标题</label>
+                        <div class="layui-input-inline">
+                            <input type="text" id="title" name="title" value="<?php echo sfret('title'); ?>" autocomplete="off" class="layui-input" style="width: 240px">
+                        </div>
+                    </div>
+                    <div class="layui-inline">
+                        <label class="layui-form-label">时间</label>
+                        <div class="layui-input-inline">
+                            <input type="text" id="dates" class="layui-input" name="dates" value="<?php echo sfret('dates'); ?>" placeholder="可选择一个时间范围">
+                        </div>
+                    </div>
+                    <div class="layui-inline">
+                        <button type="submit" class="layui-btn">查询</button>
+                        <button type="reset" class="layui-btn layui-btn-danger">重置</button>
+                    </div>
+                    <div style="float: right">
+                        <button type="button" class="layui-btn layui-btn-normal" onclick="sfaddtab('添加广告', '<?php echo sfurl('/cms/admin/addAd'); ?>', 'ad_add')">添加广告</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+        <div class="layui-form">
+            <table class="layui-table" cellspacing="0" cellpadding="0" border="0">
+                <thead>
+                <tr>
+                    <th style="width: 28px;">序号</th>
+                    <th style="width: 80px">类目</th>
+                    <th style="width: 100px">图片</th>
+                    <th style="width: 300px">标题</th>
+                    <th>链接</th>
+                    <th class="center" style="width: 60px;">点击数</th>
+                    <th class="center" style="width: 140px;">创建时间</th>
+                    <th class="center" style="width: 100px;">操作</th>
+                </tr>
+                </thead>
+                <tbody>
+                <?php
+                    $i = 0;
+                    foreach ($list as $value) :
+                ?>
+                    <tr data-index="0" class="">
+                        <td class="center"><?php echo ++$i; ?></td>
+                        <td><?php echo $value['mold_name']; ?></td>
+                        <td class="center"><img src="<?php echo sfimg($value['img'], 100, 80); ?>" /></td>
+                        <td><?php echo $value['title']; ?></td>
+                        <td><?php echo $value['url']; ?></td>
+                        <td class="center"><?php echo $value['clicks']; ?></td>
+                        <td class="center"><?php echo $value['created_at']; ?></td>
+                        <td class="center">
+                            <a class="layui-btn layui-btn-xs" href="javascript:;" onclick="sfaddtab('编辑广告', '<?php echo sfurl('/cms/admin/editAd/id/' . $value['id']); ?>', 'ad_edit_<?php echo $value['id']; ?>')">编辑</a>
+                            <a class="layui-btn layui-btn-danger layui-btn-xs" href="javascript:;" onclick="delete_ad(this, <?php echo $value['id']; ?>)">删除</a>
+                        </td>
+                    </tr>
+                <?php
+                    endforeach;
+                ?>
+                </tbody>
+            </table>
+            <div id="page"></div>
+        </div>
+    </div>
+<script type="text/javascript">
+    function init_tree(e) {
+        e.stopPropagation();
+        if(!window.treeMainUI){
+            var data = <?php echo json_encode($tree); ?>;
+            window.treeMainUI = layui.eleTree.render({
+                elem: '#treeMain',
+                data: data,
+                defaultExpandAll: true,
+                expandOnClickNode: false,
+                highlightCurrent: true,
+                showLine: true
+            });
+        }
+        $("#treeMain").toggle();
+    }
+    function delete_ad(el, id) {
+        sflock('删除中……');
+        $.post('<?php echo sfurl('/cms/admin/delAd'); ?>', {id: id}, function(ret) {
+            sfunlock();
+            ret = eval('(' + ret +  ')');
+            if (ret.code) {
+                $(el).parents('tr').first().hide({duration: 1000});
+            } else {
+                layer.msg(ret.msg);
+            }
+        });
+    }
+    layui.use(['laypage', 'layer', 'eleTree', 'laydate'], function() {
+        var laypage = layui.laypage
+            , layer = layui.layer
+            , eleTree = layui.eleTree
+            , laydate = layui.laydate;
+        eleTree.on("nodeClick(data)",function(d) {
+            $("[name='mold_id']").val(d.data.currentData.id)
+            $("[name='mold']").val(d.data.currentData.label)
+            $("#treeMain").hide();
+        })
+        $(document).on("click",function() {
+            $("#treeMain").hide();
+        })
+        laydate.render({
+            elem: '#dates'
+            , type: 'datetime'
+            , range: true
+        });
+        laypage.render({
+            elem: 'page'
+            , count: <?php echo $total; ?>
+            , layout: ['count', 'prev', 'page', 'next', 'limit', 'skip']
+            , jump: function(obj){
+                console.log(obj)
+            }
+        });
+    });
+</script>
+{include file="admin@admin:footer" /}

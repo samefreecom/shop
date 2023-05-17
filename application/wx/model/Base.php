@@ -1,6 +1,6 @@
 <?php
 namespace app\wx\model;
-include ROOT . DS . 'application/lib/Wechat.php';
+include ROOT_CORE . DS . 'application/lib/Wechat.php';
 
 use app\BaseModel;
 class Base extends BaseModel
@@ -131,10 +131,10 @@ class Base extends BaseModel
             return false;
         };
     }
-    private $token = 'panghu';
-    private $encodingaeskey = 'VXqQc3Zmn3iHaMlNAbPiE7gzMfnXzEUZCx9le0wKh7B';
-    private $appid = 'wx9a4095ab944a0ab5';
-    private $appsecret = '9e5f0f0d4024735a6edf0137e4257078';
+    private $token = WX_TOKEN;
+    private $encodingaeskey = WX_ENCODINGAESKEY;
+    private $appid = WX_APPID;
+    private $appsecret = WX_APPSECRET;
     private $debug = true;
     private $logcallback = true;
     private $wechat = null;

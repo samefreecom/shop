@@ -8,9 +8,10 @@ use think\facade\Request;
 
 class Group
 {
-    public function food()
+    public function food($groupId = 0)
     {
         $param = Request::param();
+        $param['id'] = sfret('id', $groupId);
         $bind = ['title' => '点餐', 'groupId' => $param['id']];
         $mFood = new Base();
         $bind['list'] = $mFood->findList(array('status' => 'A'));
@@ -32,6 +33,18 @@ class Group
         $bind['indentFoodList'] = $mFood->getAccountListByGroupId($param['id']);
         $bind['groupFoodList'] = $mFood->getListByGroupId($param['id']);
         return view('seat/group/index', $bind);
+    }
+    
+    public function quickFood()
+    {
+        $param = Request::param();
+        $mGroup = new \app\group\model\Base();
+        $mFood = new Base();
+        $group = $mGroup->getQuick();
+        if (empty($group)) {
+            sfresponse(0, '不支持快捷下单！');
+        }
+        return $this->food($group['id']);
     }
     
     public function saveIndent()

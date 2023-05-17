@@ -1,0 +1,26 @@
+{include file="admin@admin:header" /}
+<br />
+<form id="frmMain" class="layui-form" method="post" onsubmit="return sfsubmiting()">
+    <input type="hidden" name="id" value="<?php echo $data['id']; ?>" />
+    <div class="layui-form-item">
+        <label class="layui-form-label">名称</label>
+        <div class="layui-input-block"  style="padding-right: 20px">
+            <input type="text" name="name" lay-verify="title" autocomplete="off" placeholder="请输入导航组名称" class="layui-input" value="<?php echo $data['name']; ?>">
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <div class="layui-input-block">
+            <button type="submit" class="layui-btn" lay-submit="">立即提交</button>
+        </div>
+    </div>
+</form>
+<script type="text/javascript">
+    function callback_name() {
+        $('#frmMain input[name="name"]').focus();
+        $('#frmMain input[name="name"]').select();
+    }
+    $(function () {
+        callback_name();
+    });
+</script>
+{include file="admin@admin:footer" /}

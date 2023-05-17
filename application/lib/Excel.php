@@ -1,5 +1,5 @@
 <?php
-include ROOT . '/application/lib/PHPExcel.php';
+include ROOT_CORE . '/application/lib/PHPExcel.php';
 class Lib_Excel extends Lib_Base
 {
     private $excelList = [];

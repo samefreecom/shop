@@ -1,0 +1,138 @@
+{include file="admin@admin:header" /}
+<div class="weadmin-nav">
+    <span class="layui-breadcrumb" style="visibility: visible;">
+        <a href="javascript:;">首页</a><span lay-separator="">/</span> <a href="javascript:;">内容管理</a><span
+            lay-separator="">/</span> <a href="javascript:;">广告管理</a><span
+            lay-separator="">/</span>
+        <a href="javascript:;"> <cite>添加广告</cite></a>
+    </span>
+    <a class="layui-btn layui-btn-sm" style="margin-top:3px;float:right"
+       href="javascript:sfreload();" title="刷新">
+        <i class="layui-icon layui-icon-refresh"></i>
+    </a>
+</div>
+<div class="weadmin-body">
+    <form class="layui-form" method="post" onsubmit="return sfsubmiting()">
+        <div class="weadmin-block" style="text-align: right">
+            <button class="layui-btn layui-btn-normal" lay-submit="" type="submit">保存</button>
+        </div>
+        <input type="hidden" name="mold_id" value="<?php echo sfret('mold_id'); ?>" />
+        <div class="layui-form-item">
+            <label class="layui-form-label">所属类目</label>
+            <div class="layui-input-block">
+                <input type="text" name="mold" value="<?php echo sfret('mold', '请选择所属类目'); ?>" onclick="init_tree(event)" readonly="" autocomplete="off" class="layui-input">
+                <div id="treeMain" lay-filter="data" style="display: none;position: absolute; z-index: 999; background: rgb(255, 255, 255) none repeat scroll 0% 0%; border: 1px solid rgb(204, 204, 204); width: 100%; padding: 5px 0;" class="eleTree"></div>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">标题</label>
+            <div class="layui-input-block">
+                <input type="text" name="title" value="<?php echo sfret('title'); ?>" lay-verify="required" lay-reqtext="请输入标题！" placeholder="请输入广告标题" autocomplete="off" class="layui-input">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">链接</label>
+            <div class="layui-input-block">
+                <input type="text" name="url" value="<?php echo sfret('url', '/'); ?>" lay-verify="required" lay-reqtext="请输入或选择链接！" placeholder="请输入或选择链接" autocomplete="off" class="layui-input" style="width: 90%">
+                <button type="button" class="layui-btn" style="float: right;margin-top: -38px;z-index: 999;" onclick="sfshowurl(window, function(url) {$('input[name=url]').val(url)})">选择</button>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">打开方式</label>
+            <div class="layui-input-block"  style="padding-right: 20px">
+                <select name="target">
+                    <option value="_self"<?php echo sfret('target') == '_self' ? ' selected="selected"' : ''; ?>>当前窗口</option>
+                    <option value="_blank"<?php echo sfret('target', '_blank') == '_blank' ? ' selected="selected"' : ''; ?>>新的窗口</option>
+                </select>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">图片</label>
+            <div class="layui-input-block">
+                <input type="hidden" name="img" id="upload" />
+                <div class="layui-upload">
+                    <div class="layui-upload-drag" id="uploadDrag">
+                        <i class="layui-icon"></i>
+                        <p>点击上传，或将文件拖拽到此处</p>
+                    </div>
+                    <div class="layui-upload-list">
+                        <img class="layui-upload-img" id="uploadImg" style="max-height: 120px">
+                        <p id="uploadMsg"></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="layui-form-item layui-form-text">
+            <label class="layui-form-label">设为主要</label>
+            <div class="layui-input-block">
+                <input type="checkbox" name="main" value="1" lay-skin="switch" lay-text="是|否">
+            </div>
+        </div>
+    </form>
+</div>
+<script type="text/javascript">
+    function init_tree(e) {
+        e.stopPropagation();
+        if(!window.treeMainUI){
+            var data = <?php echo json_encode($tree); ?>;
+            window.treeMainUI = layui.eleTree.render({
+                elem: '#treeMain',
+                data: data,
+                defaultExpandAll: true,
+                expandOnClickNode: false,
+                highlightCurrent: true,
+                showLine: true
+            });
+        }
+        $("#treeMain").toggle();
+    }
+
+    layui.use(['form', 'eleTree', 'upload'], function() {
+        var $ = layui.jquery
+            , upload = layui.upload;
+
+        var eleTree = layui.eleTree;
+        eleTree.on("nodeClick(data)",function(d) {
+            $("[name='mold_id']").val(d.data.currentData.id)
+            $("[name='mold']").val(d.data.currentData.label)
+            $("#treeMain").hide();
+        })
+        $(document).on("click",function() {
+            $("#treeMain").hide();
+        })
+        //拖拽上传
+        var uploadInst = upload.render({
+            elem: '#uploadDrag'
+            , url: '<?php echo sfurl('/cms/admin/upload/type/ad'); ?>'
+            , accept: 'images'
+            , before: function (obj) {
+                //预读本地文件示例，不支持ie8
+                obj.preview(function (index, file, result) {
+                    $('#uploadImg').attr('src', result); //图片链接（base64）
+                });
+            }
+            , done: function (ret) {
+                //如果上传失败
+                if (ret.code != 1) {
+                    this.error();
+                    return layer.msg(ret.msg);
+                }
+                //上传成功
+                $('#uploadMsg').html('');
+                $('#uploadImg').attr('src', ret.data.url);
+                $('#upload').val(ret.data.path);
+            }
+            , error: function () {
+                $('#uploadImg').attr('src', '<?php echo sfurl('/public/asset/no_image.png'); ?>');
+                $('#upload').val('');
+                //演示失败状态，并实现重传
+                var uploadMsg = $('#uploadMsg');
+                uploadMsg.html('<span style="color: #FF5722;">上传失败</span> <a class="layui-btn layui-btn-xs demo-reload">重试</a>');
+                uploadMsg.find('.demo-reload').on('click', function () {
+                    uploadInst.upload();
+                });
+            }
+        });
+    });
+</script>
+{include file="admin@admin:footer" /}

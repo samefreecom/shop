@@ -15,7 +15,8 @@ define('FLAG_BASEDIR', false);
 define('DS', DIRECTORY_SEPARATOR);
 define('FLAG_AJAX', isset($_SERVER['HTTP_X_REQUESTED_WITH']) ? ($_SERVER['HTTP_X_REQUESTED_WITH']== 'XMLHttpRequest') : false);
 define('FLAG_WX', strpos($_SERVER['HTTP_USER_AGENT'], 'MicroMessenger'));
-define('ROOT', dirname(dirname(__FILE__)));
+define('ROOT_CORE', dirname(dirname(__FILE__)));
+define('ROOT', dirname(dirname(__FILE__)) . (defined('ROOT_SUB') ? DS . ROOT_SUB : ''));
 define('DOMAIN', isset($_SERVER['HTTP_HOST']) ? $_SERVER['HTTP_HOST'] : 'localhost');
 define('BASEURL', 'http://' . DOMAIN);  //  e.g. localhost
 if (!defined('BASEDIR')) {
@@ -1406,7 +1407,7 @@ function sfget_csv($file_path)
 function sfget_xls($file_path, $index = 0)
 {
     if (!class_exists('Lib_Excel')) {
-        include ROOT . '/application/lib/Excel.php';
+        include ROOT_CORE . '/application/lib/Excel.php';
     }
     return Lib_Excel::instance()->read($file_path, $index);
 }
@@ -1414,7 +1415,7 @@ function sfget_xls($file_path, $index = 0)
 function sfsave_xls($file_path, $list, $mapHead = [])
 {
     if (!class_exists('Lib_Excel')) {
-        include ROOT . '/application/lib/Excel.php';
+        include ROOT_CORE . '/application/lib/Excel.php';
     }
     return Lib_Excel::instance()->write($file_path, $list, $mapHead);
 }

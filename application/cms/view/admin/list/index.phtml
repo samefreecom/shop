@@ -1,0 +1,148 @@
+{include file="admin@admin:header" /}
+<style>
+    .soul-bottom-contion {
+        display: none;
+    }
+</style>
+    <div class="weadmin-nav">
+    <span class="layui-breadcrumb" style="visibility: visible;">
+        <a href="javascript:;">首页</a><span lay-separator="">/</span> <a href="javascript:;">内容管理</a><span
+                lay-separator="">/</span>
+        <a href="javascript:;"> <cite>文章管理</cite></a>
+    </span>
+        <a class="layui-btn layui-btn-sm" style="margin-top:3px;float:right"
+           href="javascript:sfreload();" title="刷新">
+            <i class="layui-icon layui-icon-refresh"></i>
+        </a>
+    </div>
+    <div class="weadmin-body">
+        <div class="weadmin-block tool">
+            <form id="frmMain" class="layui-form" onsubmit="return false">
+                <input type="text" style="display: none" id="mold_id" name="mold_id" value="0" />
+                <div class="layui-form-item">
+                    <div class="layui-inline">
+                        <label class="layui-form-label">类目</label>
+                        <div class="layui-input-inline">
+                            <input type="text" name="mold" onclick="init_tree(event)" value="可选择所属类目" readonly="" autocomplete="off" class="layui-input">
+                            <div id="treeMain" lay-filter="data" style="display: none;position: absolute; z-index: 999; background: rgb(255, 255, 255) none repeat scroll 0% 0%; border: 1px solid rgb(204, 204, 204); width: 268px; padding: 5px 0;height: 120px; overflow-y: auto;" class="eleTree"></div>
+                        </div>
+                    </div>
+                    <div class="layui-inline">
+                        <label class="layui-form-label">标题</label>
+                        <div class="layui-input-inline">
+                            <input type="text" id="title" name="title" autocomplete="off" class="layui-input" style="width: 240px">
+                        </div>
+                    </div>
+                    <div class="layui-inline">
+                        <label class="layui-form-label">时间</label>
+                        <div class="layui-input-inline">
+                            <input type="text" id="dates" class="layui-input" name="dates" placeholder="可选择一个时间范围">
+                        </div>
+                    </div>
+                    <div class="layui-inline">
+                            <button type="button" class="layui-btn" onclick="dosearch()">查询</button>
+                            <button type="reset" class="layui-btn layui-btn-danger">重置</button>
+                    </div>
+                    <div style="float: right">
+                        <button type="button" class="layui-btn layui-btn-normal" onclick="sfaddtab('添加文章', '<?php echo sfurl('/cms/admin/addList'); ?>', 'list_add')">添加文章</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+        <table id="tblMain"></table>
+    </div>
+        <script type="text/html" id="bar">
+            <a class="layui-btn layui-btn-xs" href="javascript:;" onclick="sfaddtab('编辑文章', '<?php echo sfurl('/cms/admin/editList/id/#id#'); ?>', 'list_edit_#id#')">编辑</a>
+            <a class="layui-btn layui-btn-danger layui-btn-xs" href="javascript:;" onclick="delete_list(this, #id#)">删除</a>
+        </script>
+        <script type="text/javascript">
+            function dosearch() {
+                window.table.reload('tblMain', {
+                    where: {
+                        mold_id: $('#mold_id').val()
+                        , title: $('#title').val()
+                        , dates: $('#dates').val()
+                    }
+                });
+            }
+            function init_tree(e) {
+                e.stopPropagation();
+                if(!window.treeMainUI){
+                    var data = <?php echo json_encode($tree); ?>;
+                    window.treeMainUI = layui.eleTree.render({
+                        elem: '#treeMain',
+                        data: data,
+                        defaultExpandAll: true,
+                        expandOnClickNode: false,
+                        highlightCurrent: true,
+                        showLine: true
+                    });
+                }
+                $("#treeMain").toggle();
+            }
+            function delete_list(el, id) {
+                if (!confirm('确定要删除该文章吗？')) return;
+                sflock('删除中……');
+                $.post('<?php echo sfurl('/cms/admin/delList'); ?>', {id: id}, function(ret) {
+                    sfunlock();
+                    ret = eval('(' + ret +  ')');
+                    if (ret.code) {
+                        $(el).parents('tr').first().hide({duration: 600});
+                    } else {
+                        layer.msg(ret.msg);
+                    }
+                });
+            }
+            layui.extend({
+                soulTable: 'soulTable'  // 模块别名
+            }).use(['form', 'table', 'soulTable', 'eleTree', 'laydate'], function () {
+                var table = layui.table,
+                    soulTable = layui.soulTable,
+                    eleTree = layui.eleTree,
+                    laydate = layui.laydate;
+                eleTree.on("nodeClick(data)",function(d) {
+                    $("[name='mold_id']").val(d.data.currentData.id)
+                    $("[name='mold']").val(d.data.currentData.label)
+                    $("#treeMain").hide();
+                })
+                $(document).on("click",function() {
+                    $("#treeMain").hide();
+                })
+                // 后台分页
+                table.render({
+                    elem: '#tblMain'
+                    , id: 'tblMain'
+                    , url: '<?php echo sfurl('/cms/admin/getList'); ?>'
+                    , height: $(document).height() - $('#tblMain').offset().top - 50
+                    , page: true
+                    , limit: 50
+                    , cols: [[
+                        {type: 'checkbox', fixed: 'left'},
+                        {field: 'mold_name', title: '类目', width: 150, sort: false, filter: true},
+                        {field: 'title', title: '标题', width: 300, sort: false, filter: true},
+                        {field: 'outline', title: '简述', sort: false, filter: true},
+                        {
+                            field: 'created_at',
+                            title: '创建时间',
+                            width: 165,
+                            filter: {type: 'date[yyyy-MM-dd HH:mm:ss]'},
+                            sort: false
+                        },
+                        {title: '操作', width: 156, fixed: 'right', templet: function (data) {
+                            return document.getElementById('bar').innerHTML.replace(/#id#/g, data.id);
+                        }}
+                    ]]
+                    , done: function () {
+                        soulTable.render(this)
+                    }
+                });
+
+                window.table = table;
+                laydate.render({
+                    elem: '#dates'
+                    , type: 'datetime'
+                    , range: true
+                });
+            })
+        </script>
+{include file="admin@admin:footer" /}

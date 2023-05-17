@@ -1,7 +1,7 @@
 <?php
     namespace app\base\controller;
 
-    require_once ROOT . '/application/lib/Mq.php';
+    require_once ROOT_CORE . '/application/lib/Mq.php';
 
     class Consume
     {

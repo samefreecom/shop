@@ -1,0 +1,61 @@
+{include file="admin@admin:header" /}
+    <br />
+    <form id="frmMain" class="layui-form" method="post" onsubmit="return sfsubmiting()">
+        <input type="hidden" name="type" value="<?php echo sfret('type'); ?>" />
+        <input type="hidden" name="parent_id" value="<?php echo sfret('parent_id', 0); ?>" />
+        <div class="layui-form-item">
+            <label class="layui-form-label">父级类目</label>
+            <div class="layui-input-block" style="padding-right: 20px">
+                <input type="text" name="parent" value="可选择一个父类目" readonly="" autocomplete="off" class="layui-input">
+                <div id="treeMain" lay-filter="data" style="display: none;position: absolute; z-index: 999; background: rgb(255, 255, 255) none repeat scroll 0% 0%; border: 1px solid rgb(204, 204, 204); width: 268px; padding: 5px 0;height: 120px; overflow-y: auto;" class="eleTree"></div>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">名称</label>
+            <div class="layui-input-block" style="padding-right: 20px">
+                <input type="text" name="name" lay-verify="title" autocomplete="off" placeholder="请输入类目名称" class="layui-input" value="<?php echo sfret('name'); ?>">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <div class="layui-input-block">
+                <button type="submit" class="layui-btn" lay-submit="">立即提交</button>
+            </div>
+        </div>
+    </form>
+    <script type="text/javascript">
+        function sfinit() {
+            layui.use(['eleTree'], function () {
+                var eleTree = layui.eleTree;
+                var data = <?php echo json_encode($tree); ?>;
+                var treeMain;
+                $("[name='parent']").on("click",function (e) {
+                    e.stopPropagation();
+                    if(!treeMain){
+                        treeMain = eleTree.render({
+                            elem: '#treeMain',
+                            data: data,
+                            defaultExpandAll: true,
+                            expandOnClickNode: false,
+                            highlightCurrent: true,
+                            showLine: true
+                        });
+                    }
+                    $("#treeMain").toggle();
+                })
+                eleTree.on("nodeClick(data)",function(d) {
+                    $("[name='parent_id']").val(d.data.currentData.id)
+                    $("[name='parent']").val(d.data.currentData.label)
+                    $("#treeMain").hide();
+                })
+                $(document).on("click",function() {
+                    $("#treeMain").hide();
+                })
+                callback_name();
+            });
+        }
+        function callback_name() {
+            $('#frmMain input[name="name"]').focus();
+            $('#frmMain input[name="name"]').select();
+        }
+    </script>
+{include file="admin@admin:footer" /}
