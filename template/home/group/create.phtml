@@ -1,5 +1,10 @@
 <?php
+
+use app\base\model\Session;
+
 $menuSeat = true;
+$lon = Session::instance()->getLon();
+$lat = Session::instance()->getLat();
 ?>
 {include file="common:header" /}
 <link rel="stylesheet" href="__STATIC__/home/css/find.css__URL_CACHE__">
@@ -29,7 +34,7 @@ $menuSeat = true;
             </div>
         </div>
         <iframe id="mapPage" width="100%" height="340px" frameborder=0
-                src="https://apis.map.qq.com/tools/locpicker?search=1&type=1&coordtype=2&key=7KTBZ-ZUDYN-ZPTF5-SZECU-QWT66-FXB2M&referer=myapp">
+                src="https://apis.map.qq.com/tools/locpicker?search=1&type=1&coordtype=2&key=7KTBZ-ZUDYN-ZPTF5-SZECU-QWT66-FXB2M&referer=myapp{if condition='$lon gt 0'}&coord={$lat},{$lon}{/endif}">
         </iframe>
         <div class="weui-cell">
             <div class="weui-cell__hd"><label class="weui-label">标题*</label></div>

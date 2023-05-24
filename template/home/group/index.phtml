@@ -14,6 +14,10 @@ $menuSeat = true;
     .caption-item {
         margin-top: -32px;
     }
+    .weui-actionsheet__cell a {
+        display: inline-block;
+        width: 100%;
+    }
 </style>
 <header class="zyw-header">
     <div class="zyw-container white-color">
@@ -51,7 +55,10 @@ $menuSeat = true;
                     $.photoBrowser({items:[{image: '<?php echo sfurl("/base/image/qrcode") ?>?size=8&no=_no_'.replace('_no_', $('#copylink').val()), caption: '<strong style="font-size: 32px;">' + text + '</strong?'}]}).open();
                 }
             },{
-                text: "<a class='copy_share' href='javascript:;'  data-clipboard-target='#copylink'>文本</a>"
+                text: "<a class='copy_share' href='javascript:$.closeActions();'  data-clipboard-target='#copylink'>文本</a>",
+                onClick: function() {
+                    $.closeActions();
+                }
             }]
         });
         setTimeout(function () {
@@ -67,7 +74,7 @@ $menuSeat = true;
                     empty: false
                 });
             });
-        }, 1000);
+        }, 500);
     }
     function do_search() {
         window.param = window.param || {};
